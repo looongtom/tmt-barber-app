@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.model.Service;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,10 @@ public class ServiceRecycleViewAdapter extends RecyclerView.Adapter<ServiceRecyc
         holder.tvName.setText(service.getName());
         holder.tvPrice.setText(service.getPrice()+"");
         holder.tvDescription.setText(service.getDescription());
-        holder.img.setImageResource(R.drawable.barber_man);
+//
+        String fileImage=service.getFilePath();
+        if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.img);
+        else holder.img.setImageResource(R.drawable.barber_man);
     }
 
     @Override

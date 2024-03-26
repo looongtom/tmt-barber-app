@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,8 +23,9 @@ import java.util.List;
 
 public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.ItemListener {
     private RecyclerView recyclerView;
-    BarberRecycleViewAdapter adapter;
+    private BarberRecycleViewAdapter adapter;
     private DatabaseHelper db;
+    private Button btManageBarber;
 
     @Nullable
     @Override
@@ -35,6 +37,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView=view.findViewById(R.id.rcvStaff);
+        btManageBarber=view.findViewById(R.id.btAddBarber);
         adapter=new BarberRecycleViewAdapter(getContext());
         db=new DatabaseHelper(getContext());
 
@@ -42,6 +45,13 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         adapter.setItemListener(this);
+
+        btManageBarber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Click to add barber", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

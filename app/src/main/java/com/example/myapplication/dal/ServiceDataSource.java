@@ -1,5 +1,6 @@
 package com.example.myapplication.dal;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -47,4 +48,46 @@ public class ServiceDataSource {
         cursor.close();
         return services;
     }
+
+    public Service addService(Service service){
+        db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_SERVICE_NAME, service.getName());
+        values.put(DatabaseHelper.COLUMN_SERVICE_PRICE, service.getPrice());
+        values.put(DatabaseHelper.COLUMN_SERVICE_DESCRIPTION, service.getDescription());
+        values.put(DatabaseHelper.COLUMN_SERVICE_FILE, service.getFilePath());
+        long insertId = db.insert(DatabaseHelper.SERVICES_TABLE, null, values);
+        Cursor cursor = db.query(DatabaseHelper.SERVICES_TABLE, allColumns, DatabaseHelper.COLUMN_SERVICE_ID + " = " + insertId, null, null, null, null);
+        cursor.moveToFirst();
+        Service newService = cursorToService(cursor);
+        cursor.close();
+        return newService;
+    }
+
+    private Service cursorToService(Cursor cursor) {
+        Service serv = new Service();
+        serv.setName(cursor.getString(0));
+//        serv.setCategory_id(cursor.getInt(1));
+        return serv;
+    }
+
+    public int updateService( Service service) {
+        db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(dbHelper.COLUMN_SERVICE_NAME, service.getName());
+        cv.put(dbHelper.COLUMN_SERVICE_DESCRIPTION, service.getDescription());
+        cv.put(dbHelper.COLUMN_SERVICE_PRICE, service.getPrice());
+        cv.put(dbHelper.COLUMN_SERVICE_FILE, service.getFilePath());
+
+        String whereCLase="id=?";
+        String[] whereArgs = {service.getId()+""};
+        return db.update(dbHelper.SERVICES_TABLE, cv, whereCLase, whereArgs);
+    }
+
+//    public static boolean deleteService(Context context, int id) {
+//        dbHelper = new DatabaseHelper(context);
+//        db = dbHelper.getWritableDatabase();
+//        int deleteService = db.delete(dbHelper.SERVICES_TABLE, dbHelper.COLUMN_SERVICE_ID + " = ?", new String[]{Integer.toString(id)});
+//        return deleteService > 0;
+//    }
 }

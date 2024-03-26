@@ -40,4 +40,8 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.squareup.okhttp3:okhttp:4.2.1'
+
+
+    //Cloudinary sdk
+    implementation 'com.cloudinary:cloudinary-android:2.3.1'
 }

@@ -57,6 +57,24 @@ public class Service implements Serializable {
         this.filePath = filePath;
     }
 
+    public Service(String name, Double price, String description, String filePath) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.filePath = filePath;
+    }
+
     public Service() {
+    }
+
+    @Override
+    public String toString() {
+        return "Service{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", filePath='" + filePath + '\'' +
+                '}';
     }
 }
