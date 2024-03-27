@@ -111,10 +111,113 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void insertTimeSlotTable(SQLiteDatabase db) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TIME_START_TABLE, "9:00");
-        values.put(COLUMN_STATUS_TABLE, 0);
+        values.put(COLUMN_STATUS_TABLE, "Available");
         values.put(COLUMN_DATE_TABLE, "27-03-2024");
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, "Available");
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+
     }
 
     private void createTimeSlotTable(SQLiteDatabase db) {
@@ -224,24 +327,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void insertServicesTable(SQLiteDatabase db) {
         String sql = "";
-        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Cắt gội 10 bước', 120000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Cắt gội 10 bước', 70000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
         db.execSQL(sql);
-        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Combo cắt gội và massage đá nóng VIP', 370000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Combo cắt gội và massage đá nóng VIP', 120000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
         db.execSQL(sql);
         sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Combo cắt gội VIP (all dịch vụ chăm sóc)', 270000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
         db.execSQL(sql);
-//        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Chăm sóc da cấp thiết UltraWhite', 50000, '', '')";
-//        db.execSQL(sql);
-//        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Massage cổ, vai, gáy bạc hà cam ngọt', 45000, '', '')";
-//        db.execSQL(sql);
-//        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Combo lấy ráy tai VIP', 70000, '', '')";
-//        db.execSQL(sql);
-//        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Uốn cao cấp Hàn Quốc', 399000, '', '')";
-//        db.execSQL(sql);
-//        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Uốn định hình Ivy Star 2023', 599000, '', '')";
-//        db.execSQL(sql);
-//        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Uốn tiêu chuẩn', 319000, '', '')";
-//        db.execSQL(sql);
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Chăm sóc da cấp thiết UltraWhite', 50000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        db.execSQL(sql);
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Massage cổ, vai, gáy bạc hà cam ngọt', 45000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        db.execSQL(sql);
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Combo lấy ráy tai VIP', 70000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        db.execSQL(sql);
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Uốn cao cấp Hàn Quốc', 399000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        db.execSQL(sql);
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Uốn định hình Ivy Star 2023', 599000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        db.execSQL(sql);
+        sql = "INSERT INTO " + SERVICES_TABLE + " VALUES (null, 'Uốn tiêu chuẩn', 319000, '', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
+        db.execSQL(sql);
     }
 
 

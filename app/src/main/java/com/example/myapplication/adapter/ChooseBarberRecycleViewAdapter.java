@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.ChooseServiceActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteBarberActivity;
 import com.example.myapplication.dal.AccountDataSource;
@@ -24,7 +27,8 @@ public class ChooseBarberRecycleViewAdapter extends RecyclerView.Adapter<ChooseB
     private List<Account> list;
     private Context context;
     private ItemListener itemListener;
-
+    private AccountDataSource accountDataSource;
+    private Account account=null;
     public void setItemListener(ItemListener itemListener) {
         this.itemListener = itemListener;
     }
@@ -36,9 +40,6 @@ public class ChooseBarberRecycleViewAdapter extends RecyclerView.Adapter<ChooseB
 
     public void setList(List<Account> list) {
         this.list = list;
-        for(Account account: list){
-            System.out.println(account.getAccount());
-        }
         notifyDataSetChanged();
     }
 
@@ -81,11 +82,22 @@ public class ChooseBarberRecycleViewAdapter extends RecyclerView.Adapter<ChooseB
     public class BarberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imgBarber;
         private TextView barberName;
+        private Button btChoose;
 
         public BarberViewHolder(@NonNull View itemView) {
             super(itemView);
             imgBarber = itemView.findViewById(R.id.imgBarber);
             barberName = itemView.findViewById(R.id.tvBarberName);
+            btChoose = itemView.findViewById(R.id.btnChoose);
+            btChoose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    account = list.get(getAdapterPosition());
+                    Intent intent = new Intent(context, ChooseServiceActivity.class);
+                    intent.putExtra("account", account);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
