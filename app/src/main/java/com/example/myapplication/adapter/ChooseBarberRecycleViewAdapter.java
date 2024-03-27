@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteBarberActivity;
 import com.example.myapplication.dal.AccountDataSource;
-import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Account;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycleViewAdapter.BarberViewHolder> {
+public class ChooseBarberRecycleViewAdapter extends RecyclerView.Adapter<ChooseBarberRecycleViewAdapter.BarberViewHolder> {
     private List<Account> list;
     private Context context;
     private ItemListener itemListener;
@@ -31,7 +29,7 @@ public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycle
         this.itemListener = itemListener;
     }
 
-    public BarberRecycleViewAdapter(Context context) {
+    public ChooseBarberRecycleViewAdapter(Context context) {
         list=new ArrayList<>();
         this.context = context;
     }
@@ -47,7 +45,7 @@ public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycle
     @NonNull
     @Override
     public BarberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_barber, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_choose_barber, parent, false);
         return new BarberViewHolder(itemView);
     }
 

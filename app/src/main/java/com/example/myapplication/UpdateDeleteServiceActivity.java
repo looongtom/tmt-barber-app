@@ -24,17 +24,18 @@ import java.util.Map;
 
 public class UpdateDeleteServiceActivity extends AppCompatActivity {
     private EditText eName, ePrice, eDescription;
-    private Button btUpdate, btnChooseImage,btnCancel;
+    private Button btUpdate, btnChooseImage, btnCancel;
     private ImageView img;
-    private Uri imagePath=null;
+    private Uri imagePath = null;
     private Service service;
 
     private int SELECT_PICTURE = 200;
     ServiceDataSource serviceDataSource = new ServiceDataSource(UpdateDeleteServiceActivity.this);
 
     private static boolean isMediaManagerInitialized = false;
+    private static boolean isChooseImage = false;
 
-    private void cloudinaryConfig(){
+    private void cloudinaryConfig() {
         if (!isMediaManagerInitialized) {
             Map config = new HashMap();
             config.put("cloud_name", "dsjuckdxu");
@@ -45,12 +46,13 @@ public class UpdateDeleteServiceActivity extends AppCompatActivity {
             isMediaManagerInitialized = true;
         }
     }
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_delete_service);
-        cloudinaryConfig();
+//        cloudinaryConfig();
         service = new Service();
 
         initView();
@@ -58,10 +60,15 @@ public class UpdateDeleteServiceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         service = (Service) intent.getSerializableExtra("service");
         eName.setText(service.getName());
-        ePrice.setText(service.getPrice()+"");
+        ePrice.setText(service.getPrice() + "");
         eDescription.setText(service.getDescription());
-        String fileImage=service.getFilePath();
-        if(fileImage!=null) Picasso.get().load(fileImage).resize(300,300).into(img);
+        String fileImage = service.getFilePath();
+        imagePath = Uri.parse(fileImage);
+
+        if (imagePath != null && !imagePath.toString().isEmpty())
+            isChooseImage = true;
+
+        if (fileImage != null) Picasso.get().load(fileImage).resize(300, 300).into(img);
         else img.setImageResource(R.drawable.barber_man);
 
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
@@ -75,42 +82,63 @@ public class UpdateDeleteServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(imagePath!=null){
-                    MediaManager.get().upload(imagePath).callback(new UploadCallback() {
-                        @Override
-                        public void onStart(String requestId) {
+                if (imagePath != null) {
+                    if (isChooseImage) {
+                        String name = eName.getText().toString();
+                        String price = ePrice.getText().toString();
+                        String description = eDescription.getText().toString();
+                        if (name.isEmpty() || price.isEmpty() || description.isEmpty() || imagePath == null) {
+                            Toast.makeText(UpdateDeleteServiceActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                         }
-                        @Override
-                        public void onProgress(String requestId, long bytes, long totalBytes) {
+                        try {
+                            Service service = new Service(name, Double.parseDouble(price), description, imagePath.toString());
+                            service.setId(UpdateDeleteServiceActivity.this.service.getId());
+                            System.out.println("===========================Service UPDATE=========================");
+                            System.out.println(service.toString());
+                            serviceDataSource.updateService(service);
+                            finish();
+                        } catch (NumberFormatException numberFormatException) {
+                            Toast.makeText(UpdateDeleteServiceActivity.this, "Price must be filled with number", Toast.LENGTH_SHORT).show();
                         }
-                        @Override
-                        public void onSuccess(String requestId, Map resultData) {
-                            String imageUrl = resultData.get("secure_url").toString();
-                            String name = eName.getText().toString();
-                            String price = ePrice.getText().toString();
-                            String description = eDescription.getText().toString();
-                            if(name.isEmpty() || price.isEmpty() || description.isEmpty() || imagePath == null){
-                                Toast.makeText(UpdateDeleteServiceActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        MediaManager.get().upload(imagePath).callback(new UploadCallback() {
+                            @Override
+                            public void onStart(String requestId) {
                             }
-                            try{
-                                Service service = new Service(name, Double.parseDouble(price), description, imageUrl);
-                                service.setId(UpdateDeleteServiceActivity.this.service.getId());
-                                System.out.println("===========================Service UPDATE=========================");
-                                System.out.println(service.toString());
-                                serviceDataSource.updateService(service);
-                                finish();
-                            }catch (NumberFormatException numberFormatException){
-                                Toast.makeText(UpdateDeleteServiceActivity.this, "Price must be filled with number", Toast.LENGTH_SHORT).show();
+
+                            @Override
+                            public void onProgress(String requestId, long bytes, long totalBytes) {
                             }
-                        }
-                        @Override
-                        public void onError(String requestId, ErrorInfo error) {
-                        }
-                        @Override
-                        public void onReschedule(String requestId, ErrorInfo error) {
-                        }
-                    }).dispatch();
-                }else{
+
+                            @Override
+                            public void onSuccess(String requestId, Map resultData) {
+                                String imageUrl = resultData.get("url").toString();
+                                String name = eName.getText().toString();
+                                String price = ePrice.getText().toString();
+                                String description = eDescription.getText().toString();
+                                if (name.isEmpty() || price.isEmpty() || description.isEmpty() || imagePath == null) {
+                                    Toast.makeText(UpdateDeleteServiceActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                                }
+                                try {
+                                    Service service = new Service(name, Double.parseDouble(price), description, imageUrl);
+                                    service.setId(UpdateDeleteServiceActivity.this.service.getId());
+                                    serviceDataSource.updateService(service);
+                                    finish();
+                                } catch (NumberFormatException numberFormatException) {
+                                    Toast.makeText(UpdateDeleteServiceActivity.this, "Price must be filled with number", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onError(String requestId, ErrorInfo error) {
+                            }
+
+                            @Override
+                            public void onReschedule(String requestId, ErrorInfo error) {
+                            }
+                        }).dispatch();
+                    }
+                } else {
                     Toast.makeText(UpdateDeleteServiceActivity.this, "Please choose image", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -129,10 +157,11 @@ public class UpdateDeleteServiceActivity extends AppCompatActivity {
         ePrice = findViewById(R.id.ePrice);
         eDescription = findViewById(R.id.eDescription);
         btUpdate = findViewById(R.id.btUpdate);
-        btnCancel=findViewById(R.id.btCancel);
+        btnCancel = findViewById(R.id.btCancel);
         img = findViewById(R.id.imgView);
         btnChooseImage = findViewById(R.id.BSelectImage);
     }
+
     void imageChooser() {
         // create an instance of the
         // intent of the type image
@@ -143,6 +172,7 @@ public class UpdateDeleteServiceActivity extends AppCompatActivity {
         // with the returned requestCode
         startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -153,7 +183,7 @@ public class UpdateDeleteServiceActivity extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
-                    imagePath= selectedImageUri;
+                    imagePath = selectedImageUri;
                     img.setImageURI(selectedImageUri);
                 }
             }

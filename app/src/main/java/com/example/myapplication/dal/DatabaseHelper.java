@@ -23,6 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EMAIL = "EMAIL";
     public static final String COLUMN_GENDER = "GENDER";
     public static final String COLUMN_DATEOFBIRTH = "DATE_OF_BIRTH";
+    public static final String COLUMN_ABOUT = "ABOUT";
     public static final String COLUMN_ACCOUNT_FILE_PICTURE = "AVATAR";
     public static final String COLUMN_FOREIGN_ROLEID = "roleID";
 
@@ -51,21 +52,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static  final String COLUMN_SERVICE_FILE = "FILE";
 //    public static final String COLUMN_SERVICE_CATEGORY_ID = "CATEGORY_ID";
 
-    //TABLE VOUCHERS
-    public static final String VOUCHERS_TABLE = "VOUCHERS";
-    public static final String COLUMN_VOUCHER_ID = "ID";
-    public static final String COLUMN_VOUCHER_NAME = "NAME";
-    public static final String COLUMN_VOUCHER_CODE = "CODE";
-    public static final String COLUMN_VOUCHER_VALUE = "VALUE";
-    public static final String COLUMN_VOUCHER_QUANTITY = "QUANTITY";
-    public static final String COLUMN_VOUCHER_START = "START_DAY";
-    public static final String COLUMN_VOUCHER_END = "END_DAY";
-
     //TABLE BOOKING
     public static final String BOOKING_TABLE = "BOOKING";
     public static final String COLUMN_BOOKING_ID = "ID";
     public static final String COLUMN_BOOKING_USER_ID = "USER_ID";
-    public static final String COLUMN_BOOKING_STAFF_ID = "STAFF_ID";
+    public static final String COLUMN_BOOKING_BARBER_ID = "BARBER_ID";
     public static final String COLUMN_BOOKING_TIME = "BOOKING_TIME";
     public static final String COLUMN_BOOKING_CREATE_TIME = "CREATE_TIME";
     public static final String COLUMN_BOOKING_SLOT = "SLOT";
@@ -78,6 +69,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BOOKING_DETAIL_ID = "ID";
     public static final String COLUMN_BOOKING_DETAIL_BOOKING_ID = "BOOKING_ID";
     public static final String COLUMN_BOOKING_DETAIL_SERVICE_ID = "SERVICE_ID";
+
+    //Table TimeSlot
+    public static final String TIME_SLOT_TABLE = "TIME_SLOT";
+    public static final String COLUMN_TIME_SLOT_ID = "ID";
+    public static final String COLUMN_TIME_START_TABLE = "TIME_START";
+    public static final String COLUMN_STATUS_TABLE = "STATUS";
+    public static final String COLUMN_DATE_TABLE = "DATE";
+    public static final String COLUMN_BARBER_ID = "BARBER_ID";
 
 
     public DatabaseHelper(@Nullable Context context) {
@@ -99,13 +98,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createServicesTable(db);
         insertServicesTable(db);
         //VOUCHERS
-        createVouchersTable(db);
-        insertVouchersTable(db);
         //BOOKING
         createBookingTable(db);
         insertBookingTable(db);
         //BOOKING DETAIL
         createBookingDetailTable(db);
+        //TIME SLOT
+        createTimeSlotTable(db);
+        insertTimeSlotTable(db);
+    }
+
+    private void insertTimeSlotTable(SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_STATUS_TABLE, 0);
+        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_BARBER_ID, 1);
+        db.insert(TIME_SLOT_TABLE, null, values);
+    }
+
+    private void createTimeSlotTable(SQLiteDatabase db) {
+        String createTableTimeSlot = "CREATE TABLE IF NOT EXISTS " + TIME_SLOT_TABLE + " (" +
+                COLUMN_TIME_SLOT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TIME_START_TABLE + " TEXT, " +
+                COLUMN_STATUS_TABLE + " INTEGER, " +
+                COLUMN_DATE_TABLE + " TEXT, " +
+                COLUMN_BARBER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + ")" +
+                ")";
+        db.execSQL(createTableTimeSlot);
     }
 
     //this is called if the database version number changes, It prevents previous users app from breaking when you change the database design
@@ -116,8 +136,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + ROLE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + CATEGORIES_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SERVICES_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + VOUCHERS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + BOOKING_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TIME_SLOT_TABLE);
         // Tạo lại bảng mới với cấu trúc đã cập nhật
         onCreate(db);
     }
@@ -134,7 +154,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DATEOFBIRTH + " TEXT, " +
                 COLUMN_ACCOUNT_FILE_PICTURE + " TEXT, " +
                 COLUMN_IS_BLOCK + " INTEGER, " +
-                COLUMN_FOREIGN_ROLEID + " INTEGER REFERENCES " + ROLE_TABLE + "("+ COLUMN_ROLE_ID + ")" +
+                COLUMN_FOREIGN_ROLEID + " INTEGER REFERENCES " + ROLE_TABLE + "("+ COLUMN_ROLE_ID + ")," +
+                COLUMN_ABOUT + " TEXT" +
                 ")";
         db.execSQL(createTableAccount);
     }
@@ -178,7 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void createBookingTable(SQLiteDatabase db) {
         String createTableBooking = "CREATE TABLE IF NOT EXISTS " + BOOKING_TABLE + " (" + COLUMN_BOOKING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_BOOKING_USER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
-                COLUMN_BOOKING_STAFF_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
+                COLUMN_BOOKING_BARBER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
                 COLUMN_BOOKING_TIME + " TEXT, " +
                 COLUMN_BOOKING_SLOT + " TEXT, " +
                 COLUMN_BOOKING_STATUS + " TEXT, " +
@@ -223,27 +244,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        db.execSQL(sql);
     }
 
-    public void createVouchersTable(SQLiteDatabase db) {
-        String createTableVouchers = "CREATE TABLE IF NOT EXISTS " + VOUCHERS_TABLE + " (" + COLUMN_VOUCHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_VOUCHER_NAME + " TEXT, " +
-                COLUMN_VOUCHER_CODE + " TEXT, " +
-                COLUMN_VOUCHER_VALUE + " DOUBLE, " +
-                COLUMN_VOUCHER_QUANTITY + " INTEGER, " +
-                COLUMN_VOUCHER_START + " TEXT, " +
-                COLUMN_VOUCHER_END + " TEXT)";
-
-        db.execSQL(createTableVouchers);
-    }
-
-    public void insertVouchersTable(SQLiteDatabase db) {
-        String sql = "";
-        sql = "INSERT INTO " + VOUCHERS_TABLE + " VALUES (null, 'Giảm 10k', '10k', 10000, 100, '14-07-2023', '02-09-2023')";
-        db.execSQL(sql);
-        sql = "INSERT INTO " + VOUCHERS_TABLE + " VALUES (null, 'Giảm 20k', '20k', 20000, 100, '14-07-2023', '02-09-2023')";
-        db.execSQL(sql);
-        sql = "INSERT INTO " + VOUCHERS_TABLE + " VALUES (null, 'Giảm 30k', '30k', 30000, 100, '14-07-2023', '02-09-2023')";
-        db.execSQL(sql);
-    }
 
     public boolean addOne(Account account) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -267,21 +267,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insertAccountTable(SQLiteDatabase db) {
         //admin
         String sql = "";
-        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'ADMIN', 'admin', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 1 )";
+        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'ADMIN', 'admin', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 1,'' )";
         db.execSQL(sql);
 
         //staff
-        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Minh Tuấn', 'tuan', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 2 )";
+        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Minh Tuấn', 'tuan', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 2,'about me' )";
         db.execSQL(sql);
-        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Phong BVB', 'phong', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 2 )";
+        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Phong BVB', 'phong', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 2,'about me' )";
         db.execSQL(sql);
-        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Liêm Barber', 'liem', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 2 )";
+        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Liêm Barber', 'liem', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 2,'about me' )";
         db.execSQL(sql);
-        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Hào Napoli', 'hao', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', null, 0, 2 )";
+        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'Hào Napoli', 'hao', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', null, 0, 2,'about me' )";
         db.execSQL(sql);
 
         //user
-        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'USER', 'user', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 3 )";
+        sql = "INSERT INTO " + ACCOUNT_TABLE + " VALUES (null,'USER', 'user', '1', '0901248851', 'admin@gmail.com', 'Nam', '22-07-2001', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png', 0, 3,'about me' )";
         db.execSQL(sql);
     }
 

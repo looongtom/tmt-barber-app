@@ -15,9 +15,22 @@ public class Account implements Serializable {
     private String avatar = "https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png";
     private boolean is_Block;
     private int roleId = 3;
+    private String about;
+
+    public boolean isIs_Block() {
+        return is_Block;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
 
     //Staff
-    public Account(int id, String name, String username, String password, String email, String phone, String dateOfBirth, String gender,String avatar, int roleId) {
+    public Account(int id, String name, String username, String password, String email, String phone, String dateOfBirth, String gender,String avatar, int roleId,String about) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -28,6 +41,7 @@ public class Account implements Serializable {
         this.gender = gender;
         this.avatar = avatar;
         this.roleId = roleId;
+        this.about = about;
     }
 
     //User
@@ -71,6 +85,23 @@ public class Account implements Serializable {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public String getAccount() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", gender='" + gender + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", is_Block=" + is_Block +
+                ", roleId=" + roleId +
+                ", about me=" + about +
+                '}';
     }
 
     //Getter and Setter

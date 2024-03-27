@@ -10,16 +10,16 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="410dp"
-        android:layout_height="120dp"
+        android:layout_height="110dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstrains"></LinearLayout>
 
     <ImageView
+        android:id="@+id/avatar"
         android:layout_width="129dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="110dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/barber_man"
         app:layout_constraintEnd_toStartOf="@+id/barberProfileName"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
-                android:text="THÊM BARBER MỚI"
+                android:text="Thông tin"
                 android:textColor="@color/black"
                 android:textSize="33sp"
                 app:layout_constraintBottom_toTopOf="@id/Username"
@@ -117,7 +117,7 @@
             <LinearLayout
                 android:id="@+id/Password"
                 android:layout_width="297dp"
-                android:layout_height="58dp"
+                android:layout_height="70dp"
                 android:layout_marginTop="15dp"
 
                 app:layout_constraintEnd_toEndOf="parent"
@@ -126,15 +126,15 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <EditText
-                    android:id="@+id/txtPassword"
+                    android:id="@+id/txtAboutMe"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Mật khẩu"
+                    android:layout_height="match_parent"
+                    android:hint="Mô tả cá nhân"
                     android:textColorHint="@color/white_gray"
                     app:boxStrokeColor="@color/black"
                     app:endIconMode="password_toggle"
                     app:hintTextColor="@color/white_gray"
-                    android:inputType="textPassword"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/black" />
                 />
 
@@ -214,7 +214,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/DateOfBirth"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
-
                 <Spinner
                     android:id="@+id/spinner"
                     android:layout_width="301dp"
@@ -222,35 +221,37 @@
                     tools:listitem="" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btAdd"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="@color/primary"
-                android:text="Add"
-                android:textColor="@color/black_custom"
-                android:textSize="20sp"
+
+            <LinearLayout
+                android:id="@+id/lnButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/selectGender" />
+                app:layout_constraintTop_toBottomOf="@id/selectGender"
+                android:layout_marginTop="15dp"
+                android:weightSum="2">
+                <Button
+                    android:id="@+id/btUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/primary"
+                    android:text="Update"
+                    android:textColor="@color/black_custom"
+                    android:textSize="20sp" />
+                <Button
+                    android:id="@+id/btCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FF9800"
+                    android:text="Cancel"
+                    android:textColor="@color/black_custom"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/li1"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:visibility="gone"/>
-
-            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

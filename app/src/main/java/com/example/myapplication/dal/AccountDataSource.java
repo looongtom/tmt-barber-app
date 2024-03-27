@@ -24,7 +24,9 @@ public class AccountDataSource {
             dbHelper.COLUMN_GENDER,
             dbHelper.COLUMN_DATEOFBIRTH,
             dbHelper.COLUMN_FOREIGN_ROLEID,
-            dbHelper.COLUMN_IS_BLOCK
+            dbHelper.COLUMN_IS_BLOCK,
+            dbHelper.COLUMN_ABOUT,
+
     };
 
     public AccountDataSource(Context context){
@@ -68,6 +70,8 @@ public class AccountDataSource {
 //                isBlock = cursor.getInt(columnIndex) == 1;
                 boolean is_block =cursor.getInt(9) == 1;
                 int role_ID = cursor.getInt(10);
+                String about = cursor.getString(11);
+
 //                boolean is_block = cursor.get
 
                 // Create a Category object
@@ -92,9 +96,10 @@ public class AccountDataSource {
         cv.put(dbHelper.COLUMN_EMAIL, account.getEmail());
         cv.put(dbHelper.COLUMN_PHONENUMBER, account.getPhone());
         cv.put(dbHelper.COLUMN_DATEOFBIRTH, account.getDateOfBirth());
-        cv.put(dbHelper.COLUMN_FOREIGN_ROLEID, account.getRoleId());
+        cv.put(dbHelper.COLUMN_FOREIGN_ROLEID, account.getRoleId());// barber = 2, user = 3
         cv.put(dbHelper.COLUMN_GENDER, account.getGender());
-
+        cv.put(dbHelper.COLUMN_ABOUT, account.getAbout());
+        cv.put(dbHelper.COLUMN_ACCOUNT_FILE_PICTURE, "https://res.cloudinary.com/dgm68hajt/image/upload/v1689830191/user_ppwwwc.png");
         long insertId = db.insert(dbHelper.ACCOUNT_TABLE, null, cv);
         Cursor cursor = db.query(dbHelper.ACCOUNT_TABLE, allColumns, null,null,null,null,null );
         cursor.moveToFirst();
@@ -114,6 +119,7 @@ public class AccountDataSource {
         account.setGender(cursor.getString(6));
         account.setDateOfBirth(cursor.getString(7));
         account.setRoleId(cursor.getInt(8));
+        account.setAbout(cursor.getString(9));
         return account;
     }
 
@@ -232,10 +238,9 @@ public class AccountDataSource {
                 String dateOfBirth = cursor.getString(7);
                 String avatar = cursor.getString(8);
                 int role_ID = cursor.getInt(9);
-
+                String about = cursor.getString(11);
                 // Create a Category object
-                Account account = new Account(accountID, name, username, password, phoneNumber, email, gender, dateOfBirth, avatar, role_ID);
-
+                Account account = new Account(accountID, name, username, password, email, phoneNumber, dateOfBirth, gender, avatar, role_ID,about);
                 // Add the category to the list
                 accounts.add(account);
             } while (cursor.moveToNext());
@@ -246,12 +251,17 @@ public class AccountDataSource {
         return accounts;
     }
 
-    public static boolean updateAccount(Context context, Account acc) {
-        dbHelper = new DatabaseHelper(context);
+    public static boolean updateAccount( Account account) {
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(dbHelper.COLUMN_IS_BLOCK, acc.getIs_Block());
-        int updateAccount = db.update(dbHelper.ACCOUNT_TABLE, cv, dbHelper.COLUMN_ACCOUNT_ID + " = ?", new String[]{Integer.toString(acc.getId())});
+        cv.put(dbHelper.COLUMN_NAME, account.getName());
+        cv.put(dbHelper.COLUMN_USERNAME, account.getUsername());
+        cv.put(dbHelper.COLUMN_ABOUT, account.getAbout());
+        cv.put(dbHelper.COLUMN_EMAIL, account.getEmail());
+        cv.put(dbHelper.COLUMN_DATEOFBIRTH, account.getDateOfBirth());
+        cv.put(dbHelper.COLUMN_GENDER, account.getGender());
+        cv.put(dbHelper.COLUMN_ACCOUNT_FILE_PICTURE, account.getAvatar());
+        int updateAccount = db.update(dbHelper.ACCOUNT_TABLE, cv, dbHelper.COLUMN_ACCOUNT_ID + " = ?", new String[]{String.valueOf(account.getId())});
         return updateAccount > 0;
     }
 

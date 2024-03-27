@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Click on fab", Toast.LENGTH_SHORT).show();
+                //display activity choose barber
+                Intent intent=new Intent(MainActivity.this,ChooseBarberActivity.class);
+                startActivity(intent);
             }
         });
         ViewPagerAdapter adapter=new ViewPagerAdapter(getSupportFragmentManager(),
