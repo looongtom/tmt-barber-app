@@ -16,10 +16,14 @@ import android.widget.Toast;
 import com.example.myapplication.adapter.ChooseServiceRecycleViewAdapter;
 import com.example.myapplication.dal.DatabaseHelper;
 import com.example.myapplication.dal.ServiceDataSource;
+import com.example.myapplication.dal.TimeSlotDataSource;
 import com.example.myapplication.model.Account;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.TimeSlot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,7 +60,18 @@ public class ChooseServiceActivity extends AppCompatActivity implements ChooseSe
             public void onClick(View v) {
                 Intent intent= new Intent(ChooseServiceActivity.this,ChooseTimeSlotActivity.class);
                 intent.putExtra("account",account);
-                intent.putExtra("listIdService",new ArrayList<>(listIdService));
+                intent.putExtra("listIdService",new HashSet<>(listIdService));
+
+                //get current date
+                String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+                TimeSlotDataSource timeSlotDataSource = new TimeSlotDataSource(ChooseServiceActivity.this);
+
+                List<TimeSlot> list=  timeSlotDataSource.getTimeSlotByBarberIdAndDate(account.getId(),date);
+                if(list==null){
+                    list=timeSlotDataSource.insertTimeSlotForDate(date,account.getId());
+                }
+                intent.putExtra("listTimeSlot",new ArrayList<>(list));
                 startActivity(intent);
             }
         });

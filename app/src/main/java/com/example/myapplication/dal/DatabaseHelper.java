@@ -57,18 +57,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BOOKING_ID = "ID";
     public static final String COLUMN_BOOKING_USER_ID = "USER_ID";
     public static final String COLUMN_BOOKING_BARBER_ID = "BARBER_ID";
+    public static final String COLUMN_RESULT_ID = "RESULT_ID";
     public static final String COLUMN_BOOKING_TIME = "BOOKING_TIME";
     public static final String COLUMN_BOOKING_CREATE_TIME = "CREATE_TIME";
-    public static final String COLUMN_BOOKING_SLOT = "SLOT";
-    public static final String COLUMN_BOOKING_TOTAL = "TOTAL";
-
     public static final String COLUMN_BOOKING_STATUS = "STATUS";
+    public static final String COLUMN_BOOKING_TOTAL = "TOTAL";
+    public static final String COLUMN_BOOKING_SLOT_ID = "SLOT_ID";
+
 
     //TABLE BOOKING_DETAIL
     public static final String BOOKING_DETAIL_TABLE = "BOOKING_DETAIL";
     public static final String COLUMN_BOOKING_DETAIL_ID = "ID";
     public static final String COLUMN_BOOKING_DETAIL_BOOKING_ID = "BOOKING_ID";
     public static final String COLUMN_BOOKING_DETAIL_SERVICE_ID = "SERVICE_ID";
+    public static final String COLUMN_BOOKING_DETAIL_SERVICE_NAME = "SERVICE_NAME";
 
     //Table TimeSlot
     public static final String TIME_SLOT_TABLE = "TIME_SLOT";
@@ -100,121 +102,121 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //VOUCHERS
         //BOOKING
         createBookingTable(db);
-        insertBookingTable(db);
+//        insertBookingTable(db);
         //BOOKING DETAIL
         createBookingDetailTable(db);
         //TIME SLOT
         createTimeSlotTable(db);
-        insertTimeSlotTable(db);
+//        insertTimeSlotTable(db);
     }
 
-    private void insertTimeSlotTable(SQLiteDatabase db) {
+    private void insertTimeSlotTable(SQLiteDatabase db,String date) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TIME_START_TABLE, "9:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "09:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "10:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "10:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "11:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "11:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "12:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "12:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "13:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "13:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "14:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "14:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "15:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "15:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "16:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "16:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "17:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
-        values.put(COLUMN_TIME_START_TABLE, "9:00");
+        values.put(COLUMN_TIME_START_TABLE, "17:30");
         values.put(COLUMN_STATUS_TABLE, "Available");
-        values.put(COLUMN_DATE_TABLE, "27-03-2024");
+        values.put(COLUMN_DATE_TABLE, date);
         values.put(COLUMN_BARBER_ID, 1);
         db.insert(TIME_SLOT_TABLE, null, values);
 
@@ -300,15 +302,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void createBookingTable(SQLiteDatabase db) {
-        String createTableBooking = "CREATE TABLE IF NOT EXISTS " + BOOKING_TABLE + " (" + COLUMN_BOOKING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_BOOKING_USER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
-                COLUMN_BOOKING_BARBER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
-                COLUMN_BOOKING_TIME + " TEXT, " +
-                COLUMN_BOOKING_SLOT + " TEXT, " +
-                COLUMN_BOOKING_STATUS + " TEXT, " +
-                COLUMN_BOOKING_TOTAL + " TEXT, " +
-                COLUMN_BOOKING_CREATE_TIME + " TEXT)";
-        db.execSQL(createTableBooking);
+//        String createTableBooking = "CREATE TABLE IF NOT EXISTS " + BOOKING_TABLE + " (" + COLUMN_BOOKING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                COLUMN_BOOKING_USER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
+//                COLUMN_BOOKING_BARBER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
+//                COLUMN_BOOKING_TIME + " TEXT, " +
+//                COLUMN_BOOKING_SLOT + " TEXT, " +
+//                COLUMN_BOOKING_STATUS + " TEXT, " +
+//                COLUMN_BOOKING_TOTAL + " TEXT, " +
+//                COLUMN_BOOKING_CREATE_TIME + " TEXT)";
+//        db.execSQL(createTableBooking);
     }
     public void insertBookingTable(SQLiteDatabase db) {
         String sql = "";

@@ -56,7 +56,13 @@ public class ChooseTimeSlotRecycleViewAdapter extends RecyclerView.Adapter<Choos
         TimeSlotDataSource timeSlotDataSource = new TimeSlotDataSource(context);
         holder.txtTimeSlot.setText(timeSlot.getTimeStart());
         holder.txtStatus.setText(timeSlot.getStatus());
+        if(timeSlot.getStatus().equals("Booked")){
+            holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.choosen_color));
+            holder.cardView.setEnabled(false);
+            holder.txtStatus.setTextColor(context.getResources().getColor(R.color.white));
+            holder.txtTimeSlot.setTextColor(context.getResources().getColor(R.color.white));
 
+        }
     }
 
     @Override
