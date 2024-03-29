@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -25,6 +26,7 @@ import com.example.myapplication.dal.TimeSlotDataSource;
 import com.example.myapplication.model.Account;
 import com.example.myapplication.model.TimeSlot;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,7 +136,12 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                 }
                 TimeSlotDataSource timeSlotDataSource = new TimeSlotDataSource(ChooseTimeSlotActivity.this);
                 timeSlotDataSource.chooseTimeSlot(choosenTimeSlot.getId());
-                Toast.makeText(ChooseTimeSlotActivity.this, "Choose time "+ choosenTimeSlot.getTimeStart()+" "+choosenTimeSlot.getDate() + " slot successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ChooseTimeSlotActivity.this, BookingActivity.class);
+                intent.putExtra("timeSlot",choosenTimeSlot);
+                intent.putExtra("account",barber);
+                intent.putExtra("listIdService", (Serializable) listIdService);
+                intent.putExtra("queryDate",queryDate);
+                startActivity(intent);
             }
         });
 
