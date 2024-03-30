@@ -28,8 +28,11 @@ import com.example.myapplication.model.TimeSlot;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -98,8 +101,15 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                         } else {
                             date = dayOfMonth + "-0" + (month + 1)+ "-"+year;
                         }
-                        edtDate.setText(date);
-                        queryDate = date;
+                        if(compareDate(date,getToday())){
+                            edtDate.setText(date);
+                            queryDate = date;
+                        }else{
+                            Toast.makeText(ChooseTimeSlotActivity.this, "Cannot choose date before today", Toast.LENGTH_SHORT).show();
+                            edtDate.setText(getToday());
+                            queryDate=getToday();
+                        }
+
                     }
                 }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -121,8 +131,10 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
             public void afterTextChanged(Editable editable) {
                 timeSlotList.clear();
                 TimeSlotDataSource timeSlotDataSource = new TimeSlotDataSource(ChooseTimeSlotActivity.this);
-
                 timeSlotList =   timeSlotDataSource.getTimeSlotByBarberIdAndDate(barberId,edtDate.getText().toString());
+                if( timeSlotList==null ){
+                    timeSlotList=timeSlotDataSource.insertTimeSlotForDate(edtDate.getText().toString(),barberId);
+                }
                 adapter.setList(timeSlotList);
             }
         });
@@ -145,6 +157,25 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
             }
         });
 
+    }
+
+    public boolean compareDate(String str1, String str2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            Date date1 = sdf.parse(str1);
+            Date date2 = sdf.parse(str2);
+
+            if(date1.compareTo(date2) < 0) {
+                //before
+                return false;
+            } else {
+//                after
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private String getToday() {

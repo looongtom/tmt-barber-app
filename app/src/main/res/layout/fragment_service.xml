@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +23,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:text="DỊCH VỤ"
-                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textColor="@color/primary"
                 android:textSize="18dp" />
 
             <Button

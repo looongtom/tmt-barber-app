@@ -20,9 +20,14 @@ import java.util.List;
 public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<ChooseServiceRecycleViewAdapter.ServiceViewHolder> {
     private List<Service>list;
     private ItemListener itemListener;
+    private Boolean isChoose=true;
 
     public ChooseServiceRecycleViewAdapter() {
         list = new ArrayList<>();
+    }
+
+    public void setChoose(Boolean choose) {
+        isChoose = choose;
     }
 
     public void setItemListener(ItemListener itemListener) {
@@ -74,12 +79,13 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
             tvPrice=view.findViewById(R.id.tvPrice);
             tvDescription=view.findViewById(R.id.tvDescription);
             checkBox=view.findViewById(R.id.cbChoose);
+            if(!isChoose)checkBox.setVisibility(View.INVISIBLE);
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if(itemListener!=null){
+            if(itemListener!=null && isChoose){
                 itemListener.onItemClick(view,getAdapterPosition());
             }
         }

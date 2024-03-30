@@ -57,11 +57,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BOOKING_ID = "ID";
     public static final String COLUMN_BOOKING_USER_ID = "USER_ID";
     public static final String COLUMN_BOOKING_BARBER_ID = "BARBER_ID";
-    public static final String COLUMN_RESULT_ID = "RESULT_ID";
-    public static final String COLUMN_BOOKING_TIME = "BOOKING_TIME";
+    public static final String COLUMN_BOOKING_RESULT_ID = "RESULT_ID";
     public static final String COLUMN_BOOKING_CREATE_TIME = "CREATE_TIME";
     public static final String COLUMN_BOOKING_STATUS = "STATUS";
-    public static final String COLUMN_BOOKING_TOTAL = "TOTAL";
+    public static final String COLUMN_BOOKING_TOTAL = "PRICE";
     public static final String COLUMN_BOOKING_SLOT_ID = "SLOT_ID";
 
 
@@ -70,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BOOKING_DETAIL_ID = "ID";
     public static final String COLUMN_BOOKING_DETAIL_BOOKING_ID = "BOOKING_ID";
     public static final String COLUMN_BOOKING_DETAIL_SERVICE_ID = "SERVICE_ID";
-    public static final String COLUMN_BOOKING_DETAIL_SERVICE_NAME = "SERVICE_NAME";
+//    public static final String COLUMN_BOOKING_DETAIL_SERVICE_NAME = "SERVICE_NAME";
 
     //Table TimeSlot
     public static final String TIME_SLOT_TABLE = "TIME_SLOT";
@@ -80,6 +79,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DATE_TABLE = "DATE";
     public static final String COLUMN_BARBER_ID = "BARBER_ID";
 
+    //Table Result
+    public static final String RESULT_TABLE = "RESULT";
+    public static final String COLUMN_RESULT_ID = "ID";
+    public static final String COLUMN_RESULT_TIME= "CREATE_TIME";
+
+    //Table ImageResult
+    public static final String COLUMN_IMAGE_RESULT_TABLE = "IMAGE_RESULT";
+    public static final String COLUMN_IMAGE_RESULT_ID = "ID";
+    public static final String COLUMN_IMAGE_RESULT_RESULT_ID = "RESULT_ID";
+    public static final String COLUMN_IMAGE_RESULT_URL = "IMAGE";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, "barber.db", null, DATABASE_VERSION);
@@ -108,7 +117,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //TIME SLOT
         createTimeSlotTable(db);
 //        insertTimeSlotTable(db);
+        //RESULT
+        createResultTable(db);
+        //IMAGE RESULT
+        createImageResultTable(db);
     }
+
+    public void createResultTable(SQLiteDatabase db){
+        String createTableStatement = "CREATE TABLE " + RESULT_TABLE + " (" +
+                "" + COLUMN_RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_RESULT_TIME + " TEXT)";
+        db.execSQL(createTableStatement);
+    }
+
+    public void createImageResultTable(SQLiteDatabase db){
+        String createTableStatement = "CREATE TABLE " + COLUMN_IMAGE_RESULT_TABLE + " (" +
+                "" + COLUMN_IMAGE_RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_IMAGE_RESULT_URL + " TEXT, " +
+                COLUMN_IMAGE_RESULT_RESULT_ID + " INTEGER, " +
+                "FOREIGN KEY (" + COLUMN_IMAGE_RESULT_RESULT_ID + ") REFERENCES " + RESULT_TABLE + "(" + COLUMN_RESULT_ID + "))";
+        db.execSQL(createTableStatement);
+    }
+
+
 
     private void insertTimeSlotTable(SQLiteDatabase db,String date) {
         ContentValues values = new ContentValues();

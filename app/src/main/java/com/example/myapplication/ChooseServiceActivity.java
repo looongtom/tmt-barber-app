@@ -58,6 +58,10 @@ public class ChooseServiceActivity extends AppCompatActivity implements ChooseSe
         btNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(listIdService.size()==0){
+                    Toast.makeText(ChooseServiceActivity.this,"Please choose at least one service",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent= new Intent(ChooseServiceActivity.this,ChooseTimeSlotActivity.class);
                 intent.putExtra("account",account);
                 intent.putExtra("listIdService",new HashSet<>(listIdService));

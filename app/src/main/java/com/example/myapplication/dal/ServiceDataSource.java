@@ -24,18 +24,19 @@ public class ServiceDataSource {
     public ServiceDataSource(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
+
     public void open() throws SQLException {
         db = dbHelper.getWritableDatabase();
     }
 
-    public static ArrayList<Service> selectAllService(Context context){
+    public static ArrayList<Service> selectAllService(Context context) {
         ArrayList<Service> services = new ArrayList<Service>();
         ServiceDataSource serviceDataSource = new ServiceDataSource(context);
         serviceDataSource.open();
         Cursor cursor = db.query(DatabaseHelper.SERVICES_TABLE, allColumns, null, null, null, null, null);
         cursor.moveToFirst();
-        if(!cursor.isAfterLast()){
-            do{
+        if (!cursor.isAfterLast()) {
+            do {
                 Service service = new Service();
                 service.setId(cursor.getInt(0));
                 service.setName(cursor.getString(1));
@@ -43,13 +44,13 @@ public class ServiceDataSource {
                 service.setDescription(cursor.getString(3));
                 service.setFilePath(cursor.getString(4));
                 services.add(service);
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
         return services;
     }
 
-    public Service addService(Service service){
+    public Service addService(Service service) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_SERVICE_NAME, service.getName());
@@ -66,12 +67,16 @@ public class ServiceDataSource {
 
     private Service cursorToService(Cursor cursor) {
         Service serv = new Service();
-        serv.setName(cursor.getString(0));
-//        serv.setCategory_id(cursor.getInt(1));
+        serv.setId(cursor.getInt(0));
+        serv.setName(cursor.getString(1));
+        serv.setPrice(cursor.getDouble(2));
+        serv.setDescription(cursor.getString(3));
+        serv.setFilePath(cursor.getString(4));
+
         return serv;
     }
 
-    public int updateService( Service service) {
+    public int updateService(Service service) {
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(dbHelper.COLUMN_SERVICE_NAME, service.getName());
@@ -79,9 +84,19 @@ public class ServiceDataSource {
         cv.put(dbHelper.COLUMN_SERVICE_PRICE, service.getPrice());
         cv.put(dbHelper.COLUMN_SERVICE_FILE, service.getFilePath());
 
-        String whereCLase="id=?";
-        String[] whereArgs = {service.getId()+""};
+        String whereCLase = "id=?";
+        String[] whereArgs = {service.getId() + ""};
         return db.update(dbHelper.SERVICES_TABLE, cv, whereCLase, whereArgs);
+    }
+
+    public Service getById(int id) {
+        db = dbHelper.getWritableDatabase();
+        Cursor rs = db.query(dbHelper.SERVICES_TABLE, allColumns, dbHelper.COLUMN_SERVICE_ID + "= ?", new String[]{String.valueOf(id)}, null, null, null);
+        if (rs != null && rs.moveToNext()) {
+            Service service = cursorToService(rs);
+            return service;
+        }
+        return null;
     }
 
 //    public static boolean deleteService(Context context, int id) {

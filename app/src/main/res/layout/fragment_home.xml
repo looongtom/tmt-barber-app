@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/primary"
     android:layout_height="match_parent">
 
     <ScrollView
@@ -12,7 +13,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black">
+            android:background="@color/primary">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -45,8 +46,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="Welcome back,"
-                    android:textColor="@color/white_gray"
-                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="25dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,9 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="5dp"
                     android:text="Minh Tuan"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="28dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -73,19 +75,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.487" />
 
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="6dp"
-                    android:text="Barbershop"
-                    android:textColor="@color/white_gray"
-                    android:textSize="17dp"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtName" />
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -99,7 +89,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="580dp"
-                    android:background="@color/black_custom"
+                    android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -142,15 +132,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
-                            android:text="THỢ CẮT"
-                            android:textColor="@color/white"
+                            android:text="Our Barbers"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary"
                             android:textSize="18sp" />
 
                         <Button
                             android:id="@+id/btAddBarber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Thêm thợ cắt" />
+                            android:background="@color/primary"
+                            android:textColor="@color/white"
+                            android:layout_marginLeft="20dp"
+                            android:text="Add Barber" />
 
                     </LinearLayout>
 
@@ -160,9 +154,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="8dp"
-                        android:backgroundTint="@color/green_custom"
+                        android:backgroundTint="@color/primary"
                         android:text="Manage Category"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:visibility="gone"
                         app:layout_constraintStart_toEndOf="@+id/tv_name_category"
                         app:layout_constraintTop_toBottomOf="@+id/rcvStaff" />
@@ -181,8 +175,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="20dp"
-                        android:text="DANH MỤC"
-                        android:textColor="@color/white"
+                        android:text="Our Services"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rcvStaff" />
