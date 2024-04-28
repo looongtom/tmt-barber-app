@@ -1,6 +1,8 @@
 package com.example.myapplication.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,10 +50,17 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
         adapter=new ServiceRecycleViewAdapter();
         db=new DatabaseHelper(getContext());
 
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+
         LinearLayoutManager manager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         adapter.setItemListener(this);
+
+        if(roleId!=1) {
+            btAdd.setVisibility(View.GONE);
+        }
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,10 +72,16 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
 
     @Override
     public void onItemClick(View view, int pos) {
-        Service service=adapter.getItem(pos);
-        Intent intent=new Intent(getContext(), UpdateDeleteServiceActivity.class);
-        intent.putExtra("service",service);
-        startActivity(intent);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+        if(roleId!=1){
+            return;
+        }else{
+            Service service=adapter.getItem(pos);
+            Intent intent=new Intent(getContext(), UpdateDeleteServiceActivity.class);
+            intent.putExtra("service",service);
+            startActivity(intent);
+        }
     }
 
     @Override

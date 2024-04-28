@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TMT Barber app</string>
+    <string-array name="gender_options">
+        <item>Nam</item>
+        <item>Nữ</item>
+    </string-array>
 </resources>

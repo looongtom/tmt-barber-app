@@ -6,7 +6,9 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("UserData",Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+        int userId = sharedPreferences.getInt("userId", -1);
+        String userName=sharedPreferences.getString("username","");
+
         navigationView=findViewById(R.id.bottom_nav);
         viewPager=findViewById(R.id.viewPager);
         fab=findViewById(R.id.fab);

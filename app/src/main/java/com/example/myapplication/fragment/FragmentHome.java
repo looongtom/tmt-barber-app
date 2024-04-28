@@ -1,11 +1,14 @@
 package com.example.myapplication.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +31,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     private BarberRecycleViewAdapter adapter;
     private DatabaseHelper db;
     private Button btManageBarber;
+    private TextView txtName;
 
     @Nullable
     @Override
@@ -40,13 +44,24 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         super.onViewCreated(view, savedInstanceState);
         recyclerView=view.findViewById(R.id.rcvStaff);
         btManageBarber=view.findViewById(R.id.btAddBarber);
+        txtName=view.findViewById(R.id.txtName);
         adapter=new BarberRecycleViewAdapter(getContext());
         db=new DatabaseHelper(getContext());
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+        int userId = sharedPreferences.getInt("userId", -1);
+        String userName=sharedPreferences.getString("username","");
+        txtName.setText(userName);
 
         LinearLayoutManager manager=new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
         adapter.setItemListener(this);
+
+        if(roleId!=1){
+            btManageBarber.setVisibility(View.GONE);
+        }
 
         btManageBarber.setOnClickListener(new View.OnClickListener() {
             @Override

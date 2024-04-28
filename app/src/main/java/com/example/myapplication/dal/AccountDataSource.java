@@ -19,8 +19,8 @@ public class AccountDataSource {
             dbHelper.COLUMN_NAME,
             dbHelper.COLUMN_USERNAME,
             dbHelper.COLUMN_PASSWORD,
-            dbHelper.COLUMN_PHONENUMBER,
             dbHelper.COLUMN_EMAIL,
+            dbHelper.COLUMN_PHONENUMBER,
             dbHelper.COLUMN_GENDER,
             dbHelper.COLUMN_DATEOFBIRTH,
             dbHelper.COLUMN_FOREIGN_ROLEID,
@@ -167,6 +167,19 @@ public class AccountDataSource {
         return name;
     }
 
+    public Account getAccountById(int id) {
+        db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(dbHelper.ACCOUNT_TABLE, allColumns, dbHelper.COLUMN_ACCOUNT_ID + " = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        Account account = cursorToAccount(cursor);
+        cursor.close();
+        db.close();
+        return account;
+    }
+
     public String getStaffByStaffId(int staffId) {
         String name = "";
         db = dbHelper.getReadableDatabase();
@@ -253,15 +266,18 @@ public class AccountDataSource {
 
     public static boolean updateAccount( Account account) {
         db = dbHelper.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(dbHelper.COLUMN_NAME, account.getName());
-        cv.put(dbHelper.COLUMN_USERNAME, account.getUsername());
-        cv.put(dbHelper.COLUMN_ABOUT, account.getAbout());
-        cv.put(dbHelper.COLUMN_EMAIL, account.getEmail());
-        cv.put(dbHelper.COLUMN_DATEOFBIRTH, account.getDateOfBirth());
-        cv.put(dbHelper.COLUMN_GENDER, account.getGender());
-        cv.put(dbHelper.COLUMN_ACCOUNT_FILE_PICTURE, account.getAvatar());
-        int updateAccount = db.update(dbHelper.ACCOUNT_TABLE, cv, dbHelper.COLUMN_ACCOUNT_ID + " = ?", new String[]{String.valueOf(account.getId())});
+        ContentValues values = new ContentValues();
+        values.put(dbHelper.COLUMN_NAME, account.getName());
+        values.put(dbHelper.COLUMN_USERNAME, account.getUsername());
+        values.put(dbHelper.COLUMN_ABOUT, account.getAbout());
+        values.put(dbHelper.COLUMN_PHONENUMBER, account.getPhone());
+        values.put(dbHelper.COLUMN_EMAIL, account.getEmail());
+        values.put(dbHelper.COLUMN_DATEOFBIRTH, account.getDateOfBirth());
+        values.put(dbHelper.COLUMN_GENDER, account.getGender());
+        values.put(dbHelper.COLUMN_ACCOUNT_FILE_PICTURE, account.getAvatar());
+        String selection = dbHelper.COLUMN_ACCOUNT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(account.getId())};
+        int updateAccount = db.update(dbHelper.ACCOUNT_TABLE, values, selection, selectionArgs);
         return updateAccount > 0;
     }
 
