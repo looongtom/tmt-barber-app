@@ -89,9 +89,6 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
         super.onResume();
         ServiceDataSource serviceDataSource=new ServiceDataSource(getContext());
         List<Service> list=(List<Service>) serviceDataSource.selectAllService(getContext());
-        for(Service s: list){
-            System.out.println(s.getName());
-        }
         adapter.setList(list);
     }
 }

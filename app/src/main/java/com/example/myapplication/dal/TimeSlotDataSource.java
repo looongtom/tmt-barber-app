@@ -222,6 +222,21 @@ public class TimeSlotDataSource {
 //
 //    }
 
+    public TimeSlot getTimeSlotById(int id) {
+        db = dbHelper.getReadableDatabase();
+        String[] columns = {COLUMN_TIME_SLOT_ID, COLUMN_TIME_START_TABLE, COLUMN_STATUS_TABLE, COLUMN_DATE_TABLE, COLUMN_BARBER_ID};
+        String selection = COLUMN_TIME_SLOT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+        Cursor cursor = db.query(TIME_SLOT_TABLE, columns, selection, selectionArgs, null, null, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            TimeSlot timeSlot = cursorToTimeSlot(cursor);
+            cursor.close();
+            return timeSlot;
+        }
+        return null;
+    }
+
     public void chooseTimeSlot(int id) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();

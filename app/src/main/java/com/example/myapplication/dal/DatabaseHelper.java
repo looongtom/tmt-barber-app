@@ -58,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BOOKING_USER_ID = "USER_ID";
     public static final String COLUMN_BOOKING_BARBER_ID = "BARBER_ID";
     public static final String COLUMN_BOOKING_RESULT_ID = "RESULT_ID";
+    public static final String COLUMN_BOOKING_DATE= "DATE";
     public static final String COLUMN_BOOKING_CREATE_TIME = "CREATE_TIME";
     public static final String COLUMN_BOOKING_STATUS = "STATUS";
     public static final String COLUMN_BOOKING_TOTAL = "PRICE";
@@ -333,15 +334,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void createBookingTable(SQLiteDatabase db) {
-//        String createTableBooking = "CREATE TABLE IF NOT EXISTS " + BOOKING_TABLE + " (" + COLUMN_BOOKING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                COLUMN_BOOKING_USER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
-//                COLUMN_BOOKING_BARBER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
-//                COLUMN_BOOKING_TIME + " TEXT, " +
-//                COLUMN_BOOKING_SLOT + " TEXT, " +
-//                COLUMN_BOOKING_STATUS + " TEXT, " +
-//                COLUMN_BOOKING_TOTAL + " TEXT, " +
-//                COLUMN_BOOKING_CREATE_TIME + " TEXT)";
-//        db.execSQL(createTableBooking);
+        String createTableBooking = "CREATE TABLE IF NOT EXISTS " + BOOKING_TABLE + " (" + COLUMN_BOOKING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_BOOKING_USER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
+                COLUMN_BOOKING_BARBER_ID + " INTEGER REFERENCES " + ACCOUNT_TABLE + "(" + COLUMN_ACCOUNT_ID + "), " +
+                COLUMN_BOOKING_DATE + " TEXT, " +
+                COLUMN_BOOKING_SLOT_ID + " INTEGER REFERENCES " + TIME_SLOT_TABLE + "(" + COLUMN_TIME_SLOT_ID + "), " +
+                COLUMN_BOOKING_STATUS + " TEXT, " +
+                COLUMN_BOOKING_TOTAL + " TEXT, " +
+                COLUMN_BOOKING_CREATE_TIME + " TEXT)";
+        db.execSQL(createTableBooking);
     }
     public void insertBookingTable(SQLiteDatabase db) {
         String sql = "";

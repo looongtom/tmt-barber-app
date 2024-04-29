@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -21,9 +23,14 @@ import android.widget.Toast;
 
 import com.example.myapplication.adapter.ChooseTimeSlotRecycleViewAdapter;
 import com.example.myapplication.dal.AccountDataSource;
+import com.example.myapplication.dal.BookingDataSource;
+import com.example.myapplication.dal.BookingDetailDataSource;
 import com.example.myapplication.dal.DatabaseHelper;
+import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.dal.TimeSlotDataSource;
 import com.example.myapplication.model.Account;
+import com.example.myapplication.model.Booking;
+import com.example.myapplication.model.BookingDetail;
 import com.example.myapplication.model.TimeSlot;
 
 import java.io.Serializable;
@@ -59,6 +66,10 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_time_slot);
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+        int userId = sharedPreferences.getInt("userId", -1);
+        String userName=sharedPreferences.getString("username","");
 
         edtDate = findViewById(R.id.eDate);
         edtDate.setShowSoftInputOnFocus(false);
@@ -153,6 +164,25 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                 intent.putExtra("account",barber);
                 intent.putExtra("listIdService", (Serializable) listIdService);
                 intent.putExtra("queryDate",queryDate);
+
+                BookingDataSource bookingDataSource = new BookingDataSource(ChooseTimeSlotActivity.this);
+                Booking booking = new Booking();
+                booking.setBarberId(barberId);
+                booking.setUserId(userId);
+                booking.setTime(queryDate);
+                booking.setCreateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+                booking.setSlotId(choosenTimeSlot.getId());
+                booking.setPrice(1.0);
+                booking.setStatus("Đã đặt");
+                Booking insertBooking =  bookingDataSource.insertBooking(getApplicationContext(),booking);
+                intent.putExtra("idBooking",insertBooking.getId());
+
+                BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(ChooseTimeSlotActivity.this);
+                for(Integer idService : listIdService){
+                    BookingDetail bookingDetail = new BookingDetail(insertBooking.getId(),idService);
+                    bookingDetailDataSource.insert(bookingDetail);
+                }
+
                 startActivity(intent);
             }
         });
