@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:text="Thợ cắt:"
             android:textColor="@color/black"
             android:textSize="17dp"
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:text="Guesttt"
             android:textColor="@color/primary"
             android:textSize="17dp"
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:text="Ngày đặt:"
             android:textColor="@color/black"
             android:textSize="17dp"
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:text="Guesttt"
             android:textColor="@color/primary"
             android:textSize="17dp"
@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:text="Giờ cắt:"
             android:textColor="@color/black"
             android:textSize="17dp"
@@ -104,8 +104,8 @@
             android:id="@+id/txtSlot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="20dp"
             android:text="Guesttt"
             android:textColor="@color/primary"
             android:textSize="17dp"
@@ -113,25 +113,49 @@
             app:layout_constraintTop_toBottomOf="@+id/txtBookingTime" />
 
         <TextView
+            android:id="@+id/tv7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:text="Trạng thái:"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv4" />
+
+        <TextView
+            android:id="@+id/txtStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:text="Guesttt"
+            android:textColor="@color/primary"
+            android:textSize="17dp"
+            app:layout_constraintStart_toEndOf="@+id/tv7"
+            app:layout_constraintTop_toBottomOf="@+id/txtSlot" />
+
+        <TextView
             android:id="@+id/tv5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="12dp"
             android:text="Tổng tiền:"
             android:textColor="@color/black"
             android:textSize="17dp"
             app:layout_constraintBottom_toTopOf="@+id/rcvService"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv4"
+            app:layout_constraintTop_toBottomOf="@+id/tv7"
             app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/tv6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="44dp"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="12dp"
             android:text="5.000.000"
@@ -141,7 +165,7 @@
             app:layout_constraintBottom_toTopOf="@+id/rcvService"
             app:layout_constraintStart_toEndOf="@id/tv5"
             app:layout_constraintTop_toBottomOf="@+id/txtSlot"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.96" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvService"

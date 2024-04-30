@@ -85,6 +85,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         holder.txtBookingTime.setText(booking.getCreateTime());
         holder.txtSlot.setText(getStartTimeSlot(booking.getSlotId()) + "   :   " + booking.getTime());
         holder.txtPrice.setText(booking.getPrice().toString());
+        holder.txtStatus.setText(booking.getStatus());
 
         BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(context);
         List<BookingDetail> listBookingDetail = bookingDetailDataSource.getAllBookingDetail();
@@ -117,7 +118,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     }
 
     public class BookingViewHolder extends RecyclerView.ViewHolder{
-        private TextView txtUsername,txtStaff,txtBookingTime,txtSlot,txtPrice,textViewLine;
+        private TextView txtUsername,txtStaff,txtBookingTime,txtSlot,txtPrice,txtStatus;
         private RecyclerView recService;
 
         public BookingViewHolder(@NonNull View itemView) {
@@ -128,6 +129,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             txtSlot=itemView.findViewById(R.id.txtSlot);
             recService=itemView.findViewById(R.id.rcvService);
             txtPrice=itemView.findViewById(R.id.tv6);
+            txtStatus=itemView.findViewById(R.id.txtStatus);
         }
     }
 

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/primary"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primary">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -46,9 +46,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:text="Welcome back,"
-                    android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="25dp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,8 +74,6 @@
                     app:layout_constraintEnd_toStartOf="@+id/imageView2"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.487" />
-
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -133,33 +131,20 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
                             android:text="Our Barbers"
-                            android:textStyle="bold"
                             android:textColor="@color/primary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <Button
                             android:id="@+id/btAddBarber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@color/primary"
-                            android:textColor="@color/white"
                             android:layout_marginLeft="20dp"
-                            android:text="Add Barber" />
+                            android:background="@drawable/border_butoon"
+                            android:text="Add Barber"
+                            android:textColor="@color/white" />
 
                     </LinearLayout>
-
-                    <Button
-                        android:id="@+id/btnManageCategory"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="8dp"
-                        android:backgroundTint="@color/primary"
-                        android:text="Manage Category"
-                        android:textColor="@color/white"
-                        android:visibility="gone"
-                        app:layout_constraintStart_toEndOf="@+id/tv_name_category"
-                        app:layout_constraintTop_toBottomOf="@+id/rcvStaff" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rcvStaff"
@@ -169,31 +154,67 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/lnBarber" />
 
-                    <TextView
-                        android:id="@+id/tv_name_category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Our Services"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/rcvStaff" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rcvCategory"
+                    <LinearLayout
+                        android:id="@+id/lnButton"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="32dp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_name_category"
-                        tools:layout_editor_absoluteX="5dp" />
+                        android:layout_height="130dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/primary"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/rcvStaff">
+
+                        <Button
+                            android:id="@+id/btService"
+                            android:layout_width="120dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/border_black_button"
+                            android:text="Services"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <Button
+                            android:id="@+id/btBooking"
+                            android:layout_width="120dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/border_black_button"
+                            android:text="Booking"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <Button
+                            android:id="@+id/btHistory"
+                            android:layout_width="120dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/border_black_button"
+                            android:text="History"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+                        <!--                        <WebView-->
+                        <!--                            android:layout_width="400dp"-->
+                        <!--                            android:layout_height="560dp"/>-->
+                    </LinearLayout>
+
+
+                    <WebView
+                        android:id="@+id/webView"
+                        android:layout_width="400dp"
+                        android:layout_height="560dp"
+                        android:layout_marginTop="5dp"
+                        android:foregroundGravity="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lnButton" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </ScrollView>
 
 </FrameLayout>
