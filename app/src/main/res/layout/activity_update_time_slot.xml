@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/cardTimeSlot"
+    android:orientation="vertical"
+    tools:context=".ChooseTimeSlotActivity">
+
+    <TextView
+        android:id="@+id/tvHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@drawable/green_wallpaper_icon"
+        android:gravity="center"
+        android:text="SỬA LỊCH"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/eDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Choose date"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerTimeSlot"
+        app:layout_constraintTop_toBottomOf="@+id/tvHistory" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerTimeSlot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/eDate"/>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+
+        <Button
+            android:id="@+id/btNext"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="250dp"
+            android:layout_weight="1"
+            android:text="Next >>" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

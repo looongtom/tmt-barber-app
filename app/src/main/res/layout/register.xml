@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="410dp"
-        android:layout_height="126dp"
+        android:layout_height="90dp"
         android:background="@drawable/green_wallpaper"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,9 +17,9 @@
         tools:ignore="MissingConstrains"></LinearLayout>
 
     <ImageView
-        android:layout_width="129dp"
-        android:layout_height="128dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="1dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/tmt_icon_login"
         app:layout_constraintEnd_toStartOf="@+id/textView2"
@@ -30,7 +30,7 @@
         android:layout_width="231dp"
         android:layout_height="45dp"
         android:layout_marginLeft="90dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:text="ĐĂNG KÝ"
         android:textColor="@color/white"
         android:textSize="35sp"
@@ -39,11 +39,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.cardview.widget.CardView
+    <ScrollView
         android:layout_width="352dp"
-        android:layout_height="600dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="90dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +53,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
+            android:background="#FFFFFF">
 
 
             <LinearLayout
@@ -209,7 +209,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Email">
+                app:layout_constraintTop_toBottomOf="@+id/DateOfBirth">
 
                 <EditText
                     android:id="@+id/txtPhone"
@@ -260,7 +260,7 @@
                 android:id="@+id/btnSignUp"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/primary"
                 android:text="Tiếp tục"
                 android:textColor="@color/white"
@@ -308,5 +308,5 @@
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

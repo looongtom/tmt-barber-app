@@ -104,9 +104,6 @@ public class ChooseServiceActivity extends AppCompatActivity implements ChooseSe
         super.onResume();
         ServiceDataSource serviceDataSource=new ServiceDataSource(this);
         List<Service> list=(List<Service>) serviceDataSource.selectAllService(this);
-        for(Service s: list){
-            System.out.println(s.toString());
-        }
         adapter.setList(list);
     }
 }

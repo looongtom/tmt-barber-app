@@ -180,7 +180,7 @@ public class AccountDataSource {
         return account;
     }
 
-    public String getStaffByStaffId(int staffId) {
+    public String getUsernameById(int staffId) {
         String name = "";
         db = dbHelper.getReadableDatabase();
         // Tạo câu truy vấn SQL để lấy ID người dùng dựa vào tên người dùng

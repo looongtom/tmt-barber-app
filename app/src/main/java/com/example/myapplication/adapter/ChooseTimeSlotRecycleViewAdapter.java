@@ -63,6 +63,18 @@ public class ChooseTimeSlotRecycleViewAdapter extends RecyclerView.Adapter<Choos
             holder.txtTimeSlot.setTextColor(context.getResources().getColor(R.color.white));
 
         }
+        else if(timeSlot.getStatus().equals("Currently Booked")){
+            holder.cardView.setCardBackgroundColor(context.getResources().getColor(android.R.color.holo_orange_light));
+            holder.cardView.setEnabled(true);
+            holder.txtStatus.setTextColor(context.getResources().getColor(R.color.black));
+            holder.txtTimeSlot.setTextColor(context.getResources().getColor(R.color.black));
+        }
+        else if(timeSlot.getStatus().equals("Available")){
+            holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.white));
+            holder.cardView.setEnabled(true);
+            holder.txtStatus.setTextColor(context.getResources().getColor(R.color.primary));
+            holder.txtTimeSlot.setTextColor(context.getResources().getColor(R.color.black));
+        }
     }
 
     @Override

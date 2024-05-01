@@ -29,6 +29,15 @@ public class FragmentHistory  extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+        int userId = sharedPreferences.getInt("userId", -1);
+        String userName=sharedPreferences.getString("username","");
+
+        if(roleId!=3){
+            return inflater.inflate(R.layout.fragment_history_staff,container,false);
+        }
+
         return inflater.inflate(R.layout.fragment_history,container,false);
     }
 
@@ -55,6 +64,14 @@ public class FragmentHistory  extends Fragment {
         String userName=sharedPreferences.getString("username","");
 
         super.onResume();
+
+        if(roleId!=3){
+            BookingDataSource bookingDataSource = new BookingDataSource(getContext());
+            List<Booking> bookings = bookingDataSource.getBookingByStaffId(getContext(),userId);
+            adapter.setData(bookings);
+            return;
+        }
+
         BookingDataSource bookingDataSource = new BookingDataSource(getContext());
         List<Booking> bookings = bookingDataSource.getBookingByUserId(getContext(),userId);
         adapter.setData(bookings);

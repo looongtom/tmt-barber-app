@@ -78,6 +78,11 @@ public class BookingDetailDataSource {
         return bookingDetails;
     }
 
+    public void deleteByBookingId(int bookingId) {
+        db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.BOOKING_DETAIL_TABLE, DatabaseHelper.COLUMN_BOOKING_DETAIL_BOOKING_ID + " = ?", new String[]{String.valueOf(bookingId)});
+    }
+
     private BookingDetail cursorToBookingDetail(Cursor cursor) {
         BookingDetail bookingDetail = new BookingDetail();
         bookingDetail.setId(cursor.getInt(0));

@@ -237,6 +237,15 @@ public class TimeSlotDataSource {
         return null;
     }
 
+    public void updateStatusTimeSlot(int id, String status) {
+        db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_STATUS_TABLE, status);
+        String selection = COLUMN_TIME_SLOT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+        db.update(TIME_SLOT_TABLE, values, selection, selectionArgs);
+    }
+
     public void chooseTimeSlot(int id) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();

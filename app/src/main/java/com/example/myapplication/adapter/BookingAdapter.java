@@ -1,31 +1,34 @@
 package com.example.myapplication.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.UpdateBookingActivity;
 import com.example.myapplication.dal.AccountDataSource;
+import com.example.myapplication.dal.BookingDataSource;
 import com.example.myapplication.dal.BookingDetailDataSource;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.dal.TimeSlotDataSource;
-import com.example.myapplication.fragment.FragmentHistory;
 import com.example.myapplication.model.Booking;
 import com.example.myapplication.model.BookingDetail;
 import com.example.myapplication.model.Service;
-import com.example.myapplication.model.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder>  {
     private List<Booking> list;
@@ -57,13 +60,24 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     @NonNull
     @Override
     public BookingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+        int userId = sharedPreferences.getInt("userId", -1);
+        String userName=sharedPreferences.getString("username","");
+
+        if (roleId != 3) {
+            //return inflater.inflate(R.layout.fragment_history_staff,container,false);
+            View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history_staff, parent, false);
+            return new BookingViewHolder(view);
+        }
+
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
         return new BookingViewHolder(view);
     }
 
-    public String getStaffName(int id){
+    public String getUsername(int id){
         AccountDataSource db=new AccountDataSource(context);
-        return db.getStaffByStaffId(id);
+        return db.getAccountById(id).getUsername();
     }
 
     public String getStartTimeSlot(int id){
@@ -80,12 +94,21 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
 
         Booking booking=list.get(position);
-        holder.txtUsername.setText(userName);
-        holder.txtStaff.setText(getStaffName(booking.getBarberId()));
+        holder.txtUsername.setText(getUsername(booking.getUserId()));
+        holder.txtStaff.setText(getUsername(booking.getBarberId()));
         holder.txtBookingTime.setText(booking.getCreateTime());
         holder.txtSlot.setText(getStartTimeSlot(booking.getSlotId()) + "   :   " + booking.getTime());
         holder.txtPrice.setText(booking.getPrice().toString());
         holder.txtStatus.setText(booking.getStatus());
+
+        if(booking.getStatus().equals("Hủy")){
+            holder.txtStatus.setTextColor(context.getResources().getColor(R.color.choosen_color));
+//            set text style to bold
+            holder.txtStatus.setTypeface(null, Typeface.BOLD);
+        }else if (booking.getStatus().equals("Đã nhận khách")) {
+            holder.txtStatus.setTextColor(context.getResources().getColor(android.R.color.holo_orange_light));
+            holder.txtStatus.setTypeface(null, Typeface.BOLD);
+        }
 
         BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(context);
         List<BookingDetail> listBookingDetail = bookingDetailDataSource.getAllBookingDetail();
@@ -120,9 +143,30 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     public class BookingViewHolder extends RecyclerView.ViewHolder{
         private TextView txtUsername,txtStaff,txtBookingTime,txtSlot,txtPrice,txtStatus;
         private RecyclerView recService;
+        private Button btnReceive;
 
         public BookingViewHolder(@NonNull View itemView) {
             super(itemView);
+            SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            int roleId = sharedPreferences.getInt("roleId", -1);
+            int userId = sharedPreferences.getInt("userId", -1);
+            String userName=sharedPreferences.getString("username","");
+
+            if(roleId!=3){
+                btnReceive=itemView.findViewById(R.id.btnReceive);
+                btnReceive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //update status
+                        Booking booking=list.get(getAdapterPosition());
+
+                        Intent intent=new Intent(context, UpdateBookingActivity.class);
+                        intent.putExtra("bookingId",booking.getId());
+                        context.startActivity(intent);
+                    }
+                });
+            }
+
             txtUsername=itemView.findViewById(R.id.txtUsername);
             txtStaff=itemView.findViewById(R.id.txtStaff);
             txtBookingTime=itemView.findViewById(R.id.txtBookingTime);

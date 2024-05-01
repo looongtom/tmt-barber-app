@@ -16,9 +16,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<ChooseServiceRecycleViewAdapter.ServiceViewHolder> {
     private List<Service>list;
+    private Set<Integer>setChoosenService;
     private ItemListener itemListener;
     private Boolean isChoose=true;
 
@@ -39,6 +41,11 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
         notifyDataSetChanged();
     }
 
+    public void setSetChoosenService(Set<Integer> setChoosenService) {
+        this.setChoosenService = setChoosenService;
+    }
+
+
     public Service getItem(int pos) {
         return list.get(pos);
     }
@@ -55,7 +62,12 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
         holder.tvName.setText(service.getName());
         holder.tvPrice.setText(service.getPrice()+"");
         holder.tvDescription.setText(service.getDescription());
-//
+
+        if (setChoosenService != null && setChoosenService.contains(service.getId())) {
+            holder.checkBox.setChecked(true);
+        } else {
+            holder.checkBox.setChecked(false);
+        }
         String fileImage=service.getFilePath();
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.img);
         else holder.img.setImageResource(R.drawable.barber_man);

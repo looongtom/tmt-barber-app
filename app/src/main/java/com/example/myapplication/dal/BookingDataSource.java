@@ -68,7 +68,36 @@ public class BookingDataSource {
         return bookings;
     }
 
-    public Booking insertBooking(Context context, Booking booking) {
+    public static ArrayList<Booking> getBookingByStaffId(Context context, int userId) {
+        ArrayList<Booking> bookings = new ArrayList<Booking>();
+        BookingDataSource bookingDataSource = new BookingDataSource(context);
+        bookingDataSource.open();
+        String selection = DatabaseHelper.COLUMN_BOOKING_BARBER_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+        // order by booking date desc
+        Cursor cursor = db.query(DatabaseHelper.BOOKING_TABLE, allColumns, selection, selectionArgs, null, null, DatabaseHelper.COLUMN_BOOKING_DATE + " DESC");
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            do {
+                Booking booking = new Booking();
+                booking.setId(cursor.getInt(0));
+                booking.setUserId(cursor.getInt(1));
+                booking.setBarberId(cursor.getInt(2));
+                booking.setTime(cursor.getString(3));
+                booking.setCreateTime(cursor.getString(4));
+                booking.setSlotId(cursor.getInt(5));
+                booking.setPrice(cursor.getDouble(6));
+                booking.setStatus(cursor.getString(7));
+                bookings.add(booking);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return bookings;
+
+    }
+
+
+        public Booking insertBooking(Context context, Booking booking) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_BOOKING_USER_ID, booking.getUserId());
@@ -99,6 +128,19 @@ public class BookingDataSource {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_BOOKING_TOTAL, price);
         db.update(DatabaseHelper.BOOKING_TABLE, values, DatabaseHelper.COLUMN_BOOKING_ID + " = ?", new String[]{String.valueOf(bookingId)});
+    }
+
+    public void updateBooking(Booking booking){
+        db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_BOOKING_USER_ID, booking.getUserId());
+        values.put(DatabaseHelper.COLUMN_BOOKING_BARBER_ID, booking.getBarberId());
+        values.put(DatabaseHelper.COLUMN_BOOKING_DATE, booking.getTime());
+        values.put(DatabaseHelper.COLUMN_BOOKING_CREATE_TIME, booking.getCreateTime());
+        values.put(DatabaseHelper.COLUMN_BOOKING_SLOT_ID, booking.getSlotId());
+        values.put(DatabaseHelper.COLUMN_BOOKING_TOTAL, booking.getPrice());
+        values.put(DatabaseHelper.COLUMN_BOOKING_STATUS, booking.getStatus());
+        db.update(DatabaseHelper.BOOKING_TABLE, values, DatabaseHelper.COLUMN_BOOKING_ID + " = ?", new String[]{String.valueOf(booking.getId())});
     }
 
     private Booking cursorToBooking(Cursor cursor) {
