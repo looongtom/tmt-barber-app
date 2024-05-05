@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -19,10 +20,15 @@ import android.widget.Toast;
 
 import com.example.myapplication.dal.AccountDataSource;
 import com.example.myapplication.model.Account;
+import com.example.myapplication.verification.VerifyOTP;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText txtUsername;
@@ -30,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText txtEmail;
     EditText txtDateOfBirth;
     EditText txtName;
+    EditText txtPhone;
     ImageView calendarImage;
     Button btnSignUp;
     ProgressBar progressBar;
@@ -49,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
         txtEmail = findViewById(R.id.txtEmail);
+        txtPhone = findViewById(R.id.txtPhone);
 
         progressBar = findViewById(R.id.progressBar);
         text1 = findViewById(R.id.text1);
@@ -77,13 +85,15 @@ public class RegisterActivity extends AppCompatActivity {
                 acc.setPassword(txtPassword.getText().toString());
                 acc.setEmail(txtEmail.getText().toString());
                 acc.setDateOfBirth(txtDateOfBirth.getText().toString());
+                acc.setPhone(txtPhone.getText().toString());
                 AccountDataSource accountDataSource = new AccountDataSource(RegisterActivity.this);
 
                 if (txtUsername.getText().toString().isEmpty() ||
                         txtName.getText().toString().isEmpty() ||
                         txtPassword.getText().toString().isEmpty() ||
                         txtEmail.getText().toString().isEmpty() ||
-                        txtDateOfBirth.getText().toString().isEmpty()) {
+                        txtDateOfBirth.getText().toString().isEmpty()||
+                        txtPhone.getText().toString().isEmpty()) {
 
                     progressBar.setVisibility(View.GONE);
                     text1.setVisibility(View.VISIBLE);
@@ -96,15 +106,59 @@ public class RegisterActivity extends AppCompatActivity {
                     textSignIn.setVisibility(View.VISIBLE);
                     Toast.makeText(RegisterActivity.this, "Please enter correct email format !", Toast.LENGTH_SHORT).show();
                 } else {
+                    int findAcount= accountDataSource.getUserIdByUsername(txtUsername.getText().toString());
+                    if(findAcount!=-1){
+                        progressBar.setVisibility(View.GONE);
+                        text1.setVisibility(View.VISIBLE);
+                        textSignIn.setVisibility(View.VISIBLE);
+                        Toast.makeText(RegisterActivity.this, "Username already exists !", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     progressBar.setVisibility(View.VISIBLE);
                     text1.setVisibility(View.INVISIBLE);
                     textSignIn.setVisibility(View.INVISIBLE);
+                    btnSignUp.setVisibility(View.INVISIBLE);
 
-                    accountDataSource.addAccount(acc);
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    //Clear các hoạt động trước đó và chuyển sang MainActivity
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+//                    accountDataSource.addAccount(acc);
+//                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//                    //Clear các hoạt động trước đó và chuyển sang MainActivity
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+
+                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                            "+84"+txtPhone.getText().toString(),
+                            60,
+                            TimeUnit.SECONDS,
+                            RegisterActivity.this,
+                            new PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
+                                @Override
+                                public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                                    progressBar.setVisibility(View.GONE);
+                                    btnSignUp.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onVerificationFailed(@NonNull FirebaseException e) {
+                                    progressBar.setVisibility(View.GONE);
+                                    btnSignUp.setVisibility(View.VISIBLE);
+                                    Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onCodeSent(@NonNull String verification, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                    progressBar.setVisibility(View.GONE);
+                                    btnSignUp.setVisibility(View.VISIBLE);
+                                    Intent intent=new Intent(RegisterActivity.this, VerifyOTP.class);
+                                    intent.putExtra("mobile", txtPhone.getText().toString().substring(1));
+                                    intent.putExtra("verificationId", verification);
+                                    intent.putExtra("account", acc);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    Toast.makeText(RegisterActivity.this, "Mã OTP đã được gửi đến thiết bị", Toast.LENGTH_SHORT).show();
+                                    startActivity(intent);
+                                }
+                            }
+                    );
                 }
             }
         });

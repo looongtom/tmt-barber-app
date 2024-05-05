@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -61,8 +63,16 @@
         <activity
             android:name=".ChooseTimeSlotActivity"
             android:exported="false" />
+
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:exported="false" />
+
         <activity
             android:name=".ChooseServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".verification.VerifyOTP"
             android:exported="false" />
         <activity
             android:name=".ChooseBarberActivity"
@@ -101,12 +111,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
 
             <meta-data
                 android:name="android.app.lib_name"

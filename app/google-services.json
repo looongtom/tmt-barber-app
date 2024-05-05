@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "349113942348",
+    "project_id": "verification-otp-f544a",
+    "storage_bucket": "verification-otp-f544a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349113942348:android:8cf94e38bbadefb93c0fe9",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHoz7Rp__Mo1FirdzgQ555fYR-liskCPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349113942348:android:a95125c6c0649bc53c0fe9",
+        "android_client_info": {
+          "package_name": "com.example.sendotp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHoz7Rp__Mo1FirdzgQ555fYR-liskCPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
