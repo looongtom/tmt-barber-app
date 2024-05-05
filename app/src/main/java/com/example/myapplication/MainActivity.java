@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void receiveGeneralNotification() {
-        FirebaseMessaging.getInstance().subscribeToTopic("go-chat-2")
+        FirebaseMessaging.getInstance().subscribeToTopic("tmt-barber")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
