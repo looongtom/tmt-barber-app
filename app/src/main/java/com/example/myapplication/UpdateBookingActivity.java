@@ -3,11 +3,8 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,12 +29,11 @@ public class UpdateBookingActivity extends AppCompatActivity {
     private TextView txtUsername, txtStaff, txtBookingTime, txtPrice, txtStatus;
     private EditText txtSlot;
     private RecyclerView recService;
-    private Button btnSave, btnChooseService, btDelete, btChooseTimeSlot;
+    private Button btnSave, btnChooseService, btDelete, btChooseTimeSlot,btChooseImage;
     private Booking booking;
     private ChooseServiceRecycleViewAdapter adapter;
     private Double price = 0.0;
     private List<Service> listService = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,13 +107,23 @@ public class UpdateBookingActivity extends AppCompatActivity {
                 showConfirmationDialog();
             }
         });
+
+        btChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                open activity to UploadImage
+                Intent intent = new Intent(getApplicationContext(), UploadImage.class);
+                intent.putExtra("bookingId", booking.getId());
+                startActivity(intent);
+            }
+        });
     }
 
-    private void showConfirmationDialog() {
+        private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete?")
-                .setTitle("Delete Confirmation")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setMessage("Bạn có chắc huỷ lịch không ?")
+                .setTitle("Xác nhận huỷ lịch")
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         BookingDataSource db = new BookingDataSource(getApplicationContext());
@@ -127,7 +133,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
                         finish();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Quay lại", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss(); // Close the dialog
@@ -158,6 +164,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
         btnChooseService = findViewById(R.id.btChooseService);
         btDelete = findViewById(R.id.btDelete);
         btChooseTimeSlot = findViewById(R.id.btChooseTimeSlot);
+        btChooseImage = findViewById(R.id.btChooseImage);
     }
 
     @Override

@@ -155,6 +155,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btDelete" />
 
 
+
     <TextView
         android:id="@+id/tv7"
         android:layout_width="wrap_content"
@@ -205,6 +206,21 @@
         app:layout_constraintStart_toEndOf="@id/tv8"
         app:layout_constraintTop_toBottomOf="@+id/txtStatus" />
 
+
+    <Button
+        android:id="@+id/btChooseImage"
+        android:layout_width="160dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginLeft="-30dp"
+        android:background="@drawable/border"
+        android:text="Chọn ảnh kết quả"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtSlot"
+        app:layout_constraintTop_toBottomOf="@+id/btChooseTimeSlot" />
+
     <Button
         android:id="@+id/btChooseService"
         android:layout_width="130dp"
@@ -214,17 +230,20 @@
         android:text="Chọn lại dịch vụ"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv8" />
+        app:layout_constraintTop_toBottomOf="@id/tv6" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvService"
         android:layout_width="411dp"
         android:layout_height="0dp"
-        app:layout_constraintVertical_bias="0.0"
-
         android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btChooseService"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintVertical_bias="0.0" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
