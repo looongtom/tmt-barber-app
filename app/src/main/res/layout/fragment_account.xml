@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="115dp"
         android:background="@drawable/green_wallpaper_icon"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
 
     <ImageView
         android:layout_width="129dp"
-        android:layout_height="120dp"
+        android:layout_height="115dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/tmt_icon_login"
@@ -52,6 +52,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="-6dp"
             android:background="@color/white">
 
             <TextView
@@ -62,7 +63,7 @@
                 android:layout_marginBottom="24dp"
                 android:text="THÔNG TIN TÀI KHOẢN"
                 android:textColor="@color/primary"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 app:layout_constraintBottom_toTopOf="@id/Username"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

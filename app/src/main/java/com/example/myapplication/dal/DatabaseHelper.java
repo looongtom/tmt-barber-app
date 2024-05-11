@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import com.example.myapplication.model.Account;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static int DATABASE_VERSION=1;
+    private static int DATABASE_VERSION = 1;
 
 
     // TABLE ACCOUNT
@@ -47,9 +47,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SERVICE_ID = "ID";
     public static final String COLUMN_SERVICE_NAME = "NAME";
 
-    public static  final String COLUMN_SERVICE_PRICE = "PRICE";
-    public static  final String COLUMN_SERVICE_DESCRIPTION = "DESCRIPTION";
-    public static  final String COLUMN_SERVICE_FILE = "FILE";
+    public static final String COLUMN_SERVICE_PRICE = "PRICE";
+    public static final String COLUMN_SERVICE_DESCRIPTION = "DESCRIPTION";
+    public static final String COLUMN_SERVICE_FILE = "FILE";
 //    public static final String COLUMN_SERVICE_CATEGORY_ID = "CATEGORY_ID";
 
     //TABLE BOOKING
@@ -58,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BOOKING_USER_ID = "USER_ID";
     public static final String COLUMN_BOOKING_BARBER_ID = "BARBER_ID";
     public static final String COLUMN_BOOKING_RESULT_ID = "RESULT_ID";
-    public static final String COLUMN_BOOKING_DATE= "DATE";
+    public static final String COLUMN_BOOKING_DATE = "DATE";
     public static final String COLUMN_BOOKING_CREATE_TIME = "CREATE_TIME";
     public static final String COLUMN_BOOKING_STATUS = "STATUS";
     public static final String COLUMN_BOOKING_TOTAL = "PRICE";
@@ -83,8 +83,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Table Result
     public static final String RESULT_TABLE = "RESULT";
     public static final String COLUMN_RESULT_ID = "ID";
-    public static final String COLUMN_RESULT_TIME= "CREATE_TIME";
-
+    public static final String COLUMN_IMAGE_FRONT = "IMAGE_FRONT";
+    public static final String COLUMN_IMAGE_BACK = "IMAGE_BACK";
+    public static final String COLUMN_IMAGE_LEFT = "IMAGE_LEFT";
+    public static final String COLUMN_IMAGE_RIGHT = "IMAGE_RIGHT";
     //Table ImageResult
     public static final String COLUMN_IMAGE_RESULT_TABLE = "IMAGE_RESULT";
     public static final String COLUMN_IMAGE_RESULT_ID = "ID";
@@ -94,9 +96,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context) {
         super(context, "barber.db", null, DATABASE_VERSION);
     }
+
     //this is called the first time a database is accessed. There should be code in here to create a new database
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Xóa bảng cũ
+        db.execSQL("DROP TABLE IF EXISTS " + ACCOUNT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + ROLE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CATEGORIES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + SERVICES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + RESULT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + BOOKING_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TIME_SLOT_TABLE);
+
         //ACCOUNT
         createAccountTable(db);
         insertAccountTable(db);
@@ -109,7 +121,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //SERVICES
         createServicesTable(db);
         insertServicesTable(db);
-        //VOUCHERS
+        //RESULT
+        createResultTable(db);
         //BOOKING
         createBookingTable(db);
 //        insertBookingTable(db);
@@ -118,20 +131,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //TIME SLOT
         createTimeSlotTable(db);
 //        insertTimeSlotTable(db);
-        //RESULT
-        createResultTable(db);
+
         //IMAGE RESULT
-        createImageResultTable(db);
+//        createImageResultTable(db);
     }
 
-    public void createResultTable(SQLiteDatabase db){
+    public void createResultTable(SQLiteDatabase db) {
         String createTableStatement = "CREATE TABLE " + RESULT_TABLE + " (" +
                 "" + COLUMN_RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_RESULT_TIME + " TEXT)";
+                COLUMN_IMAGE_FRONT + " TEXT, " +
+                COLUMN_IMAGE_BACK + " TEXT, " +
+                COLUMN_IMAGE_LEFT + " TEXT, " +
+                COLUMN_IMAGE_RIGHT + " TEXT " +
+                ")";
         db.execSQL(createTableStatement);
     }
 
-    public void createImageResultTable(SQLiteDatabase db){
+    public void createImageResultTable(SQLiteDatabase db) {
         String createTableStatement = "CREATE TABLE " + COLUMN_IMAGE_RESULT_TABLE + " (" +
                 "" + COLUMN_IMAGE_RESULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_IMAGE_RESULT_URL + " TEXT, " +
@@ -141,8 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    private void insertTimeSlotTable(SQLiteDatabase db,String date) {
+    private void insertTimeSlotTable(SQLiteDatabase db, String date) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TIME_START_TABLE, "9:00");
         values.put(COLUMN_STATUS_TABLE, "Available");
@@ -273,6 +288,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + ROLE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + CATEGORIES_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SERVICES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + RESULT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + BOOKING_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + TIME_SLOT_TABLE);
         // Tạo lại bảng mới với cấu trúc đã cập nhật
@@ -291,11 +307,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DATEOFBIRTH + " TEXT, " +
                 COLUMN_ACCOUNT_FILE_PICTURE + " TEXT, " +
                 COLUMN_IS_BLOCK + " INTEGER, " +
-                COLUMN_FOREIGN_ROLEID + " INTEGER REFERENCES " + ROLE_TABLE + "("+ COLUMN_ROLE_ID + ")," +
+                COLUMN_FOREIGN_ROLEID + " INTEGER REFERENCES " + ROLE_TABLE + "(" + COLUMN_ROLE_ID + ")," +
                 COLUMN_ABOUT + " TEXT" +
                 ")";
         db.execSQL(createTableAccount);
     }
+
     public void createRoleTable(SQLiteDatabase db) {
         String createTableRole = "CREATE TABLE IF NOT EXISTS " + ROLE_TABLE + " (" + COLUMN_ROLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ROLE_NAME + " TEXT ) ";
@@ -312,7 +329,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createTableCategories);
     }
 
-    public void  insertCategoriesTable(SQLiteDatabase db) {
+    public void insertCategoriesTable(SQLiteDatabase db) {
         String sql = "";
         sql = "INSERT INTO " + CATEGORIES_TABLE + " VALUES (null, 'CẮT GỘI MASSAGE', 'abcd', 'https://res.cloudinary.com/dgm68hajt/image/upload/v1689578157/jiuar6v7kwbza3czwebw.png')";
         db.execSQL(sql);
@@ -327,7 +344,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_SERVICE_NAME + " TEXT, " +
                 COLUMN_SERVICE_PRICE + " TEXT, " +
                 COLUMN_SERVICE_DESCRIPTION + " TEXT, " +
-                COLUMN_SERVICE_FILE + " TEXT"+ ")";
+                COLUMN_SERVICE_FILE + " TEXT" + ")";
 //                COLUMN_SERVICE_CATEGORY_ID + " INTEGER REFERENCES " + CATEGORIES_TABLE + "("+ COLUMN_CATEGORY_ID + "))";
 
         db.execSQL(createTableServices);
@@ -341,9 +358,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_BOOKING_SLOT_ID + " INTEGER REFERENCES " + TIME_SLOT_TABLE + "(" + COLUMN_TIME_SLOT_ID + "), " +
                 COLUMN_BOOKING_STATUS + " TEXT, " +
                 COLUMN_BOOKING_TOTAL + " TEXT, " +
-                COLUMN_BOOKING_CREATE_TIME + " TEXT)";
+                COLUMN_BOOKING_CREATE_TIME + " TEXT, " +
+                COLUMN_BOOKING_RESULT_ID + " INTEGER REFERENCES " + RESULT_TABLE + "(" + COLUMN_BOOKING_RESULT_ID + ") " +
+                ")";
         db.execSQL(createTableBooking);
     }
+
     public void insertBookingTable(SQLiteDatabase db) {
         String sql = "";
         sql = "INSERT INTO " + BOOKING_TABLE + " VALUES (null,1, 3, '22-07-2023', 4, null, '22-07-2023', 10000)";

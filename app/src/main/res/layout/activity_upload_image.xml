@@ -26,6 +26,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:id="@+id/btBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primary"
+            android:text="Back"
+            android:textColor="@color/white" />
+
         <ImageView
             android:id="@+id/click_image1"
             android:layout_width="350dp"

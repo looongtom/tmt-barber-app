@@ -20,7 +20,8 @@ public class BookingDataSource {
             DatabaseHelper.COLUMN_BOOKING_CREATE_TIME,
             DatabaseHelper.COLUMN_BOOKING_SLOT_ID,
             DatabaseHelper.COLUMN_BOOKING_TOTAL,
-            DatabaseHelper.COLUMN_BOOKING_STATUS
+            DatabaseHelper.COLUMN_BOOKING_STATUS,
+            DatabaseHelper.COLUMN_BOOKING_RESULT_ID
     };
 
     public BookingDataSource(Context context) {
@@ -61,6 +62,7 @@ public class BookingDataSource {
                 booking.setSlotId(cursor.getInt(5));
                 booking.setPrice(cursor.getDouble(6));
                 booking.setStatus(cursor.getString(7));
+                booking.setResultId(cursor.getInt(8));
                 bookings.add(booking);
             } while (cursor.moveToNext());
         }
@@ -88,6 +90,7 @@ public class BookingDataSource {
                 booking.setSlotId(cursor.getInt(5));
                 booking.setPrice(cursor.getDouble(6));
                 booking.setStatus(cursor.getString(7));
+                booking.setResultId(cursor.getInt(8));
                 bookings.add(booking);
             } while (cursor.moveToNext());
         }
@@ -140,6 +143,7 @@ public class BookingDataSource {
         values.put(DatabaseHelper.COLUMN_BOOKING_SLOT_ID, booking.getSlotId());
         values.put(DatabaseHelper.COLUMN_BOOKING_TOTAL, booking.getPrice());
         values.put(DatabaseHelper.COLUMN_BOOKING_STATUS, booking.getStatus());
+        if(booking.getResultId() != null) values.put(DatabaseHelper.COLUMN_BOOKING_RESULT_ID, booking.getResultId());
         db.update(DatabaseHelper.BOOKING_TABLE, values, DatabaseHelper.COLUMN_BOOKING_ID + " = ?", new String[]{String.valueOf(booking.getId())});
     }
 
@@ -153,6 +157,7 @@ public class BookingDataSource {
         booking.setSlotId(cursor.getInt(5));
         booking.setPrice(cursor.getDouble(6));
         booking.setStatus(cursor.getString(7));
+        booking.setResultId(cursor.getInt(8));
         return booking;
     }
 }

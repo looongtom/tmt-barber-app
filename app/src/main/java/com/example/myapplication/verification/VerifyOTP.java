@@ -85,7 +85,7 @@ public class VerifyOTP extends AppCompatActivity {
                                 Toast.makeText(VerifyOTP.this, "Xác thực thành công", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(VerifyOTP.this, "Mã OTP đã được gửi đến thiết bị", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VerifyOTP.this, "Mã không chính xác", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

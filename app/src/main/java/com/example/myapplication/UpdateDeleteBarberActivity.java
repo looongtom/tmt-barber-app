@@ -39,7 +39,7 @@ public class UpdateDeleteBarberActivity extends AppCompatActivity {
     private Button btUpdate, btCancel;
     private Account acc = new Account();
     private int SELECT_PICTURE = 200;
-    private Uri imagePath = null;
+    private String imagePath = null;
     private static boolean isMediaManagerInitialized = false;
     private AccountDataSource accountDataSource = new AccountDataSource(UpdateDeleteBarberActivity.this);
 
@@ -61,7 +61,7 @@ public class UpdateDeleteBarberActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_delete_barber);
-
+        cloudinaryConfig();
         initView();
 
         Intent intent = getIntent();
@@ -74,12 +74,10 @@ public class UpdateDeleteBarberActivity extends AppCompatActivity {
         txtDateOfBirth.setText(acc.getDateOfBirth());
         profileName.setText(acc.getName());
 
-        String fileImage = acc.getAvatar();
-        if(fileImage!=null)imagePath = Uri.parse(fileImage);
-        if (imagePath != null && !imagePath.toString().isEmpty())
-            isChooseImage = true;
+        imagePath = acc.getAvatar();
+//        if(fileImage!=null)imagePath = Uri.parse(fileImage);
 
-        if (fileImage != null) Picasso.get().load(fileImage).resize(129, 110).into(avatar);
+        if (imagePath != null) Picasso.get().load(imagePath).resize(129, 110).into(avatar);
         else avatar.setImageResource(R.drawable.barber_man);
 
         calendarImage.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +110,7 @@ public class UpdateDeleteBarberActivity extends AppCompatActivity {
                         String about = txtAboutMe.getText().toString();
                         String email = txtEmail.getText().toString();
                         String dateOfBirth = txtDateOfBirth.getText().toString();
-                        String image = imagePath.toString();
+                        String image = imagePath;
                         if (name.isEmpty() || username.isEmpty() || email.isEmpty() || dateOfBirth.isEmpty()) {
                             Toast.makeText(UpdateDeleteBarberActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                         }
@@ -125,8 +123,6 @@ public class UpdateDeleteBarberActivity extends AppCompatActivity {
                             acc.setEmail(email);
                             acc.setDateOfBirth(dateOfBirth);
                             acc.setAvatar(image);
-                            System.out.println("UPDATE ACCOUNT");
-                            System.out.println(acc.getAccount());
                             accountDataSource.updateAccount(acc);
                             finish();
                         }
@@ -150,7 +146,7 @@ public class UpdateDeleteBarberActivity extends AppCompatActivity {
                                 String about = txtAboutMe.getText().toString();
                                 String email = txtEmail.getText().toString();
                                 String dateOfBirth = txtDateOfBirth.getText().toString();
-                                String image = resultData.get("url").toString();
+                                String image = resultData.get("secure_url").toString();
                                 if (name.isEmpty() || username.isEmpty() || email.isEmpty() || dateOfBirth.isEmpty()) {
                                     Toast.makeText(UpdateDeleteBarberActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                                 }
@@ -209,8 +205,38 @@ public class UpdateDeleteBarberActivity extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
                     // update the preview image in the layout
-                    imagePath = selectedImageUri;
                     avatar.setImageURI(selectedImageUri);
+                    // Upload the image to Cloudinary
+                    MediaManager.get().upload(selectedImageUri).callback(new UploadCallback() {
+                        @Override
+                        public void onStart(String requestId) {
+                            // your code here
+                        }
+
+                        @Override
+                        public void onProgress(String requestId, long bytes, long totalBytes) {
+                            // your code here
+                        }
+
+                        @Override
+                        public void onSuccess(String requestId, Map resultData) {
+                            // your code here
+//                            upload image to cloudinary
+                            String image = resultData.get("secure_url").toString();
+                            imagePath = image;
+                            isChooseImage = true;
+                        }
+
+                        @Override
+                        public void onError(String requestId, ErrorInfo error) {
+                            // your code here
+                        }
+
+                        @Override
+                        public void onReschedule(String requestId, ErrorInfo error) {
+                            // your code here
+                        }
+                    }).dispatch();
                 }
             }
         }

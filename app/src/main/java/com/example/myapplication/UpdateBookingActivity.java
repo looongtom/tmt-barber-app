@@ -114,6 +114,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
 //                open activity to UploadImage
                 Intent intent = new Intent(getApplicationContext(), UploadImage.class);
                 intent.putExtra("bookingId", booking.getId());
+
                 startActivity(intent);
             }
         });

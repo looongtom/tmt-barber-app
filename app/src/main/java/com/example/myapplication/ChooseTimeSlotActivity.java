@@ -212,10 +212,11 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
 
     private void setAlarm() {
         try {
+            // set alarm thông báo vào thời gian cắt tóc
 //            Calendar calendar = convertStringToCalendar(choosenTimeSlot.getDate(), choosenTimeSlot.getTimeStart());
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.add(Calendar.MINUTE, 1);
+            calendar.add(Calendar.MINUTE, 1); // test set thời gian thông báu sau 1 phút tại thời điểm hiện tại
 
             Intent intent = new Intent(ChooseTimeSlotActivity.this, AlarmReceiver.class);
             intent.setAction("MyAction");

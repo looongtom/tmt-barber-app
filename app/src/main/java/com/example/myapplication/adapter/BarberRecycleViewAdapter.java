@@ -2,6 +2,7 @@ package com.example.myapplication.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,9 @@ public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycle
 
     @Override
     public void onBindViewHolder(@NonNull BarberViewHolder holder, int position) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
+
         Account barber = list.get(position);
         if(barber==null)return;
         AccountDataSource accountDataSource = new AccountDataSource(context);
@@ -61,15 +65,17 @@ public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycle
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.imgBarber);
         else holder.imgBarber.setImageResource(R.drawable.barber_man);
 
-        holder.imgBarber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, UpdateDeleteBarberActivity.class);
-                // Pass the Account to the next activity
-                intent.putExtra("account", barber);
-                context.startActivity(intent);
-            }
-        });
+        if(roleId==1){
+            holder.imgBarber.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, UpdateDeleteBarberActivity.class);
+                    // Pass the Account to the next activity
+                    intent.putExtra("account", barber);
+                    context.startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override

@@ -88,7 +88,7 @@ public class AddServiceActivity extends AppCompatActivity {
 
                         @Override
                         public void onSuccess(String requestId, Map resultData) {
-                            String imageUrl = resultData.get("url").toString();
+                            String imageUrl = resultData.get("secure_url").toString();
                             String name = eName.getText().toString();
                             String price = ePrice.getText().toString();
                             String description = eDescription.getText().toString();

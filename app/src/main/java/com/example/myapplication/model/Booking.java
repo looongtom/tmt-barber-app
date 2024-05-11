@@ -9,9 +9,33 @@ public class Booking {
     private int slotId;
     private Double price;
     private String status ;
+    private Integer resultId;
+
+    public Integer getResultId() {
+        return resultId;
+    }
+
+    public void setResultId(Integer resultId) {
+        this.resultId = resultId;
+    }
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", barberId=" + barberId +
+                ", time='" + time + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", slotId=" + slotId +
+                ", price=" + price +
+                ", status='" + status + '\'' +
+                ", resultId=" + resultId +
+                '}';
     }
 
     public void setId(int id) {
