@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteBarberActivity;
-import com.example.myapplication.dal.AccountDataSource;
+
 import com.example.myapplication.dal.ServiceDataSource;
-import com.example.myapplication.model.Account;
+import com.example.myapplication.model.account.Account;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,9 +39,6 @@ public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycle
 
     public void setList(List<Account> list) {
         this.list = list;
-        for(Account account: list){
-            System.out.println(account.getAccount());
-        }
         notifyDataSetChanged();
     }
 
@@ -56,12 +53,12 @@ public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycle
     public void onBindViewHolder(@NonNull BarberViewHolder holder, int position) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
         int roleId = sharedPreferences.getInt("roleId", -1);
-
+//
         Account barber = list.get(position);
         if(barber==null)return;
-        AccountDataSource accountDataSource = new AccountDataSource(context);
-        String fileImage=accountDataSource.getFilePictureForCategory(barber.getId());
-        holder.barberName.setText(barber.getName());
+//        AccountDataSource accountDataSource = new AccountDataSource(context);
+        String fileImage=barber.getAvatar();
+        holder.barberName.setText(barber.getFullName());
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.imgBarber);
         else holder.imgBarber.setImageResource(R.drawable.barber_man);
 

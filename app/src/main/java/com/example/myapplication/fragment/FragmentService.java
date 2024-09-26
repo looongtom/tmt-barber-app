@@ -22,19 +22,28 @@ import com.example.myapplication.MyApplication;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteServiceActivity;
 import com.example.myapplication.adapter.ServiceRecycleViewAdapter;
+import com.example.myapplication.api.ApiServicingService;
+import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.DatabaseHelper;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.category.Category;
+import com.example.myapplication.model.category.response.GetListCategoryResponse;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class FragmentService extends Fragment implements ServiceRecycleViewAdapter.ItemListener {
     private RecyclerView recyclerView;
     ServiceRecycleViewAdapter adapter;
     private Button btAdd;
-    private DatabaseHelper db;
+    private TokenManager tokenManager ;
 
     @Nullable
     @Override
@@ -48,7 +57,8 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
         recyclerView=view.findViewById(R.id.recyleService);
         btAdd=view.findViewById(R.id.btAddService);
         adapter=new ServiceRecycleViewAdapter();
-        db=new DatabaseHelper(getContext());
+        tokenManager = new TokenManager(getContext());
+
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
         int roleId = sharedPreferences.getInt("roleId", -1);
@@ -87,8 +97,33 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
     @Override
     public void onResume() {
         super.onResume();
-        ServiceDataSource serviceDataSource=new ServiceDataSource(getContext());
-        List<Service> list=(List<Service>) serviceDataSource.selectAllService(getContext());
-        adapter.setList(list);
+        sendApiGetListCategory();
+
+//        ServiceDataSource serviceDataSource=new ServiceDataSource(getContext());
+//        List<Service> list=(List<Service>) serviceDataSource.selectAllService(getContext());
+//        adapter.setList(list);
+    }
+
+    private void sendApiGetListCategory(){
+        String accessToken = tokenManager.getAccessToken();
+        ApiServicingService.API_SERVICING_SERVICE.getListCategory(accessToken).enqueue(new Callback<GetListCategoryResponse>() {
+
+
+            @Override
+            public void onResponse(Call<GetListCategoryResponse> call, Response<GetListCategoryResponse> response) {
+                if(response.isSuccessful()){
+                    GetListCategoryResponse getListCategoryResponse=response.body();
+                    List<Category> listCategory=getListCategoryResponse.getListCategory();
+                    for(Category category:listCategory){
+                        System.out.println(category);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetListCategoryResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "error get list category", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
