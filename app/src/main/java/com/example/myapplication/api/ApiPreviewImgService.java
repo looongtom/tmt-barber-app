@@ -15,7 +15,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public interface ApiPreviewImgService {
-    String apiUrl = BuildConfig.API_BASE_URL+":8085/";
+    String apiUrl = "http://"+BuildConfig.API_BASE_URL+":8085/";
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     ApiPreviewImgService apiService = new Retrofit.Builder()
             .baseUrl(apiUrl)

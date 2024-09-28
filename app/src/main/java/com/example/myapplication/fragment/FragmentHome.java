@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.AddBarberActivity;
+import com.example.myapplication.BuildConfig;
 import com.example.myapplication.ChooseBarberActivity;
 import com.example.myapplication.DetailHairFastActivity;
 import com.example.myapplication.GenerateHairStyle;
@@ -64,6 +65,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     private WebSocket webSocket;
     private OkHttpClient client;
     private Queue<String> queue=new LinkedList<>();
+    private String apiUrl;
 
     @Nullable
     @Override
@@ -78,7 +80,9 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         hairFastWS = new HairFastWS();
 
         client = new OkHttpClient();
-        Request request = new Request.Builder().url("ws://192.168.1.4:8080/hairfast").build();
+        apiUrl = BuildConfig.API_BASE_URL;
+        String url = "ws://"+apiUrl + ":8080/hairfast";
+        Request request = new Request.Builder().url(url).build();
         EchoWebSocketListener listener = new EchoWebSocketListener();
         webSocket = client.newWebSocket(request, listener);
 

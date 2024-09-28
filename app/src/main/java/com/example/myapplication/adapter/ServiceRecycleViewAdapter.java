@@ -5,35 +5,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.model.Service;
+import com.example.myapplication.model.service.Servicing;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceRecycleViewAdapter extends RecyclerView.Adapter<ServiceRecycleViewAdapter.ServiceViewHolder> {
-    private List<Service>list;
+    private List<Servicing>list;
     private ItemListener itemListener;
 
-    public ServiceRecycleViewAdapter() {
-        list = new ArrayList<>();
+    public ServiceRecycleViewAdapter(List<Servicing> listService) {
+        list = listService;
     }
 
     public void setItemListener(ItemListener itemListener) {
         this.itemListener = itemListener;
     }
 
-    public void setList(List<Service> list) {
+    public void setList(List<Servicing> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
-    public Service getItem(int pos) {
+    public Servicing getItem(int pos) {
         return list.get(pos);
     }
     @NonNull
@@ -45,14 +46,24 @@ public class ServiceRecycleViewAdapter extends RecyclerView.Adapter<ServiceRecyc
 
     @Override
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
-        Service service=list.get(position);
+        Servicing service=list.get(position);
         holder.tvName.setText(service.getName());
         holder.tvPrice.setText(service.getPrice()+"");
-        holder.tvDescription.setText(service.getDescription());
+        String des=service.getDescription();
+        if(des.length()>11)des=des.substring(0,11)+"...";
+        holder.tvDescription.setText(des);
 //
-        String fileImage=service.getFilePath();
+        String fileImage=service.getUrl();
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.img);
         else holder.img.setImageResource(R.drawable.barber_man);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), service.toString(), Toast.LENGTH_SHORT).show();
+                //add logic to display service details
+            }
+        });
     }
 
     @Override
@@ -77,6 +88,7 @@ public class ServiceRecycleViewAdapter extends RecyclerView.Adapter<ServiceRecyc
         public void onClick(View view) {
             if(itemListener!=null){
                 itemListener.onItemClick(view,getAdapterPosition());
+                Toast.makeText(view.getContext(), "Click", Toast.LENGTH_SHORT).show();
             }
         }
     }

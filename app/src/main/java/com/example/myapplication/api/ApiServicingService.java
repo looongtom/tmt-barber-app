@@ -12,7 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 
 public interface ApiServicingService {
-    String apiUrl = BuildConfig.API_BASE_URL+":8001/";
+    String apiUrl = "http://"+BuildConfig.API_BASE_URL+":8001/";
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     ApiServicingService API_SERVICING_SERVICE = new Retrofit.Builder()
             .baseUrl(apiUrl)
@@ -20,6 +20,6 @@ public interface ApiServicingService {
             .build()
             .create(ApiServicingService.class);
 
-    @GET("servicing/category/get-list")
+    @GET("servicing/service/get-list-v2")
     Call<GetListCategoryResponse> getListCategory(@Header("Authorization") String token);
 }
