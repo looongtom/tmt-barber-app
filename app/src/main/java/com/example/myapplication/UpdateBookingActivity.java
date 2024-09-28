@@ -21,6 +21,7 @@ import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.dal.TimeSlotDataSource;
 import com.example.myapplication.model.Booking;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.service.Servicing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +60,8 @@ public class UpdateBookingActivity extends AppCompatActivity {
 
         BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(this);
         List<Integer> listIdServices = bookingDetailDataSource.getListServiceByBookingId(booking.getId());
-        List<Service> listService = getListService(listIdServices);
-
+//        List<Servicing> listService = getListService(listIdServices);
+        List<Servicing> listService=null;
         adapter = new ChooseServiceRecycleViewAdapter();
         adapter.setChoose(false);
         adapter.setList(listService);
@@ -173,9 +174,10 @@ public class UpdateBookingActivity extends AppCompatActivity {
         super.onResume();
         BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(this);
         List<Integer> listIdServices = bookingDetailDataSource.getListServiceByBookingId(booking.getId());
-        List<Service> listService = getListService(listIdServices);
+//        List<Service> listService = getListService(listIdServices);
+        List<Servicing> listService=null;
         price = 0.0;
-        for (Service service: listService) price+=service.getPrice();
+        for (Servicing service: listService) price+=service.getPrice();
         txtPrice.setText(price + "");
         adapter.setList(listService);
         adapter.notifyDataSetChanged();

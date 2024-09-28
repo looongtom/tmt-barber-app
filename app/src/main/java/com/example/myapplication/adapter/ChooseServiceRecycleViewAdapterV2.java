@@ -3,9 +3,10 @@ package com.example.myapplication.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,22 +15,14 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.service.Servicing;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<ChooseServiceRecycleViewAdapter.ServiceViewHolder> {
+public class ChooseServiceRecycleViewAdapterV2 extends RecyclerView.Adapter<ChooseServiceRecycleViewAdapterV2.ServiceViewHolder> {
     private List<Servicing>list;
-    private Set<Integer>setChoosenService;
     private ItemListener itemListener;
-    private Boolean isChoose=true;
 
-    public ChooseServiceRecycleViewAdapter() {
-        list = new ArrayList<>();
-    }
-
-    public void setChoose(Boolean choose) {
-        isChoose = choose;
+    public ChooseServiceRecycleViewAdapterV2(List<Servicing> listService) {
+        list = listService;
     }
 
     public void setItemListener(ItemListener itemListener) {
@@ -41,19 +34,13 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
         notifyDataSetChanged();
     }
 
-    public void setSetChoosenService(Set<Integer> setChoosenService) {
-        this.setChoosenService = setChoosenService;
-    }
-
-
     public Servicing getItem(int pos) {
         return list.get(pos);
     }
-
     @NonNull
     @Override
     public ServiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category, parent, false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_choose_service_v2, parent, false);
         return new ServiceViewHolder(view);
     }
 
@@ -62,16 +49,21 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
         Servicing service=list.get(position);
         holder.tvName.setText(service.getName());
         holder.tvPrice.setText(service.getPrice()+"");
-        holder.tvDescription.setText(service.getDescription());
-
-        if (setChoosenService != null && setChoosenService.contains(service.getId())) {
-            holder.checkBox.setChecked(true);
-        } else {
-            holder.checkBox.setChecked(false);
-        }
+        String des=service.getDescription();
+        if(des.length()>11)des=des.substring(0,11)+"...";
+        holder.tvDescription.setText(des);
+//
         String fileImage=service.getUrl();
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.img);
         else holder.img.setImageResource(R.drawable.barber_man);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), service.toString(), Toast.LENGTH_SHORT).show();
+                //add logic to display service details
+            }
+        });
     }
 
     @Override
@@ -83,23 +75,22 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
     public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView img;
         private TextView tvName,tvPrice,tvDescription;
-        private CheckBox checkBox;
-
+        private Button btnChoose;
         public ServiceViewHolder(@NonNull View view) {
             super(view);
             img=view.findViewById(R.id.imgService);
             tvName=view.findViewById(R.id.tvName);
             tvPrice=view.findViewById(R.id.tvPrice);
             tvDescription=view.findViewById(R.id.tvDescription);
-            checkBox=view.findViewById(R.id.cbChoose);
-            if(!isChoose)checkBox.setVisibility(View.INVISIBLE);
-            view.setOnClickListener(this);
+            btnChoose=view.findViewById(R.id.cbChoose);
+            btnChoose.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if(itemListener!=null && isChoose){
+            if(itemListener!=null){
                 itemListener.onItemClick(view,getAdapterPosition());
+                Toast.makeText(view.getContext(), "Click", Toast.LENGTH_SHORT).show();
             }
         }
     }

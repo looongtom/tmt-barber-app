@@ -7,18 +7,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.myapplication.adapter.BarberRecycleViewAdapter;
 import com.example.myapplication.adapter.ChooseBarberRecycleViewAdapter;
+import com.example.myapplication.api.ApiAccountService;
 import com.example.myapplication.dal.AccountDataSource;
 import com.example.myapplication.dal.DatabaseHelper;
-import com.example.myapplication.model.Account;
+import com.example.myapplication.model.account.Account;
+import com.example.myapplication.model.account.response.GetListBarberResponse;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ChooseBarberActivity extends AppCompatActivity implements ChooseBarberRecycleViewAdapter.ItemListener {
     private ChooseBarberRecycleViewAdapter adapter;
-    private DatabaseHelper db;
     private RecyclerView recyclerView;
 
     @SuppressLint("MissingInflatedId")
@@ -29,7 +35,6 @@ public class ChooseBarberActivity extends AppCompatActivity implements ChooseBar
 
         recyclerView=findViewById(R.id.rcvBarber);
         adapter = new ChooseBarberRecycleViewAdapter(this);
-        db = new DatabaseHelper(this);
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
@@ -45,8 +50,24 @@ public class ChooseBarberActivity extends AppCompatActivity implements ChooseBar
     @Override
     public void onResume() {
         super.onResume();
-        AccountDataSource accountDataSource=new AccountDataSource(this);
-        List<Account> list=(List<Account>) accountDataSource.selectAccountsRoleStaff(this);
-        adapter.setList(list);
+        sendApiGetListBarber();
+    }
+
+    private void sendApiGetListBarber(){
+        ApiAccountService.API_ACCOUNT_SERVICE.getListBarber().enqueue(new Callback<GetListBarberResponse>() {
+            @Override
+            public void onResponse(Call<GetListBarberResponse> call, Response<GetListBarberResponse> response) {
+                if(response.isSuccessful()){
+                    GetListBarberResponse list=response.body();
+                    adapter.setList(list.getListBarber());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetListBarberResponse> call, Throwable t) {
+                Toast.makeText(ChooseBarberActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

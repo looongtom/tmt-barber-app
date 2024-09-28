@@ -21,6 +21,7 @@ import com.example.myapplication.model.Account;
 import com.example.myapplication.model.Booking;
 import com.example.myapplication.model.Service;
 import com.example.myapplication.model.TimeSlot;
+import com.example.myapplication.model.service.Servicing;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,7 +39,7 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
     private RecyclerView recyclerView;
     private ChooseServiceRecycleViewAdapter adapter;
     private DatabaseHelper db;
-    private List<Service> listService=new ArrayList<>();
+    private List<Servicing> listService=new ArrayList<>();
     private Double totalPrice;
     private Booking booking;
 
@@ -69,8 +70,8 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
         BookingDataSource bookingDataSource=new BookingDataSource(this);
         booking=bookingDataSource.getById(idBooking);
 
-        listService=getListService(listIdService);
-        totalPrice=getTotalPrice(listService);
+//        listService=getListService(listIdService);
+//        totalPrice=getTotalPrice(listService);
         booking.setPrice(totalPrice);
         //update price in booking
         bookingDataSource.updateBookingPrice(booking.getId(),totalPrice);

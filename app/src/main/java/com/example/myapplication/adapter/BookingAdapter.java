@@ -31,6 +31,7 @@ import com.example.myapplication.model.Booking;
 import com.example.myapplication.model.BookingDetail;
 import com.example.myapplication.model.Result;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.service.Servicing;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -130,8 +131,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(context);
         List<BookingDetail> listBookingDetail = bookingDetailDataSource.getAllBookingDetail();
         List<Integer> listIdServices = bookingDetailDataSource.getListServiceByBookingId(booking.getId());
-        List<Service> listService = getListService(listIdServices);
-
+//        List<Servicing> listService = getListService(listIdServices);
+        List<Servicing> listService=null;
         adapter = new ChooseServiceRecycleViewAdapter();
         adapter.setChoose(false);
         adapter.setList(listService);

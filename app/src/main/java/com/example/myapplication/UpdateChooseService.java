@@ -21,6 +21,7 @@ import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Account;
 import com.example.myapplication.model.BookingDetail;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.service.Servicing;
 
 import java.util.HashSet;
 import java.util.List;
@@ -98,7 +99,7 @@ public class UpdateChooseService extends AppCompatActivity implements ChooseServ
 
     @Override
     public void onItemClick(View view, int pos) {
-        Service service = adapter.getItem(pos);
+        Servicing service = adapter.getItem(pos);
         //set check box for view
         CheckBox checkBox = view.findViewById(R.id.cbChoose);
         if (listIdService.contains(service.getId())) {
@@ -116,7 +117,8 @@ public class UpdateChooseService extends AppCompatActivity implements ChooseServ
     public void onResume() {
         super.onResume();
         ServiceDataSource serviceDataSource = new ServiceDataSource(this);
-        List<Service> list = (List<Service>) serviceDataSource.selectAllService(this);
+//        List<Service> list = (List<Service>) serviceDataSource.selectAllService(this);
+        List<Servicing> list=null;
         adapter.setList(list);
     }
 }
