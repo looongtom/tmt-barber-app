@@ -71,7 +71,7 @@ public class UpdateTimeSlot extends AppCompatActivity implements ChooseTimeSlotR
 
         TimeSlotDataSource timeSlotDataSource = new TimeSlotDataSource(UpdateTimeSlot.this);
         timeSlotList =   timeSlotDataSource.getTimeSlotByBarberIdAndDate(barberId,edtDate.getText().toString());
-        adapter.setList(timeSlotList);
+//        adapter.setList(timeSlotList);
         currentSlot=timeSlotDataSource.getTimeSlotById(booking.getSlotId());
 
 
@@ -125,7 +125,7 @@ public class UpdateTimeSlot extends AppCompatActivity implements ChooseTimeSlotR
                 if( timeSlotList==null ){
                     timeSlotList=timeSlotDataSource.insertTimeSlotForDate(edtDate.getText().toString(),barberId);
                 }
-                adapter.setList(timeSlotList);
+//                adapter.setList(timeSlotList);
             }
         });
 
@@ -204,22 +204,22 @@ public class UpdateTimeSlot extends AppCompatActivity implements ChooseTimeSlotR
 
     @Override
     public void onItemCLick(View view, int pos) {
-        CardView cardView = view.findViewById(R.id.cardView);
-        TimeSlot timeSlot = adapter.getItem(pos);
-        if (timeSlot.getStatus().equals("Available")) {
-            if (isChosen) {
-//                for (CardView card : cardViewList) {
-//                    card.setCardBackgroundColor(getResources().getColor(R.color.white));
-//                }
-//                cardViewList.clear();
-                choosenCardView.setCardBackgroundColor(getResources().getColor(R.color.white));
-            }
-            cardView.setCardBackgroundColor(getResources().getColor(R.color.primary));
-//            cardViewList.add(cardView);
-            choosenCardView = cardView;
-            isChosen = true;
-            choosenTimeSlot = timeSlot;
-        }
+//        CardView cardView = view.findViewById(R.id.cardView);
+//        TimeSlot timeSlot = adapter.getItem(pos);
+//        if (timeSlot.getStatus().equals("Available")) {
+//            if (isChosen) {
+////                for (CardView card : cardViewList) {
+////                    card.setCardBackgroundColor(getResources().getColor(R.color.white));
+////                }
+////                cardViewList.clear();
+//                choosenCardView.setCardBackgroundColor(getResources().getColor(R.color.white));
+//            }
+//            cardView.setCardBackgroundColor(getResources().getColor(R.color.primary));
+////            cardViewList.add(cardView);
+//            choosenCardView = cardView;
+//            isChosen = true;
+//            choosenTimeSlot = timeSlot;
+//        }
     }
 
 
@@ -228,6 +228,6 @@ public class UpdateTimeSlot extends AppCompatActivity implements ChooseTimeSlotR
         super.onResume();
         TimeSlotDataSource timeSlotDataSource = new TimeSlotDataSource(this);
         List<TimeSlot> list = (List<TimeSlot>) timeSlotDataSource.getTimeSlotByBarberIdAndDate(barberId,queryDate);
-        adapter.setList(list);
+//        adapter.setList(list);
     }
 }

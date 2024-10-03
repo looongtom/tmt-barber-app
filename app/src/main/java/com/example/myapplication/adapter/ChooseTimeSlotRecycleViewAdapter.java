@@ -10,11 +10,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.dal.TimeSlotDataSource;
 import com.example.myapplication.model.Account;
-import com.example.myapplication.model.TimeSlot;
+import com.example.myapplication.model.timeslot.TimeSlot;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -53,8 +51,7 @@ public class ChooseTimeSlotRecycleViewAdapter extends RecyclerView.Adapter<Choos
     public void onBindViewHolder(@NonNull TimeSlotViewHolder holder, int position) {
         TimeSlot timeSlot = list.get(position);
         if(timeSlot==null)return;
-        TimeSlotDataSource timeSlotDataSource = new TimeSlotDataSource(context);
-        holder.txtTimeSlot.setText(timeSlot.getTimeStart());
+        holder.txtTimeSlot.setText(timeSlot.getStartTime());
         holder.txtStatus.setText(timeSlot.getStatus());
         if(timeSlot.getStatus().equals("Booked")){
             holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.choosen_color));

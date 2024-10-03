@@ -1,9 +1,12 @@
 package com.example.myapplication.adapter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,18 +18,22 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.service.Servicing;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ChooseServiceRecycleViewAdapterV2 extends RecyclerView.Adapter<ChooseServiceRecycleViewAdapterV2.ServiceViewHolder> {
     private List<Servicing>list;
-    private ItemListener itemListener;
+    private ItemListener listener;
+    private Boolean isChoose=true;
 
-    public ChooseServiceRecycleViewAdapterV2(List<Servicing> listService) {
+    public ChooseServiceRecycleViewAdapterV2(List<Servicing> listService, ItemListener listener) {
         list = listService;
+        this.listener = listener;
     }
 
-    public void setItemListener(ItemListener itemListener) {
-        this.itemListener = itemListener;
+    public void setChoose(Boolean choose) {
+        isChoose = choose;
     }
 
     public void setList(List<Servicing> list) {
@@ -57,12 +64,16 @@ public class ChooseServiceRecycleViewAdapterV2 extends RecyclerView.Adapter<Choo
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.img);
         else holder.img.setImageResource(R.drawable.barber_man);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(), service.toString(), Toast.LENGTH_SHORT).show();
-                //add logic to display service details
+            public boolean onLongClick(View view) {
+                Toast.makeText(view.getContext(), "Long click "+service.getName(), Toast.LENGTH_SHORT).show();
+                return true;
             }
+        });
+        holder.btnChoose.setOnCheckedChangeListener(null);
+        holder.btnChoose.setOnCheckedChangeListener((compoundButton, b) -> {
+            listener.onItemClick(service.getId());
         });
     }
 
@@ -75,7 +86,7 @@ public class ChooseServiceRecycleViewAdapterV2 extends RecyclerView.Adapter<Choo
     public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView img;
         private TextView tvName,tvPrice,tvDescription;
-        private Button btnChoose;
+        private CheckBox btnChoose;
         public ServiceViewHolder(@NonNull View view) {
             super(view);
             img=view.findViewById(R.id.imgService);
@@ -83,19 +94,14 @@ public class ChooseServiceRecycleViewAdapterV2 extends RecyclerView.Adapter<Choo
             tvPrice=view.findViewById(R.id.tvPrice);
             tvDescription=view.findViewById(R.id.tvDescription);
             btnChoose=view.findViewById(R.id.cbChoose);
-            btnChoose.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if(itemListener!=null){
-                itemListener.onItemClick(view,getAdapterPosition());
-                Toast.makeText(view.getContext(), "Click", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
     public interface ItemListener{
-        void onItemClick(View view,int pos);
+        void onItemClick(int id);
     }
 }
