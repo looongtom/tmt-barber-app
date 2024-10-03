@@ -24,7 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.adapter.ChooseTimeSlotRecycleViewAdapter;
+import com.example.myapplication.api.ApiBookingService;
 import com.example.myapplication.api.ApiTimeSlotService;
+import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.AccountDataSource;
 import com.example.myapplication.dal.BookingDataSource;
 import com.example.myapplication.dal.BookingDetailDataSource;
@@ -32,8 +34,9 @@ import com.example.myapplication.dal.DatabaseHelper;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.dal.TimeSlotDataSource;
 import com.example.myapplication.model.account.Account;
-import com.example.myapplication.model.Booking;
-import com.example.myapplication.model.BookingDetail;
+
+import com.example.myapplication.model.booking.Booking;
+import com.example.myapplication.model.booking.request.CreateBookingRequest;
 import com.example.myapplication.model.timeslot.TimeSlot;
 import com.example.myapplication.model.timeslot.request.FindTimeSlotRequest;
 import com.example.myapplication.model.timeslot.response.FindTimeSlotResponse;
@@ -75,14 +78,15 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
 
+    private TokenManager tokenManager ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_time_slot);
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        int roleId = sharedPreferences.getInt("roleId", -1);
         int userId = sharedPreferences.getInt("userId", -1);
-        String userName = sharedPreferences.getString("username", "");
+        tokenManager = new TokenManager(this);
 
         edtDate = findViewById(R.id.eDate);
         edtDate.setShowSoftInputOnFocus(false);
@@ -164,37 +168,57 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                     Toast.makeText(ChooseTimeSlotActivity.this, "Please choose a time slot", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                timeSlotDataSource.chooseTimeSlot(choosenTimeSlot.getId());
-                Intent intent = new Intent(ChooseTimeSlotActivity.this, BookingActivity.class);
-                intent.putExtra("timeSlot", choosenTimeSlot);
-                intent.putExtra("account", barber);
-                intent.putExtra("listIdService", (Serializable) listIdService);
-                intent.putExtra("queryDate", queryDate);
+                sendApiCreateBooking(new CreateBookingRequest(userId,barberId , choosenTimeSlot.getId(), "Booked",0,listIdService));
 
-                BookingDataSource bookingDataSource = new BookingDataSource(ChooseTimeSlotActivity.this);
-                Booking booking = new Booking();
-                booking.setBarberId(barberId);
-                booking.setUserId(userId);
-                booking.setTime(queryDate);
-                booking.setCreateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-                booking.setSlotId(choosenTimeSlot.getId());
-                booking.setPrice(1.0);
-                booking.setStatus("Đã đặt");
-                Booking insertBooking = bookingDataSource.insertBooking(getApplicationContext(), booking);
-                intent.putExtra("idBooking", insertBooking.getId());
-
-                BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(ChooseTimeSlotActivity.this);
-                for (Integer idService : listIdService) {
-                    BookingDetail bookingDetail = new BookingDetail(insertBooking.getId(), idService);
-                    bookingDetailDataSource.insert(bookingDetail);
-                }
-
-                setAlarm();
-
-                startActivity(intent);
+//                Intent intent = new Intent(ChooseTimeSlotActivity.this, BookingActivity.class);
+//                intent.putExtra("timeSlot", choosenTimeSlot);
+//                intent.putExtra("account", barber);
+//                intent.putExtra("listIdService", (Serializable) listIdService);
+//                intent.putExtra("queryDate", queryDate);
+//
+//                Booking booking = new Booking();
+//                booking.setBarberId(barberId);
+//                booking.setCustomerId(userId);
+////                booking.setTime(queryDate);
+////                booking.setCreateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+//                booking.setTimeSlotId(choosenTimeSlot.getId());
+//                booking.setPrice(1);
+//                booking.setStatus("Booked");
+//
+////                intent.putExtra("idBooking", insertBooking.getId());
+//
+////                BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(ChooseTimeSlotActivity.this);
+////                for (Integer idService : listIdService) {
+////                    BookingDetail bookingDetail = new BookingDetail(insertBooking.getId(), idService);
+////                    bookingDetailDataSource.insert(bookingDetail);
+////                }
+//
+//                setAlarm();
+//
+//                startActivity(intent);
             }
         });
 
+    }
+
+    private void sendApiCreateBooking(CreateBookingRequest createBookingRequest){
+        String accessToken = tokenManager.getAccessToken();
+        ApiBookingService.API_BOOKING_SERVICE.createBooking(accessToken,createBookingRequest).enqueue(new Callback<com.example.myapplication.model.booking.Booking>() {
+            @Override
+            public void onResponse(Call<com.example.myapplication.model.booking.Booking> call, Response<com.example.myapplication.model.booking.Booking> response) {
+                if(response.isSuccessful()){
+                    Booking booking = response.body();
+                    if(booking != null){
+                        Toast.makeText(ChooseTimeSlotActivity.this,"Create booking success",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.example.myapplication.model.booking.Booking> call, Throwable t) {
+                Toast.makeText(ChooseTimeSlotActivity.this,"Error creating booking",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void sendApiGetListTimeslot(FindTimeSlotRequest request) {
