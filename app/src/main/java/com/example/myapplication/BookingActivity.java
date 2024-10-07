@@ -17,20 +17,17 @@ import com.example.myapplication.adapter.ChooseServiceRecycleViewAdapter;
 import com.example.myapplication.dal.BookingDataSource;
 import com.example.myapplication.dal.DatabaseHelper;
 import com.example.myapplication.dal.ServiceDataSource;
-import com.example.myapplication.model.Account;
-import com.example.myapplication.model.Booking;
-import com.example.myapplication.model.Service;
-import com.example.myapplication.model.TimeSlot;
+import com.example.myapplication.model.account.Account;
+import com.example.myapplication.model.booking.Booking;
 import com.example.myapplication.model.service.Servicing;
+import com.example.myapplication.model.timeslot.TimeSlot;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class BookingActivity extends AppCompatActivity implements ChooseServiceRecycleViewAdapter.ItemListener {
-    private TextView tvNameCus, tvNameBarber, tvDate, tvTime,tvPrice;
+    private TextView tvNameCus, tvNameBarber, tvDate, tvTime,tvPrice,tvStatus;
     private TimeSlot timeSlot;
     private Account account;
     private String queryDate;
@@ -40,7 +37,7 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
     private ChooseServiceRecycleViewAdapter adapter;
     private DatabaseHelper db;
     private List<Servicing> listService=new ArrayList<>();
-    private Double totalPrice;
+    private Integer totalPrice;
     private Booking booking;
 
 
@@ -60,29 +57,30 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
         tvTime = findViewById(R.id.txtSlot);
         recyclerView=findViewById(R.id.rcvService);
         btBack=findViewById(R.id.btBack);
-        tvPrice=findViewById(R.id.tv6);
+        tvPrice=findViewById(R.id.tvPrice);
+        tvStatus=findViewById(R.id.tvStatus);
 
         timeSlot= (TimeSlot) getIntent().getSerializableExtra("timeSlot");
         account = (Account) getIntent().getSerializableExtra("account");
         queryDate = getIntent().getStringExtra("queryDate");
         Set<Integer> listIdService=(Set<Integer>) getIntent().getSerializableExtra("listIdService");
         idBooking=getIntent().getIntExtra("idBooking",-1);
-        BookingDataSource bookingDataSource=new BookingDataSource(this);
-        booking=bookingDataSource.getById(idBooking);
+
 
 //        listService=getListService(listIdService);
 //        totalPrice=getTotalPrice(listService);
-        booking.setPrice(totalPrice);
+//        booking.setPrice(totalPrice);
         //update price in booking
-        bookingDataSource.updateBookingPrice(booking.getId(),totalPrice);
+//        bookingDataSource.updateBookingPrice(booking.getId(),totalPrice);
 
 
-        tvPrice.setText(booking.getPrice().toString());
+//        tvPrice.setText(booking.getPrice().toString());
 
         tvNameCus.setText(userName);
-        tvNameBarber.setText(account.getName());
+        tvNameBarber.setText(account.getFullName());
         tvDate.setText(queryDate);
-        tvTime.setText(timeSlot.getTimeStart() + "   :   " + booking.getTime());
+//        tvTime.setText(timeSlot.getTimeStart() + "   :   " + booking.getTime());
+        tvTime.setText(timeSlot.getStartTime());
 
         adapter = new ChooseServiceRecycleViewAdapter();
         adapter.setChoose(false);
@@ -104,18 +102,18 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
 
     }
 
-    private List<Service> getListService(Set<Integer> listIdService) {
-        List<Service> listService=new ArrayList<>();
+    private List<Servicing> getListService(Set<Integer> listIdService) {
+        List<Servicing> listService=new ArrayList<>();
         ServiceDataSource db=new ServiceDataSource(this);
         for (Integer id:listIdService){
-            listService.add(db.getById(id));
+//            listService.add(db.getById(id));
         }
         return listService;
     }
 
-    private Double getTotalPrice(List<Service> listService){
+    private Double getTotalPrice(List<Servicing> listService){
         Double totalPrice=0.0;
-        for (Service service:listService){
+        for (Servicing service:listService){
             totalPrice+=service.getPrice();
         }
         return totalPrice;

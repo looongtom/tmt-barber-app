@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Account implements Serializable {
+    public static final Integer RoleAdmin = 0;
+    public static final Integer RoleUser = 1;
+    public static final Integer RoleBarber = 2;
+
     private int id;
     private String username;
     private String email;

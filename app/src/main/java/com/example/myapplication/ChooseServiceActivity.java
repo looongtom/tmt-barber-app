@@ -157,7 +157,6 @@ public class ChooseServiceActivity extends AppCompatActivity {
                     for (Map.Entry<String, List<Servicing>> entry : serviceMap.entrySet()) {
                         categories.add(new Category(entry.getValue().get(0).getCategoryId(),entry.getKey(),entry.getValue()));
                     }
-
                     adapter.setList(categories);
                 }
             }

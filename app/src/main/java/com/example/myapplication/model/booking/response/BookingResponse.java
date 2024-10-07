@@ -1,11 +1,10 @@
-package com.example.myapplication.model.booking;
+package com.example.myapplication.model.booking.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Booking implements Serializable {
+public class BookingResponse {
     private Integer id;
     @SerializedName("customer_id")
     private Integer customerId;
@@ -23,6 +22,8 @@ public class Booking implements Serializable {
     private Long createdAt;
     @SerializedName("updated_at")
     private Long updatedAt;
+    @SerializedName("list_service_struct")
+    private List<ServicingResponse> listServiceStruct;
 
     public Integer getId() {
         return id;
@@ -88,9 +89,6 @@ public class Booking implements Serializable {
         this.feedbackId = feedbackId;
     }
 
-    public Booking() {
-    }
-
     public Long getCreatedAt() {
         return createdAt;
     }
@@ -107,7 +105,15 @@ public class Booking implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Booking(Integer id, Integer customerId, Integer barberId, Integer resultId, Integer timeSlotId, String status, Integer price, Integer feedbackId, Long createdAt, Long updatedAt) {
+    public List<ServicingResponse> getListServiceStruct() {
+        return listServiceStruct;
+    }
+
+    public void setListServiceStruct(List<ServicingResponse> listServiceStruct) {
+        this.listServiceStruct = listServiceStruct;
+    }
+
+    public BookingResponse(Integer id, Integer customerId, Integer barberId, Integer resultId, Integer timeSlotId, String status, Integer price, Integer feedbackId, Long createdAt, Long updatedAt, List<ServicingResponse> listServiceStruct) {
         this.id = id;
         this.customerId = customerId;
         this.barberId = barberId;
@@ -118,5 +124,6 @@ public class Booking implements Serializable {
         this.feedbackId = feedbackId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.listServiceStruct = listServiceStruct;
     }
 }

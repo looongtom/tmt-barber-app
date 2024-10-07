@@ -170,20 +170,20 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                 }
                 sendApiCreateBooking(new CreateBookingRequest(userId,barberId , choosenTimeSlot.getId(), "Booked",0,listIdService));
 
-//                Intent intent = new Intent(ChooseTimeSlotActivity.this, BookingActivity.class);
-//                intent.putExtra("timeSlot", choosenTimeSlot);
-//                intent.putExtra("account", barber);
-//                intent.putExtra("listIdService", (Serializable) listIdService);
-//                intent.putExtra("queryDate", queryDate);
+                Intent intent = new Intent(ChooseTimeSlotActivity.this, BookingActivity.class);
+                intent.putExtra("timeSlot", choosenTimeSlot);
+                intent.putExtra("account", barber);
+                intent.putExtra("listIdService", (Serializable) listIdService);
+                intent.putExtra("queryDate", queryDate);
 //
-//                Booking booking = new Booking();
-//                booking.setBarberId(barberId);
-//                booking.setCustomerId(userId);
-////                booking.setTime(queryDate);
-////                booking.setCreateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-//                booking.setTimeSlotId(choosenTimeSlot.getId());
-//                booking.setPrice(1);
-//                booking.setStatus("Booked");
+                Booking booking = new Booking();
+                booking.setBarberId(barberId);
+                booking.setCustomerId(userId);
+//                booking.setTime(queryDate);
+//                booking.setCreateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+                booking.setTimeSlotId(choosenTimeSlot.getId());
+                booking.setPrice(1);
+                booking.setStatus("Booked");
 //
 ////                intent.putExtra("idBooking", insertBooking.getId());
 //
@@ -193,9 +193,9 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
 ////                    bookingDetailDataSource.insert(bookingDetail);
 ////                }
 //
-//                setAlarm();
+                setAlarm();
 //
-//                startActivity(intent);
+                startActivity(intent);
             }
         });
 

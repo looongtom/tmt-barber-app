@@ -150,6 +150,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="28dp"
+                android:text="Trạng thái:"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv4" />
+
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="28dp"
+                android:text="Guesttt"
+                android:textColor="@color/primary"
+                android:textSize="17dp"
+                app:layout_constraintStart_toEndOf="@+id/tv5"
+                app:layout_constraintTop_toBottomOf="@+id/txtSlot" />
+
+            <TextView
+                android:id="@+id/tv6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="12dp"
                 android:text="Tổng tiền các dịch vụ:"
@@ -157,11 +181,11 @@
                 android:textSize="17dp"
                 app:layout_constraintBottom_toTopOf="@+id/rcvService"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv4"
+                app:layout_constraintTop_toBottomOf="@+id/tv5"
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/tv6"
+                android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -172,7 +196,7 @@
                 android:textSize="17dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/rcvService"
-                app:layout_constraintStart_toEndOf="@id/tv5"
+                app:layout_constraintStart_toEndOf="@id/tv6"
                 app:layout_constraintTop_toBottomOf="@+id/txtSlot"
                 app:layout_constraintVertical_bias="1.0" />
 

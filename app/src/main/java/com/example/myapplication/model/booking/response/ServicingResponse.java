@@ -1,17 +1,11 @@
-package com.example.myapplication.model.service;
+package com.example.myapplication.model.booking.response;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
-
-public class Servicing implements Serializable {
+public class ServicingResponse {
     private int id;
     private String name;
     private int price;
     private String description;
     private String url;
-    @SerializedName("category_id")
-    private int categoryId;
 
     @Override
     public String toString() {
@@ -21,7 +15,6 @@ public class Servicing implements Serializable {
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 ", url='" + url + '\'' +
-                ", categoryId=" + categoryId +
                 '}';
     }
 
@@ -69,27 +62,4 @@ public class Servicing implements Serializable {
         this.url = url;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Servicing(int id, String name, int price, String description, String url, int categoryId) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.url = url;
-        this.categoryId = categoryId;
-    }
-    public Servicing(int id, String name, int price, String description, String url) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.url = url;
-    }
 }
