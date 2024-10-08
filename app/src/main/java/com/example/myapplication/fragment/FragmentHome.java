@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -27,22 +26,15 @@ import com.example.myapplication.BuildConfig;
 import com.example.myapplication.ChooseBarberActivity;
 import com.example.myapplication.DetailHairFastActivity;
 import com.example.myapplication.GenerateHairStyle;
-import com.example.myapplication.LoginActivity;
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.BarberRecycleViewAdapter;
 import com.example.myapplication.api.ApiAccountService;
-import com.example.myapplication.dal.AccountDataSource;
-import com.example.myapplication.dal.DatabaseHelper;
-import com.example.myapplication.model.Account;
 import com.example.myapplication.model.account.response.GetListBarberResponse;
+import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.hairfast.HairFastWS;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import okhttp3.OkHttpClient;
@@ -62,7 +54,9 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
 
     private ImageView imgNoti;
     private HairFastWS hairFastWS;
-    private WebSocket webSocket;
+    private BookingResponse bookingResponse;
+    private WebSocket webSocketHairfast;
+    private WebSocket webSocketBooking;
     private OkHttpClient client;
     private Queue<String> queue=new LinkedList<>();
     private String apiUrl;
@@ -81,10 +75,16 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
 
         client = new OkHttpClient();
         apiUrl = BuildConfig.API_BASE_URL;
-        String url = "ws://"+apiUrl + ":8080/hairfast";
-        Request request = new Request.Builder().url(url).build();
-        EchoWebSocketListener listener = new EchoWebSocketListener();
-        webSocket = client.newWebSocket(request, listener);
+
+        String urlHairFast = "ws://"+apiUrl + ":8080/hairfast";
+        Request request = new Request.Builder().url(urlHairFast).build();
+        EchoWebSocketHairfastListener listener = new EchoWebSocketHairfastListener();
+        webSocketHairfast = client.newWebSocket(request, listener);
+
+        String urlBooking = "ws://"+apiUrl + ":8080/booking";
+        Request requestBooking = new Request.Builder().url(urlBooking).build();
+        EchoWebSocketBookingListener listenerBooking = new EchoWebSocketBookingListener();
+        webSocketBooking = client.newWebSocket(requestBooking, listenerBooking);
 
         String video ="<iframe width=\"400\" height=\"560\"\n" +
                 "src=\"https://youtube.com/embed/-LgXdYkR4uQ?si=GkCI8YkxD2b74pXm\"\n" +
@@ -159,11 +159,12 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
                     imgNoti.setImageResource(R.drawable.noti);
                     Toast.makeText(getContext(), "No new notification", Toast.LENGTH_SHORT).show();
                 }else{
+
                     Toast.makeText(getContext(), queue.peek(), Toast.LENGTH_SHORT).show();
 //                    Picasso.get().load(hairFastWS.getGeneratedImgCloud()).into(imgResult);
-                    Intent intent=new Intent(getContext(), DetailHairFastActivity.class);
-                    intent.putExtra("hairFastWS",hairFastWS);
-                    startActivity(intent);
+//                    Intent intent=new Intent(getContext(), DetailHairFastActivity.class);
+//                    intent.putExtra("hairFastWS",hairFastWS);
+//                    startActivity(intent);
 
                     queue.remove();
                 }
@@ -191,7 +192,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         });
     }
 
-    private class EchoWebSocketListener extends WebSocketListener {
+    private class EchoWebSocketHairfastListener extends WebSocketListener {
         @Override
         public void onMessage(WebSocket webSocket, String text) {
             getActivity().runOnUiThread(() -> {
@@ -201,6 +202,43 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
                 hairFastWS = gson.fromJson(text, HairFastWS.class);
 
                 queue.add(hairFastWS.toString());
+                //delay 5s
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                imgNoti.setImageResource(R.drawable.noti);
+            });
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
+            getActivity().runOnUiThread(() -> {
+                // Handle connection failure
+                Toast.makeText(getContext(), "WebSocket Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            });
+        }
+
+        @Override
+        public void onClosed(WebSocket webSocket, int code, String reason) {
+            getActivity().runOnUiThread(() -> {
+                // Handle WebSocket closure
+                Toast.makeText(getContext(), "WebSocket Closed: " + reason, Toast.LENGTH_LONG).show();
+            });
+        }
+    }
+
+    private class EchoWebSocketBookingListener extends WebSocketListener {
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            getActivity().runOnUiThread(() -> {
+                // Add received message to RecyclerView
+                imgNoti.setImageResource(R.drawable.active_noti);
+                Gson gson = new Gson();
+                bookingResponse = gson.fromJson(text, BookingResponse.class);
+
+                queue.add(bookingResponse.toString());
                 //delay 5s
 //                try {
 //                    Thread.sleep(5000);

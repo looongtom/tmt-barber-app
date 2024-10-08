@@ -24,7 +24,7 @@ public interface ApiBookingService {
             .build()
             .create(ApiBookingService.class);
 
-    @POST("booking/create")
+    @POST("booking/create-kafka")
     Call<Booking> createBooking(@Header("Authorization") String token,
                                 @Body CreateBookingRequest createBookingRequest);
 

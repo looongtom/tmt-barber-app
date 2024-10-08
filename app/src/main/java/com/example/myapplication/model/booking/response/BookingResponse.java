@@ -126,4 +126,21 @@ public class BookingResponse {
         this.updatedAt = updatedAt;
         this.listServiceStruct = listServiceStruct;
     }
+
+    @Override
+    public String toString() {
+        return "BookingResponse{" +
+                "id=" + id +
+                ", customerId=" + customerId +
+                ", barberId=" + barberId +
+                ", resultId=" + resultId +
+                ", timeSlotId=" + timeSlotId +
+                ", status='" + status + '\'' +
+                ", price=" + price +
+                ", feedbackId=" + feedbackId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", listServiceStruct=" + listServiceStruct +
+                '}';
+    }
 }
