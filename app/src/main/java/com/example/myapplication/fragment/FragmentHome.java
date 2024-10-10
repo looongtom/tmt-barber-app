@@ -1,5 +1,8 @@
 package com.example.myapplication.fragment;
 
+import static com.example.myapplication.model.notification.Notification.BookingType;
+import static com.example.myapplication.model.notification.Notification.HairfastType;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,14 +29,18 @@ import com.example.myapplication.BuildConfig;
 import com.example.myapplication.ChooseBarberActivity;
 import com.example.myapplication.DetailHairFastActivity;
 import com.example.myapplication.GenerateHairStyle;
+import com.example.myapplication.NotificationActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.BarberRecycleViewAdapter;
 import com.example.myapplication.api.ApiAccountService;
 import com.example.myapplication.model.account.response.GetListBarberResponse;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.hairfast.HairFastWS;
+import com.example.myapplication.model.notification.Notification;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -58,8 +65,10 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     private WebSocket webSocketHairfast;
     private WebSocket webSocketBooking;
     private OkHttpClient client;
-    private Queue<String> queue=new LinkedList<>();
+    private Queue<HairFastWS> queueHairfast=new LinkedList<>();
+    private Queue<BookingResponse> queueBooking=new LinkedList<>();
     private String apiUrl;
+    private ArrayList<Notification> notifications;
 
     @Nullable
     @Override
@@ -71,6 +80,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
+        notifications=getDummyNotifications();
         hairFastWS = new HairFastWS();
 
         client = new OkHttpClient();
@@ -155,19 +165,37 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         imgNoti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(queue.isEmpty()){
+                if(queueHairfast.isEmpty() && queueHairfast.isEmpty()){
                     imgNoti.setImageResource(R.drawable.noti);
-                    Toast.makeText(getContext(), "No new notification", Toast.LENGTH_SHORT).show();
-                }else{
+//                    notifications.add(new Notification("Notice from backend",queue.peek(),new Date().toString()));
+//                    Intent intent = new Intent(getActivity(), NotificationActivity.class);
+//                    intent.putExtra("notifications", notifications);
+//                    startActivity(intent);
+                }
+                if(!queueHairfast.isEmpty()){
+                        HairFastWS hairFastWS =queueHairfast.peek();
+                        notifications.add(new Notification("Đã generate thành công kiểu tóc","Bấm vào để xem chi tiết",new Date().toString(),HairfastType,hairFastWS));
+                        queueHairfast.remove();
 
-                    Toast.makeText(getContext(), queue.peek(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), queue.peek(), Toast.LENGTH_SHORT).show();
+//                    notifications.add(new Notification("Notice from backend",queue.peek(),new Date().toString()));
+
+
 //                    Picasso.get().load(hairFastWS.getGeneratedImgCloud()).into(imgResult);
 //                    Intent intent=new Intent(getContext(), DetailHairFastActivity.class);
 //                    intent.putExtra("hairFastWS",hairFastWS);
 //                    startActivity(intent);
 
-                    queue.remove();
                 }
+                if(!queueBooking.isEmpty()){
+                    BookingResponse bookingResponse =queueBooking.peek();
+                    String title = bookingResponse.getStatus().equals("Booked")? "Đã đặt lịch thành công":"Đặt lịch thất bại";
+                    notifications.add(new Notification(title,"Bấm vào để xem chi tiết",new Date().toString(),BookingType,bookingResponse));
+                    queueBooking.remove();
+                }
+                Intent intent = new Intent(getActivity(), NotificationActivity.class);
+                intent.putExtra("notifications", notifications);
+                startActivity(intent);
             }
         });
 
@@ -201,7 +229,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
                 Gson gson = new Gson();
                 hairFastWS = gson.fromJson(text, HairFastWS.class);
 
-                queue.add(hairFastWS.toString());
+                queueHairfast.add(hairFastWS);
                 //delay 5s
 //                try {
 //                    Thread.sleep(5000);
@@ -238,7 +266,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
                 Gson gson = new Gson();
                 bookingResponse = gson.fromJson(text, BookingResponse.class);
 
-                queue.add(bookingResponse.toString());
+                queueBooking.add(bookingResponse);
                 //delay 5s
 //                try {
 //                    Thread.sleep(5000);
@@ -277,6 +305,12 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         btHistory=view.findViewById(R.id.btHistory);
         btGenerateImg=view.findViewById(R.id.btGenerateImg);
         imgNoti=view.findViewById(R.id.imgNoti);
+    }
+    private ArrayList<Notification> getDummyNotifications() {
+        ArrayList<Notification> notifications = new ArrayList<>();
+        notifications.add(new Notification("Title 1", "HairfastType 1", "Just now",HairfastType,new HairFastWS("https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486066/2024-10-09T22:01:02.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486067/2024-10-09T22:01:07.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486068/2024-10-09T22:01:08.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486342/idteaiucvc5rrf5guimj.png")));
+        notifications.add(new Notification("Title 2", "BookingType 2", "10 minutes ago",BookingType, new BookingResponse(1,1,1,1,1,"Booked",1,1,new Long(1),new Long(1),null)));
+        return notifications;
     }
 
     @Override

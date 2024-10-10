@@ -17,6 +17,13 @@ public class HairFastWS implements Serializable {
     public HairFastWS() {
     }
 
+    public HairFastWS(String selfImgCloud, String shapeImgCloud, String colorImgCloud, String generatedImgCloud) {
+        SelfImgCloud = selfImgCloud;
+        ShapeImgCloud = shapeImgCloud;
+        ColorImgCloud = colorImgCloud;
+        GeneratedImgCloud = generatedImgCloud;
+    }
+
     @Override
     public String toString() {
         return "HairFastWS{" +

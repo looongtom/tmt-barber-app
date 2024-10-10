@@ -2,9 +2,10 @@ package com.example.myapplication.model.booking.response;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BookingResponse {
+public class BookingResponse implements Serializable {
     private Integer id;
     @SerializedName("customer_id")
     private Integer customerId;
