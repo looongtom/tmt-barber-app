@@ -6,15 +6,22 @@ import java.io.Serializable;
 import java.util.List;
 
 public class BookingResponse implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer id;
     @SerializedName("customer_id")
     private Integer customerId;
+    @SerializedName("customer_name")
+    private String customerName;
     @SerializedName("barber_id")
     private Integer barberId;
+    @SerializedName("barber_name")
+    private String barberName;
     @SerializedName("result_id")
     private Integer resultId;
     @SerializedName("slot_id")
     private Integer timeSlotId;
+    @SerializedName("time_slot")
+    private TimeSlotResponse timeSlot;
     private String status;
     private Integer price;
     @SerializedName("feedback_id")
@@ -114,12 +121,31 @@ public class BookingResponse implements Serializable {
         this.listServiceStruct = listServiceStruct;
     }
 
-    public BookingResponse(Integer id, Integer customerId, Integer barberId, Integer resultId, Integer timeSlotId, String status, Integer price, Integer feedbackId, Long createdAt, Long updatedAt, List<ServicingResponse> listServiceStruct) {
+    public TimeSlotResponse getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(TimeSlotResponse timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public String getBarberName() {
+        return barberName;
+    }
+
+    public BookingResponse(Integer id, Integer customerId, String customerName, Integer barberId, String barberName, Integer resultId, Integer timeSlotId, TimeSlotResponse timeSlot, String status, Integer price, Integer feedbackId, Long createdAt, Long updatedAt, List<ServicingResponse> listServiceStruct) {
         this.id = id;
         this.customerId = customerId;
+        this.customerName = customerName;
         this.barberId = barberId;
+        this.barberName = barberName;
         this.resultId = resultId;
         this.timeSlotId = timeSlotId;
+        this.timeSlot = timeSlot;
         this.status = status;
         this.price = price;
         this.feedbackId = feedbackId;

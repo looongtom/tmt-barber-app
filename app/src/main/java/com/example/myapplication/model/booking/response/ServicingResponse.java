@@ -1,6 +1,6 @@
 package com.example.myapplication.model.booking.response;
 
-public class ServicingResponse {
+public class ServicingResponse implements java.io.Serializable{
     private int id;
     private String name;
     private int price;
@@ -16,6 +16,14 @@ public class ServicingResponse {
                 ", description='" + description + '\'' +
                 ", url='" + url + '\'' +
                 '}';
+    }
+
+    public ServicingResponse(int id, String name, int price, String description, String url) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.url = url;
     }
 
     public int getId() {

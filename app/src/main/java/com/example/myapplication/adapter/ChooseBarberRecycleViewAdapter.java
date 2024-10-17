@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.ChooseBarberActivity;
 import com.example.myapplication.ChooseServiceActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteBarberActivity;
@@ -96,6 +97,8 @@ public class ChooseBarberRecycleViewAdapter extends RecyclerView.Adapter<ChooseB
 //                    Toast.makeText(context, "Choose "+account.toString(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, ChooseServiceActivity.class);
                     intent.putExtra("account", account);
+                    // finish the current activity
+                    ((ChooseBarberActivity)context).finish();
                     context.startActivity(intent);
                 }
             });

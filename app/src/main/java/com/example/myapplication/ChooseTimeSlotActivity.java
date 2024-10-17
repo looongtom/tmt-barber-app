@@ -168,7 +168,7 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                     Toast.makeText(ChooseTimeSlotActivity.this, "Please choose a time slot", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                sendApiCreateBooking(new CreateBookingRequest(userId,barberId , choosenTimeSlot.getId(), "Booked",0,listIdService));
+                sendApiCreateBooking(new CreateBookingRequest(userId,barberId , choosenTimeSlot.getId(), "Pending",0,listIdService));
 
                 Intent intent = new Intent(ChooseTimeSlotActivity.this, BookingActivity.class);
                 intent.putExtra("timeSlot", choosenTimeSlot);
@@ -194,7 +194,7 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
 ////                }
 //
                 setAlarm();
-//
+                finish();
                 startActivity(intent);
             }
         });
@@ -211,6 +211,8 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                     if(booking != null){
                         Toast.makeText(ChooseTimeSlotActivity.this,"Create booking success",Toast.LENGTH_SHORT).show();
                     }
+                }else if(response.code()==401) {
+                    Toast.makeText(ChooseTimeSlotActivity.this, "Token is expired", Toast.LENGTH_SHORT).show();
                 }
             }
 

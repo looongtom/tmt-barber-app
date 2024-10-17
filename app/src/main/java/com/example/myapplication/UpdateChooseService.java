@@ -21,6 +21,8 @@ import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Account;
 import com.example.myapplication.model.BookingDetail;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.booking.response.BookingResponse;
+import com.example.myapplication.model.booking.response.ServicingResponse;
 import com.example.myapplication.model.service.Servicing;
 
 import java.util.HashSet;
@@ -32,10 +34,10 @@ public class UpdateChooseService extends AppCompatActivity implements ChooseServ
     private ChooseServiceRecycleViewAdapter adapter;
     private Button btNext;
     private TextView tvBarberInfo, tvQuantityService;
-    private DatabaseHelper db;
     private Account account;
     private Set<Integer> listIdService = new HashSet<>();
     private List<Integer> listChoosenServices;
+    private List<ServicingResponse> listServicing;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -58,13 +60,10 @@ public class UpdateChooseService extends AppCompatActivity implements ChooseServ
         recyclerView.setAdapter(adapter);
         adapter.setItemListener(this);
 
-        int bookingId = getIntent().getIntExtra("bookingId", 0);
+        BookingResponse booking = (BookingResponse) getIntent().getSerializableExtra("bookingResponse");
+        listServicing = booking.getListServiceStruct();
 
-
-        BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(this);
-        listChoosenServices = bookingDetailDataSource.getListServiceByBookingId(bookingId);
-        listIdService.addAll(listChoosenServices);
-        tvQuantityService.setText(listIdService.size() + " services selected");
+        tvQuantityService.setText(listServicing.size() + " services selected");
 
         adapter.setSetChoosenService(listIdService);
 
@@ -72,17 +71,17 @@ public class UpdateChooseService extends AppCompatActivity implements ChooseServ
             @Override
             public void onClick(View v) {
                 double total = 0;
-                bookingDetailDataSource.deleteByBookingId(bookingId);
-                for (int serviceId : listIdService) {
-                    BookingDetail bookingDetail = new BookingDetail();
-                    bookingDetail.setBookingId(bookingId);
-                    bookingDetail.setServiceId(serviceId);
-                    bookingDetailDataSource.insert(bookingDetail);
-
-                    ServiceDataSource serviceDataSource = new ServiceDataSource(UpdateChooseService.this);
-                    Service service = serviceDataSource.getById(serviceId);
-                    total += service.getPrice();
-                }
+//                bookingDetailDataSource.deleteByBookingId(bookingId);
+//                for (int serviceId : listIdService) {
+//                    BookingDetail bookingDetail = new BookingDetail();
+//                    bookingDetail.setBookingId(bookingId);
+//                    bookingDetail.setServiceId(serviceId);
+//                    bookingDetailDataSource.insert(bookingDetail);
+//
+//                    ServiceDataSource serviceDataSource = new ServiceDataSource(UpdateChooseService.this);
+//                    Service service = serviceDataSource.getById(serviceId);
+//                    total += service.getPrice();
+//                }
                 finish();
             }
         });
@@ -94,12 +93,11 @@ public class UpdateChooseService extends AppCompatActivity implements ChooseServ
         btNext = findViewById(R.id.btNext);
         tvBarberInfo = findViewById(R.id.txtBarberInfo);
         tvQuantityService = findViewById(R.id.tvQuantityService);
-        db = new DatabaseHelper(this);
     }
 
     @Override
     public void onItemClick(View view, int pos) {
-        Servicing service = adapter.getItem(pos);
+        ServicingResponse service = adapter.getItem(pos);
         //set check box for view
         CheckBox checkBox = view.findViewById(R.id.cbChoose);
         if (listIdService.contains(service.getId())) {
@@ -116,9 +114,7 @@ public class UpdateChooseService extends AppCompatActivity implements ChooseServ
     @Override
     public void onResume() {
         super.onResume();
-        ServiceDataSource serviceDataSource = new ServiceDataSource(this);
-//        List<Service> list = (List<Service>) serviceDataSource.selectAllService(this);
-        List<Servicing> list=null;
+        List<ServicingResponse> list=null;
         adapter.setList(list);
     }
 }

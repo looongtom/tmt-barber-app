@@ -57,15 +57,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
     public void setData(List<BookingResponse> list) {
         this.list = list;
-        sortData(list);
-    }
-
-    public void sortData(List<BookingResponse> list) {
-        //sort by create time desc with the value like 2021-06-01 12:00:00
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            list.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
-        }
-        this.list = list;
         notifyDataSetChanged();
     }
 
@@ -85,16 +76,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
         return new BookingViewHolder(view);
-    }
-
-    public String getUsername(int id) {
-        AccountDataSource db = new AccountDataSource(context);
-        return db.getAccountById(id).getUsername();
-    }
-
-    public String getStartTimeSlot(int id) {
-        TimeSlotDataSource db = new TimeSlotDataSource(context);
-        return db.getTimeSlotById(id).getTimeStart();
     }
 
     public void setImageSrc(ImageView img, String src) {
@@ -117,10 +98,10 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
 
         BookingResponse booking = list.get(position);
-        holder.txtUsername.setText(getUsername(booking.getCustomerId()));
-        holder.txtStaff.setText(getUsername(booking.getBarberId()));
-        holder.txtBookingTime.setText(convertTimestamp(booking.getCreatedAt()));
-//        holder.txtSlot.setText(getStartTimeSlot(booking.getTimeSlotId()) + "   :   " + booking.getTime());
+        holder.txtUsername.setText(booking.getCustomerName());
+        holder.txtStaff.setText(booking.getBarberName());
+        holder.txtBookingTime.setText(booking.getTimeSlot().getBookedDate());
+        holder.txtSlot.setText(booking.getTimeSlot().getStartTime());
 //        holder.txtSlot.setText(getStartTimeSlot(booking.getTimeSlotId()));
         holder.txtPrice.setText(booking.getPrice().toString());
         holder.txtStatus.setText(booking.getStatus());
@@ -149,9 +130,9 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 //        List<BookingDetail> listBookingDetail = bookingDetailDataSource.getAllBookingDetail();
 //        List<Integer> listIdServices = bookingDetailDataSource.getListServiceByBookingId(booking.getId());
 //        List<Servicing> listService = getListService(listIdServices);
-        List<Servicing> listService=new ArrayList<>();
+        List<ServicingResponse> listService=new ArrayList<>();
         for (ServicingResponse servicingResponse : booking.getListServiceStruct()) {
-            listService.add(new Servicing(
+            listService.add(new ServicingResponse(
                     servicingResponse.getId(),
                     servicingResponse.getName(),
                     servicingResponse.getPrice(),
@@ -204,7 +185,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                         BookingResponse booking = list.get(getAdapterPosition());
 
                         Intent intent = new Intent(context, UpdateBookingActivity.class);
-                        intent.putExtra("bookingId", booking.getId());
+                        intent.putExtra("booking", booking);
                         context.startActivity(intent);
                     }
                 });

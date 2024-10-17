@@ -35,6 +35,7 @@ import com.example.myapplication.adapter.BarberRecycleViewAdapter;
 import com.example.myapplication.api.ApiAccountService;
 import com.example.myapplication.model.account.response.GetListBarberResponse;
 import com.example.myapplication.model.booking.response.BookingResponse;
+import com.example.myapplication.model.booking.response.TimeSlotResponse;
 import com.example.myapplication.model.hairfast.HairFastWS;
 import com.example.myapplication.model.notification.Notification;
 import com.google.gson.Gson;
@@ -172,7 +173,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
 //                    intent.putExtra("notifications", notifications);
 //                    startActivity(intent);
                 }
-                if(!queueHairfast.isEmpty()){
+                while(!queueHairfast.isEmpty()){
                         HairFastWS hairFastWS =queueHairfast.peek();
                         notifications.add(new Notification("Đã generate thành công kiểu tóc","Bấm vào để xem chi tiết",new Date().toString(),HairfastType,hairFastWS));
                         queueHairfast.remove();
@@ -187,7 +188,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
 //                    startActivity(intent);
 
                 }
-                if(!queueBooking.isEmpty()){
+                while(!queueBooking.isEmpty()){
                     BookingResponse bookingResponse =queueBooking.peek();
                     String title = bookingResponse.getStatus().equals("Booked")? "Đã đặt lịch thành công":"Đặt lịch thất bại";
                     notifications.add(new Notification(title,"Bấm vào để xem chi tiết",new Date().toString(),BookingType,bookingResponse));
@@ -279,10 +280,12 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
 
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
-            getActivity().runOnUiThread(() -> {
-                // Handle connection failure
-                Toast.makeText(getContext(), "WebSocket Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            });
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    // Handle connection failure
+                    Toast.makeText(getContext(), "WebSocket Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            }
         }
 
         @Override
@@ -309,7 +312,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     private ArrayList<Notification> getDummyNotifications() {
         ArrayList<Notification> notifications = new ArrayList<>();
         notifications.add(new Notification("Title 1", "HairfastType 1", "Just now",HairfastType,new HairFastWS("https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486066/2024-10-09T22:01:02.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486067/2024-10-09T22:01:07.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486068/2024-10-09T22:01:08.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486342/idteaiucvc5rrf5guimj.png")));
-        notifications.add(new Notification("Title 2", "BookingType 2", "10 minutes ago",BookingType, new BookingResponse(1,1,1,1,1,"Booked",1,1,new Long(1),new Long(1),null)));
+        notifications.add(new Notification("Title 2", "BookingType 2", "10 minutes ago",BookingType, new BookingResponse(1,1,"",1,"",1,1,new TimeSlotResponse(),"Booked",1,1,new Long(1),new Long(1),null)));
         return notifications;
     }
 
@@ -322,5 +325,10 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     public void onResume() {
         super.onResume();
         sendApiGetListBarber();
+//
+//        String urlBooking = "ws://"+apiUrl + ":8080/booking";
+//        Request requestBooking = new Request.Builder().url(urlBooking).build();
+//        EchoWebSocketBookingListener listenerBooking = new EchoWebSocketBookingListener();
+//        webSocketBooking = client.newWebSocket(requestBooking, listenerBooking);
     }
 }

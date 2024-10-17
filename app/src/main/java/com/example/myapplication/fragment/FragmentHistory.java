@@ -8,9 +8,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,8 +39,12 @@ import retrofit2.Response;
 public class FragmentHistory  extends Fragment {
     BookingAdapter adapter;
     private RecyclerView recyclerView;
+    private ProgressBar loadingPB;
+    private NestedScrollView nestedSV;
     private TokenManager tokenManager ;
     private List<BookingResponse> listBookings;
+
+    private int page=1,limit=2,total=Integer.MAX_VALUE;
 
     @Nullable
     @Override
@@ -57,6 +65,8 @@ public class FragmentHistory  extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView=view.findViewById(R.id.rcvListBooking);
+        loadingPB=view.findViewById(R.id.idPBLoading);
+        nestedSV=view.findViewById(R.id.idNestedSV);
         adapter=new BookingAdapter(getContext());
         tokenManager = new TokenManager(getContext());
         listBookings = new ArrayList<>();
@@ -65,7 +75,16 @@ public class FragmentHistory  extends Fragment {
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
-
+        nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight()){
+                    page++;
+                    loadingPB.setVisibility(View.VISIBLE);
+                    sendApiGetListBooking(page,limit);
+                }
+            }
+        });
     }
 
 
@@ -88,24 +107,40 @@ public class FragmentHistory  extends Fragment {
 //        BookingDataSource bookingDataSource = new BookingDataSource(getContext());
 //        List<Booking> bookings = bookingDataSource.getBookingByUserId(getContext(),userId);
 //        adapter.setData(listBookings);
-            sendApiGetListBooking();
+            sendApiGetListBooking(page, limit);
     }
 
-    private void sendApiGetListBooking(){
+    private void sendApiGetListBooking(int page, int limit){
+        if (page*limit > total) {
+            // checking if the page number is greater than limit.
+            // displaying toast message in this case when page>limit.
+            Toast.makeText(getContext(), "That's all the data..", Toast.LENGTH_SHORT).show();
+
+            // hiding our progress bar.
+            loadingPB.setVisibility(View.GONE);
+            return;
+        }
+
         String accessToken = tokenManager.getAccessToken();
-        ApiBookingService.API_BOOKING_SERVICE.getListBooking(accessToken).enqueue(new Callback<GetListBookingResponse>() {
+        ApiBookingService.API_BOOKING_SERVICE.getListBooking(accessToken,page,limit).enqueue(new Callback<GetListBookingResponse>() {
             @Override
             public void onResponse(Call<GetListBookingResponse> call, Response<GetListBookingResponse> response) {
                 if(response.isSuccessful()){
                     List<BookingResponse> bookings = response.body().getData();
-                    listBookings = bookings;
+                    int totalRows = response.body().getTotal();
+                    total=totalRows;
+                    listBookings.addAll(bookings);
                     adapter.setData(listBookings);
+                }else if(response.code()==401) {
+                    Toast.makeText(getContext(), "Token is expired", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GetListBookingResponse> call, Throwable t) {
-
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
 

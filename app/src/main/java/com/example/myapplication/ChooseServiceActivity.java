@@ -126,9 +126,11 @@ public class ChooseServiceActivity extends AppCompatActivity {
                     Intent intent= new Intent(ChooseServiceActivity.this,ChooseTimeSlotActivity.class);
                     intent.putExtra("account",account);
                     intent.putExtra("listIdService",new HashSet<>(listIdService));
+
                     //put listTimeSlot in intent
                     listTimeSlot=list;
                     intent.putExtra("listTimeSlot",new ArrayList<>(listTimeSlot));
+                    finish();
                     startActivity(intent);
                 }
                 else{
@@ -158,6 +160,8 @@ public class ChooseServiceActivity extends AppCompatActivity {
                         categories.add(new Category(entry.getValue().get(0).getCategoryId(),entry.getKey(),entry.getValue()));
                     }
                     adapter.setList(categories);
+                }else if(response.code()==401) {
+                    Toast.makeText(ChooseServiceActivity.this, "Token is expired", Toast.LENGTH_SHORT).show();
                 }
             }
 

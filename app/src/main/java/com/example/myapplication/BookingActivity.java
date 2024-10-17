@@ -19,6 +19,7 @@ import com.example.myapplication.dal.DatabaseHelper;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.account.Account;
 import com.example.myapplication.model.booking.Booking;
+import com.example.myapplication.model.booking.response.ServicingResponse;
 import com.example.myapplication.model.service.Servicing;
 import com.example.myapplication.model.timeslot.TimeSlot;
 
@@ -36,7 +37,7 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
     private RecyclerView recyclerView;
     private ChooseServiceRecycleViewAdapter adapter;
     private DatabaseHelper db;
-    private List<Servicing> listService=new ArrayList<>();
+    private List<ServicingResponse> listService=new ArrayList<>();
     private Integer totalPrice;
     private Booking booking;
 
@@ -95,8 +96,9 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookingActivity.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(BookingActivity.this, MainActivity.class);
+//                startActivity(intent);
+                finish();
             }
         });
 
