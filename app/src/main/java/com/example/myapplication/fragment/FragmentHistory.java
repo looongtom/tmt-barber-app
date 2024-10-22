@@ -3,6 +3,7 @@ package com.example.myapplication.fragment;
 import static com.example.myapplication.model.account.Account.RoleUser;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.LoginActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.BookingAdapter;
 import com.example.myapplication.api.ApiBookingService;
@@ -26,6 +28,7 @@ import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.BookingDataSource;
 import com.example.myapplication.dal.DatabaseHelper;
 import com.example.myapplication.model.booking.Booking;
+import com.example.myapplication.model.booking.request.FindBookingRequest;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.GetListBookingResponse;
 
@@ -122,10 +125,10 @@ public class FragmentHistory  extends Fragment {
         }
 
         String accessToken = tokenManager.getAccessToken();
-        ApiBookingService.API_BOOKING_SERVICE.getListBooking(accessToken,page,limit).enqueue(new Callback<GetListBookingResponse>() {
+        ApiBookingService.API_BOOKING_SERVICE.findBooking(accessToken,new FindBookingRequest(page,limit)).enqueue(new Callback<GetListBookingResponse>() {
             @Override
             public void onResponse(Call<GetListBookingResponse> call, Response<GetListBookingResponse> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body().getData()!=null){
                     List<BookingResponse> bookings = response.body().getData();
                     int totalRows = response.body().getTotal();
                     total=totalRows;
@@ -133,7 +136,14 @@ public class FragmentHistory  extends Fragment {
                     adapter.setData(listBookings);
                 }else if(response.code()==401) {
                     Toast.makeText(getContext(), "Token is expired", Toast.LENGTH_SHORT).show();
-                }else{
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    getActivity().finish();
+                    startActivity(intent);
+                }else if(response.body().getData()==null){
+                    loadingPB.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "There is no data", Toast.LENGTH_SHORT).show();
+                }
+                else{
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }

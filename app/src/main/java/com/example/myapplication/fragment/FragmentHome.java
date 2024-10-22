@@ -33,6 +33,7 @@ import com.example.myapplication.NotificationActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.BarberRecycleViewAdapter;
 import com.example.myapplication.api.ApiAccountService;
+import com.example.myapplication.model.account.Account;
 import com.example.myapplication.model.account.response.GetListBarberResponse;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.TimeSlotResponse;
@@ -119,7 +120,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         recyclerView.setAdapter(adapter);
         adapter.setItemListener(this);
 
-        if(roleId!=1){
+        if(roleId!= Account.RoleAdmin){
             btManageBarber.setVisibility(View.GONE);
         }
 

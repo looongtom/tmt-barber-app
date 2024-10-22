@@ -3,11 +3,14 @@ package com.example.myapplication.api;
 import com.example.myapplication.BuildConfig;
 import com.example.myapplication.model.booking.Booking;
 import com.example.myapplication.model.booking.request.CreateBookingRequest;
+import com.example.myapplication.model.booking.request.FindBookingRequest;
+import com.example.myapplication.model.booking.request.UpdateBookingRequest;
 import com.example.myapplication.model.booking.response.BookingDetail;
 import com.example.myapplication.model.booking.response.BookingDetailResponse;
 import com.example.myapplication.model.booking.response.GetListBookingResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.protobuf.Any;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -39,5 +42,18 @@ public interface ApiBookingService {
     @GET("booking/get-by-id")
     Call<BookingDetailResponse> getBookingById(@Header("Authorization") String token,
                                                @Query("id") Integer id);
+
+    @POST("booking/find")
+    Call<GetListBookingResponse> findBooking(@Header("Authorization") String token,
+                                            @Body FindBookingRequest findBookingRequest);
+
+
+    @POST("booking/update")
+    Call<BookingDetailResponse> updateBooking(@Header("Authorization") String token,
+                                              @Body UpdateBookingRequest createBookingRequest);
+
+    @POST("booking/update-booking-service")
+    Call<Any> updateBookingService(@Header("Authorization") String token,
+                                   @Body UpdateBookingRequest createBookingRequest);
 
 }

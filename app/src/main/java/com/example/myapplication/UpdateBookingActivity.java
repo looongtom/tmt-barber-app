@@ -19,6 +19,8 @@ import com.example.myapplication.api.ApiBookingService;
 import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.booking.request.CreateBookingRequest;
+import com.example.myapplication.model.booking.request.UpdateBookingRequest;
 import com.example.myapplication.model.booking.response.BookingDetail;
 import com.example.myapplication.model.booking.response.BookingDetailResponse;
 import com.example.myapplication.model.booking.response.BookingResponse;
@@ -42,6 +44,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
     private Integer price = 0;
     private List<ServicingResponse> listService = new ArrayList<>();
     private TokenManager tokenManager ;
+    private Boolean isChooseService = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +72,10 @@ public class UpdateBookingActivity extends AppCompatActivity {
         btnChooseService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isChooseService = true;
                 Intent intent = new Intent(getApplicationContext(), UpdateChooseService.class);
                 intent.putExtra("booking",booking);
+                finish();
                 startActivity(intent);
             }
         });
@@ -96,7 +101,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                open activity to UploadImage
-                Intent intent = new Intent(getApplicationContext(), UploadImage.class);
+                Intent intent = new Intent(getApplicationContext(), UploadImageV2.class);
                 intent.putExtra("bookingId", booking.getId());
 
                 startActivity(intent);
@@ -129,6 +134,49 @@ public class UpdateBookingActivity extends AppCompatActivity {
     private void sendApiGetBookingDetail(Integer bookingId) {
         String accessToken = tokenManager.getAccessToken();
         ApiBookingService.API_BOOKING_SERVICE.getBookingById(accessToken,bookingId).enqueue(new Callback<BookingDetailResponse>() {
+            @Override
+            public void onResponse(Call<BookingDetailResponse> call, Response<BookingDetailResponse> response) {
+                if(response.isSuccessful()){
+                    bookingDetailResponse = response.body();
+
+                    adapter = new ChooseServiceRecycleViewAdapter();
+
+                    if(isChooseService){
+                        List<ServicingResponse> listServices = (List<ServicingResponse>) getIntent().getSerializableExtra("listServices");
+                        listService = listServices;
+                    }else {
+                        listService = bookingDetailResponse.getBookingDetail().getListServiceStruct();
+                    }
+
+                    adapter.setChoose(false);
+                    adapter.setList(listService);
+                    adapter.notifyDataSetChanged();
+
+                    txtUsername.setText(bookingDetailResponse.getBookingDetail().getCustomerName());
+                    txtStaff.setText(bookingDetailResponse.getBookingDetail().getBarberName());
+                    txtBookingTime.setText(bookingDetailResponse.getBookingDetail().getBookedDate());
+                    txtSlot.setText(bookingDetailResponse.getBookingDetail().getStartTime());
+                    txtPrice.setText(bookingDetailResponse.getBookingDetail().getPrice()+"");
+                    txtStatus.setText(bookingDetailResponse.getBookingDetail().getStatus());
+
+                    LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+                    recService.setLayoutManager(manager);
+                    recService.setAdapter(adapter);
+                }else if(response.code()==401) {
+                    Toast.makeText(UpdateBookingActivity.this, "Token is expired", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookingDetailResponse> call, Throwable t) {
+                Toast.makeText(UpdateBookingActivity.this, "error get list booking detail", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendApiUpdateBooking(UpdateBookingRequest updateBooking){
+        String accessToken = tokenManager.getAccessToken();
+        ApiBookingService.API_BOOKING_SERVICE.updateBooking(accessToken,updateBooking).enqueue(new Callback<BookingDetailResponse>() {
             @Override
             public void onResponse(Call<BookingDetailResponse> call, Response<BookingDetailResponse> response) {
                 if(response.isSuccessful()){
@@ -177,7 +225,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
         txtStaff = findViewById(R.id.txtStaff);
         txtBookingTime = findViewById(R.id.txtBookingTime);
         txtSlot = findViewById(R.id.txtSlot);
-        txtPrice = findViewById(R.id.tv6);
+        txtPrice = findViewById(R.id.tvPrice);
         txtStatus = findViewById(R.id.txtStatus);
         recService = findViewById(R.id.rcvService);
         btnSave = findViewById(R.id.btSave);
@@ -190,6 +238,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        sendApiGetBookingDetail(booking.getId());
 //        List<ServicingResponse> listService=bookingDetailResponse.getListServiceStruct();
 //        price = 0;
 //        for (ServicingResponse service: listService) price+=service.getPrice();

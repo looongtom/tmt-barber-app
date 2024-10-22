@@ -16,12 +16,15 @@ import com.example.myapplication.model.category.Category;
 import com.example.myapplication.model.service.Servicing;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ChooseCategoryRecycleViewAdapter extends RecyclerView.Adapter<ChooseCategoryRecycleViewAdapter.CategortViewHolder> {
     private List<Category>list;
     private Context context;
     private ItemListener listener;
+    private Set<Integer> chosenList = new HashSet<>();
 
     public ChooseCategoryRecycleViewAdapter(Context context, ItemListener listener) {
         this.context= context;
@@ -29,6 +32,13 @@ public class ChooseCategoryRecycleViewAdapter extends RecyclerView.Adapter<Choos
         list = new ArrayList<>();
     }
 
+    public Set<Integer> getChosenList() {
+        return chosenList;
+    }
+
+    public void setChosenList(Set<Integer> chosenList) {
+        this.chosenList = chosenList;
+    }
 
     public void setList(List<Category> list) {
         this.list = list;
@@ -51,12 +61,14 @@ public class ChooseCategoryRecycleViewAdapter extends RecyclerView.Adapter<Choos
         holder.tvName.setText(category.getName());
 
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        holder.recyclerView.setAdapter(new ChooseServiceRecycleViewAdapterV2(category.getListServicing(), new ChooseServiceRecycleViewAdapterV2.ItemListener() {
+        ChooseServiceRecycleViewAdapterV2 serviceAdapter =new ChooseServiceRecycleViewAdapterV2(category.getListServicing(), new ChooseServiceRecycleViewAdapterV2.ItemListener() {
             @Override
             public void onItemClick(int id) {
                 listener.onItemClick(id);
             }
-        }));
+        });
+        serviceAdapter.setChosenList(getChosenList());
+        holder.recyclerView.setAdapter(serviceAdapter);
     }
 
     @Override

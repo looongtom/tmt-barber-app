@@ -117,7 +117,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         if (resultId != null){
             result = resultDataSource.getById(resultId);
         }
-        if (booking.getStatus().equals("Hủy")) {
+        if (booking.getStatus().equals("Canceled")) {
             holder.txtStatus.setTextColor(context.getResources().getColor(R.color.choosen_color));
 //            set text style to bold
             holder.txtStatus.setTypeface(null, Typeface.BOLD);
@@ -126,10 +126,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             holder.txtStatus.setTypeface(null, Typeface.BOLD);
         }
 
-//        BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(context);
-//        List<BookingDetail> listBookingDetail = bookingDetailDataSource.getAllBookingDetail();
-//        List<Integer> listIdServices = bookingDetailDataSource.getListServiceByBookingId(booking.getId());
-//        List<Servicing> listService = getListService(listIdServices);
         List<ServicingResponse> listService=new ArrayList<>();
         for (ServicingResponse servicingResponse : booking.getListServiceStruct()) {
             listService.add(new ServicingResponse(
@@ -176,7 +172,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             int userId = sharedPreferences.getInt("userId", -1);
             String userName = sharedPreferences.getString("username", "");
 
-            if (roleId == RoleAdmin) {
+            if (roleId == RoleBarber) {
                 btnReceive = itemView.findViewById(R.id.btnReceive);
                 btnReceive.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -190,20 +186,20 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                     }
                 });
             }
-            else if(roleId == RoleBarber){
-                btnReceive = itemView.findViewById(R.id.btnReceive);
-                btnReceive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //update status
-                        BookingResponse booking = list.get(getAdapterPosition());
-                        Intent intent = new Intent(context, UploadImage.class);
-                        intent.putExtra("bookingId", booking.getId());
-                        intent.putExtra("roleId", roleId);
-                        context.startActivity(intent);
-                    }
-                });
-            }
+//            else if(roleId == RoleBarber){
+//                btnReceive = itemView.findViewById(R.id.btnReceive);
+//                btnReceive.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        //update status
+//                        BookingResponse booking = list.get(getAdapterPosition());
+//                        Intent intent = new Intent(context, UploadImage.class);
+//                        intent.putExtra("bookingId", booking.getId());
+//                        intent.putExtra("roleId", roleId);
+//                        context.startActivity(intent);
+//                    }
+//                });
+//            }
 
             txtUsername = itemView.findViewById(R.id.txtUsername);
             txtStaff = itemView.findViewById(R.id.txtStaff);

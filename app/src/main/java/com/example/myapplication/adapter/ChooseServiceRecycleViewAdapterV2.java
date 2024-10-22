@@ -18,6 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.service.Servicing;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,10 +27,15 @@ public class ChooseServiceRecycleViewAdapterV2 extends RecyclerView.Adapter<Choo
     private List<Servicing>list;
     private ItemListener listener;
     private Boolean isChoose=true;
+    private Set<Integer>chosenList=new HashSet<>();
 
     public ChooseServiceRecycleViewAdapterV2(List<Servicing> listService, ItemListener listener) {
         list = listService;
         this.listener = listener;
+    }
+
+    public void setChosenList(Set<Integer> chosenList) {
+        this.chosenList = chosenList;
     }
 
     public void setChoose(Boolean choose) {
@@ -75,6 +81,10 @@ public class ChooseServiceRecycleViewAdapterV2 extends RecyclerView.Adapter<Choo
         holder.btnChoose.setOnCheckedChangeListener((compoundButton, b) -> {
             listener.onItemClick(service.getId());
         });
+
+        if (chosenList.contains(service.getId())) {
+            holder.btnChoose.setChecked(true);
+        }
     }
 
     @Override

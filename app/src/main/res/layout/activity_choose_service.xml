@@ -40,9 +40,9 @@
         android:layout_marginTop="10dp"
         android:clipToPadding="false"
         android:paddingBottom="72dp"
-        tools:listitem="@layout/item_choose_service"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        tools:listitem="@layout/item_category"/>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
