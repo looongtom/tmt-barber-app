@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.myapplication.adapter.ChooseServiceRecycleViewAdapter;
 import com.example.myapplication.api.ApiBookingService;
+import com.example.myapplication.api.ApiTimeSlotService;
 import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Service;
@@ -25,6 +26,9 @@ import com.example.myapplication.model.booking.response.BookingDetail;
 import com.example.myapplication.model.booking.response.BookingDetailResponse;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.ServicingResponse;
+import com.example.myapplication.model.timeslot.TimeSlot;
+import com.example.myapplication.model.timeslot.request.UpdateStatusTimeSlotRequest;
+import com.example.myapplication.model.timeslot.response.UpdateTimeSlotResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +66,8 @@ public class UpdateBookingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                timeSlotDataSource.updateStatusTimeSlot(booking.getSlotId(), "Currently Booked");
+                updateStatusTimeslot();
 
-                Intent intent = new Intent(getApplicationContext(), UpdateTimeSlot.class);
-                intent.putExtra("bookingId", booking.getId());
-                startActivity(intent);
             }
         });
 
@@ -129,6 +131,29 @@ public class UpdateBookingActivity extends AppCompatActivity {
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void updateStatusTimeslot(){
+        String accessToken = tokenManager.getAccessToken();
+        ApiTimeSlotService.API_TIME_SLOT_SERVICE.createOrUpdateTimeSlot(accessToken,new UpdateStatusTimeSlotRequest(booking.getTimeSlotId(),"Currently Booked")).enqueue(new Callback<UpdateTimeSlotResponse>() {
+            @Override
+            public void onResponse(Call<UpdateTimeSlotResponse> call, Response<UpdateTimeSlotResponse> response) {
+                if(response.isSuccessful()){
+                    UpdateTimeSlotResponse timeSlot = response.body();
+
+                    Intent intent = new Intent(getApplicationContext(), UpdateTimeSlot.class);
+                    intent.putExtra("booking", booking);
+                    intent.putExtra("timeSlot", timeSlot.getData());
+                    finish();
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateTimeSlotResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Fail to update time slot", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void sendApiGetBookingDetail(Integer bookingId) {

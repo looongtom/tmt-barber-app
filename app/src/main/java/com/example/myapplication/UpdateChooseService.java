@@ -84,6 +84,10 @@ public class UpdateChooseService extends AppCompatActivity {
         btNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(listIdService.size()<=0){
+                    Toast.makeText(UpdateChooseService.this,"Please choose at least 1 service",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 sendApiUpdateBookingService();
                 finish();
             }
