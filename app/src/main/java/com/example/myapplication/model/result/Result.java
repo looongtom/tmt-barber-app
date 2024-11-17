@@ -27,6 +27,10 @@ public class Result implements Serializable {
         this.url = url;
     }
 
+    public Result(String url) {
+        this.url = url;
+    }
+
     public Result() {
     }
 }

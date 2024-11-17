@@ -6,12 +6,15 @@ import static com.example.myapplication.model.notification.Notification.Hairfast
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -211,7 +214,6 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
                 if(response.isSuccessful()){
                     GetListBarberResponse list=response.body();
                     adapter.setList(list.getListBarber());
-
                 }
             }
 

@@ -40,7 +40,7 @@ public interface ApiAccountService {
     };
 
     OkHttpClient.Builder okBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
-    String apiUrl = "http://"+BuildConfig.API_BASE_URL+":8000/";
+    String apiUrl = "http://"+BuildConfig.API_BASE_URL+":8008/";
 
     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     ApiAccountService API_ACCOUNT_SERVICE = new Retrofit.Builder()

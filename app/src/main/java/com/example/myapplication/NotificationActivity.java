@@ -58,6 +58,10 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
         }else if (notification.getType().equals(Notification.BookingType)){
             Toast.makeText(this, "Booking: "+notification.getBookingResponse().toString(), Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, UpdateBookingActivity.class);
+            intent.putExtra("booking", notification.getBookingResponse());
+            startActivity(intent);
         }else{
             Toast.makeText(this, "Unknown: "+notification.toString(), Toast.LENGTH_SHORT).show();
         }

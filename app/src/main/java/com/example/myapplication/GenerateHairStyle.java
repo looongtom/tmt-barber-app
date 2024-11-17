@@ -201,7 +201,7 @@ public class GenerateHairStyle extends AppCompatActivity {
                 if (resp != null){
                     tvResult.setText(resp.getHairResponse().toString());
                 }
-                Toast.makeText(GenerateHairStyle.this,"Please wait 2 minutes for the result",Toast.LENGTH_SHORT).show();
+                Toast.makeText(GenerateHairStyle.this,"Please wait notification for the result\n sometimes it takes one minute ",Toast.LENGTH_SHORT).show();
                 finish();
             }
 

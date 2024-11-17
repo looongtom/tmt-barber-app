@@ -51,7 +51,10 @@
             android:text="Select Hair Color Image"
             android:layout_marginTop="20dp"
             android:id="@+id/btColorImg"/>
-
+        <TextView
+            android:text="* Lưu ý: ảnh khuôn mặt nên chụp chính diện, rõ nét"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

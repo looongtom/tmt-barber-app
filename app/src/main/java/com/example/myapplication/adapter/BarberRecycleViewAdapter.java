@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteBarberActivity;
 
@@ -59,8 +61,17 @@ public class BarberRecycleViewAdapter extends RecyclerView.Adapter<BarberRecycle
 //        AccountDataSource accountDataSource = new AccountDataSource(context);
         String fileImage=barber.getAvatar();
         holder.barberName.setText(barber.getFullName());
-        if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.imgBarber);
-        else holder.imgBarber.setImageResource(R.drawable.barber_man);
+
+        Glide.with(context)
+                .load(barber.getAvatar())
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.barber_man) // Placeholder image
+                        .error(R.drawable.error_loading) // Error image in case of loading failure
+                )
+                .into(holder.imgBarber);
+//        if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.imgBarber);
+//        else holder.imgBarber.setImageResource(R.drawable.barber_man);
+//        holder.imgBarber.setImageResource(R.drawable.barber_man);
 
         if(roleId==1){
             holder.imgBarber.setOnClickListener(new View.OnClickListener() {

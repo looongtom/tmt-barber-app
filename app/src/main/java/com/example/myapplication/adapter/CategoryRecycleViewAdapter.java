@@ -1,6 +1,7 @@
 package com.example.myapplication.adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class CategoryRecycleViewAdapter extends RecyclerView.Adapter<CategoryRec
         holder.tvName.setText(category.getName());
 
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        holder.recyclerView.setAdapter(new ServiceRecycleViewAdapter(category.getListServicing()));
+        holder.recyclerView.setAdapter(new ServiceRecycleViewAdapter(category.getListServicing(),context));
     }
 
     @Override
@@ -66,7 +67,6 @@ public class CategoryRecycleViewAdapter extends RecyclerView.Adapter<CategoryRec
             super(view);
             tvName=view.findViewById(R.id.tvNameCategory);
             recyclerView=view.findViewById(R.id.recyleService);
-
         }
 
         @Override

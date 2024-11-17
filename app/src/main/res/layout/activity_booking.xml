@@ -217,10 +217,12 @@
         android:id="@+id/btBack"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
+        android:layout_marginTop="-100dp"
         android:background="@drawable/border_butoon"
-        android:text="Trở lại"
+        android:text="Done"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scrollView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

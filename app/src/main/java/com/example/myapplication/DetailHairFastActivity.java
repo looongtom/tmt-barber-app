@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cloudinary.android.MediaManager;
 import com.example.myapplication.model.hairfast.HairFastWS;
 import com.squareup.picasso.Picasso;
@@ -39,11 +41,41 @@ public class DetailHairFastActivity extends AppCompatActivity {
         init();
         cloudinaryConfig();
         hairFastWS = (HairFastWS) getIntent().getSerializableExtra("hairFastWS");
+        System.out.println("hairFastWS:"+hairFastWS.toString());
 
-        Picasso.get().load(hairFastWS.getGeneratedImgCloud()).into(resultImg);
-        Picasso.get().load(hairFastWS.getSelfImgCloud()).into(selfImg);
-        Picasso.get().load(hairFastWS.getShapeImgCloud()).into(shapeImg);
-        Picasso.get().load(hairFastWS.getColorImgCloud()).into(colorImg);
+        Glide.with(this)
+                .load(hairFastWS.getGeneratedImgCloud())
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.loading) // Placeholder image
+                        .error(R.drawable.error_loading) // Error image in case of loading failure
+                )
+                .into(resultImg);
+        Glide.with(this)
+                .load(hairFastWS.getSelfImgCloud())
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.loading) // Placeholder image
+                        .error(R.drawable.error_loading) // Error image in case of loading failure
+                )
+                .into(selfImg);
+        Glide.with(this)
+                .load(hairFastWS.getShapeImgCloud())
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.loading) // Placeholder image
+                        .error(R.drawable.error_loading) // Error image in case of loading failure
+                )
+                .into(shapeImg);
+        Glide.with(this)
+                .load(hairFastWS.getColorImgCloud())
+                .apply(new RequestOptions()
+                        .placeholder(R.drawable.loading) // Placeholder image
+                        .error(R.drawable.error_loading) // Error image in case of loading failure
+                )
+                .into(colorImg);
+
+//        Picasso.get().load(hairFastWS.getGeneratedImgCloud()).into(resultImg);
+//        Picasso.get().load(hairFastWS.getSelfImgCloud()).into(selfImg);
+//        Picasso.get().load(hairFastWS.getShapeImgCloud()).into(shapeImg);
+//        Picasso.get().load(hairFastWS.getColorImgCloud()).into(colorImg);
 
         btnBack.setOnClickListener(v -> {
             finish();

@@ -23,7 +23,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiBookingService {
-    String apiUrl = "http://"+ BuildConfig.API_BASE_URL+":8002/";
+    String apiUrl = "http://"+ BuildConfig.API_BASE_URL+":8010/";
     Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     ApiBookingService API_BOOKING_SERVICE = new Retrofit.Builder()
             .baseUrl(apiUrl)

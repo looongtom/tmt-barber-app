@@ -39,9 +39,13 @@
             android:id="@+id/rvImageResult"
             android:layout_gravity="center"
             android:layout_width="350dp"
-            tools:listitem="@layout/item_image_result"
             android:layout_height="wrap_content"/>
 
+        <ImageView
+            android:id="@+id/btAddMore"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/add_photo" />
 
         <Button
             android:id="@+id/btChoosePhoto"

@@ -1,5 +1,7 @@
 package com.example.myapplication.fragment;
 
+import static com.example.myapplication.model.account.Account.RoleUser;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -69,7 +71,7 @@ public class FragmentService extends Fragment implements CategoryRecycleViewAdap
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
-        if(roleId!=1) {
+        if(roleId==RoleUser) {
             btAdd.setVisibility(View.GONE);
         }
         btAdd.setOnClickListener(new View.OnClickListener() {

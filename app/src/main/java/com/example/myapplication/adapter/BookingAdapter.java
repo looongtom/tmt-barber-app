@@ -186,20 +186,20 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                     }
                 });
             }
-//            else if(roleId == RoleBarber){
-//                btnReceive = itemView.findViewById(R.id.btnReceive);
-//                btnReceive.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        //update status
-//                        BookingResponse booking = list.get(getAdapterPosition());
-//                        Intent intent = new Intent(context, UploadImage.class);
-//                        intent.putExtra("bookingId", booking.getId());
-//                        intent.putExtra("roleId", roleId);
-//                        context.startActivity(intent);
-//                    }
-//                });
-//            }
+            else if(roleId == RoleUser){
+                btnReceive = itemView.findViewById(R.id.btnReceive);
+                btnReceive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //update status
+                        BookingResponse booking = list.get(getAdapterPosition());
+
+                        Intent intent = new Intent(context, UpdateBookingActivity.class);
+                        intent.putExtra("booking", booking);
+                        context.startActivity(intent);
+                    }
+                });
+            }
 
             txtUsername = itemView.findViewById(R.id.txtUsername);
             txtStaff = itemView.findViewById(R.id.txtStaff);

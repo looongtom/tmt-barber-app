@@ -1,12 +1,16 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.model.account.Account.RoleUser;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -53,8 +57,18 @@ public class UpdateBookingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        int roleId = sharedPreferences.getInt("roleId", -1);
         setContentView(R.layout.activity_update_booking);
         initView();
+        if (roleId == RoleUser) {
+            btnSave.setVisibility(View.GONE);
+            btnChooseService.setVisibility(View.GONE);
+            btChooseTimeSlot.setVisibility(View.GONE);
+            btDelete.setVisibility(View.GONE);
+            btChooseImage.setText("Xem ảnh");
+        }
+
         tokenManager = new TokenManager(this);
         bookingDetailResponse = new BookingDetailResponse();
 
@@ -100,14 +114,14 @@ public class UpdateBookingActivity extends AppCompatActivity {
         });
 
         btChooseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 //                open activity to UploadImage
-                Intent intent = new Intent(getApplicationContext(), UploadImageV2.class);
-                intent.putExtra("bookingId", booking.getId());
+                    Intent intent = new Intent(getApplicationContext(), UploadImageV2.class);
+                    intent.putExtra("booking", booking);
 
-                startActivity(intent);
-            }
+                    startActivity(intent);
+                }
         });
     }
 
