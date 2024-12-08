@@ -183,7 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 String date = "";
-                if (mMonth > 8) {
+                if (month > 8) {
                     date = dayOfMonth+ "-" + (month + 1)+ "-"+year;
                 } else {
                     date = dayOfMonth + "-0" + (month + 1)+ "-"+year;

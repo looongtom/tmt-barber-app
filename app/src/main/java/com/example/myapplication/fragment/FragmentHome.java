@@ -179,7 +179,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
                 }
                 while(!queueHairfast.isEmpty()){
                         HairFastWS hairFastWS =queueHairfast.peek();
-                        notifications.add(new Notification("Đã generate thành công kiểu tóc","Bấm vào để xem chi tiết",new Date().toString(),HairfastType,hairFastWS));
+                        notifications.add(new Notification("Đã generate thành công kiểu tóc","Bấm vào để xem chi tiết",new Date().getTime(),HairfastType,hairFastWS));
                         queueHairfast.remove();
 
 //                    Toast.makeText(getContext(), queue.peek(), Toast.LENGTH_SHORT).show();
@@ -195,11 +195,12 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
                 while(!queueBooking.isEmpty()){
                     BookingResponse bookingResponse =queueBooking.peek();
                     String title = bookingResponse.getStatus().equals("Booked")? "Đã đặt lịch thành công":"Đặt lịch thất bại";
-                    notifications.add(new Notification(title,"Bấm vào để xem chi tiết",new Date().toString(),BookingType,bookingResponse));
+                    notifications.add(new Notification(title,"Bấm vào để xem chi tiết",new Date().getTime(),BookingType,bookingResponse));
                     queueBooking.remove();
                 }
                 Intent intent = new Intent(getActivity(), NotificationActivity.class);
                 intent.putExtra("notifications", notifications);
+                intent.putExtra("userId",userId);
                 startActivity(intent);
             }
         });
@@ -314,8 +315,8 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
     }
     private ArrayList<Notification> getDummyNotifications() {
         ArrayList<Notification> notifications = new ArrayList<>();
-        notifications.add(new Notification("Title 1", "HairfastType 1", "Just now",HairfastType,new HairFastWS("https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486066/2024-10-09T22:01:02.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486067/2024-10-09T22:01:07.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486068/2024-10-09T22:01:08.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486342/idteaiucvc5rrf5guimj.png")));
-        notifications.add(new Notification("Title 2", "BookingType 2", "10 minutes ago",BookingType, new BookingResponse(1,1,"",1,"",1,1,new TimeSlotResponse(),"Booked",1,1,new Long(1),new Long(1),null)));
+        notifications.add(new Notification("Title 1", "HairfastType 1", new Long(1732122000),HairfastType,new HairFastWS("https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486066/2024-10-09T22:01:02.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486067/2024-10-09T22:01:07.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486068/2024-10-09T22:01:08.jpg","https://res.cloudinary.com/dsjuckdxu/image/upload/v1728486342/idteaiucvc5rrf5guimj.png")));
+        notifications.add(new Notification("Title 2", "BookingType 2", new Long(1732122000),BookingType, new BookingResponse(1,1,"",1,"",1,1,new TimeSlotResponse(),"Booked",1,1,new Long(1),new Long(1),null)));
         return notifications;
     }
 

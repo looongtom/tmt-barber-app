@@ -192,21 +192,40 @@ public class GenerateHairStyle extends AppCompatActivity {
         RequestBody colorImgBody = RequestBody.create(MultipartBody.FORM,fileColorImg);
         MultipartBody.Part colorImgPart = MultipartBody.Part.createFormData("color_img",fileColorImg.getName(),colorImgBody);
 
-        ApiPreviewImgService.apiService.generateHair(accessToken,selfImgPart,shapeImgPart,colorImgPart).enqueue(new Callback<GenerateHairResponse>() {
+//        ApiPreviewImgService.apiService.generateHair(accessToken,selfImgPart,shapeImgPart,colorImgPart).enqueue(new Callback<GenerateHairResponse>() {
+//            @Override
+//            public void onResponse(Call<GenerateHairResponse> call, Response<GenerateHairResponse> response) {
+//                Toast.makeText(GenerateHairStyle.this,"Upload success",Toast.LENGTH_SHORT).show();
+//                progressDialog.dismiss();
+//                GenerateHairResponse resp =  response.body();
+//                if (resp != null){
+//                    tvResult.setText(resp.getHairResponse().toString());
+//                }
+//                Toast.makeText(GenerateHairStyle.this,"Please wait notification for the result\n sometimes it takes one minute ",Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<GenerateHairResponse> call, Throwable t) {
+//                progressDialog.dismiss();
+//                Toast.makeText(GenerateHairStyle.this,"Upload failed",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        ApiPreviewImgService.apiService.generateHair(accessToken,selfImgPart,shapeImgPart,colorImgPart).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<GenerateHairResponse> call, Response<GenerateHairResponse> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 Toast.makeText(GenerateHairStyle.this,"Upload success",Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                GenerateHairResponse resp =  response.body();
-                if (resp != null){
-                    tvResult.setText(resp.getHairResponse().toString());
-                }
+//                GenerateHairResponse resp =  response.body();
+//                if (resp != null){
+//                    tvResult.setText(resp.getHairResponse().toString());
+//                }
                 Toast.makeText(GenerateHairStyle.this,"Please wait notification for the result\n sometimes it takes one minute ",Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
-            public void onFailure(Call<GenerateHairResponse> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(GenerateHairStyle.this,"Upload failed",Toast.LENGTH_SHORT).show();
             }

@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,10 +32,14 @@ import com.example.myapplication.model.booking.response.BookingDetailResponse;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.ServicingResponse;
 import com.example.myapplication.model.timeslot.TimeSlot;
+import com.example.myapplication.model.timeslot.request.FindTimeSlotRequest;
 import com.example.myapplication.model.timeslot.request.UpdateStatusTimeSlotRequest;
+import com.example.myapplication.model.timeslot.response.FindTimeSlotResponse;
 import com.example.myapplication.model.timeslot.response.UpdateTimeSlotResponse;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,6 +58,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
     private List<ServicingResponse> listService = new ArrayList<>();
     private TokenManager tokenManager ;
     private Boolean isChooseService = false;
+    private TimeSlot currentTimeslot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         booking= (BookingResponse) intent.getSerializableExtra("booking");
+        currentTimeslot = (TimeSlot) intent.getSerializableExtra("timeSlot");
         sendApiGetBookingDetail(booking.getId());
 
         btChooseTimeSlot.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +88,6 @@ public class UpdateBookingActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                timeSlotDataSource.updateStatusTimeSlot(booking.getSlotId(), "Currently Booked");
                 updateStatusTimeslot();
-
             }
         });
 
@@ -149,26 +155,57 @@ public class UpdateBookingActivity extends AppCompatActivity {
 
     private void updateStatusTimeslot(){
         String accessToken = tokenManager.getAccessToken();
-        ApiTimeSlotService.API_TIME_SLOT_SERVICE.createOrUpdateTimeSlot(accessToken,new UpdateStatusTimeSlotRequest(booking.getTimeSlotId(),"Currently Booked")).enqueue(new Callback<UpdateTimeSlotResponse>() {
-            @Override
-            public void onResponse(Call<UpdateTimeSlotResponse> call, Response<UpdateTimeSlotResponse> response) {
-                if(response.isSuccessful()){
-                    UpdateTimeSlotResponse timeSlot = response.body();
+//        ApiTimeSlotService.API_TIME_SLOT_SERVICE.createOrUpdateTimeSlot(accessToken,new UpdateStatusTimeSlotRequest(booking.getTimeSlotId(),"Currently Booked")).enqueue(new Callback<UpdateTimeSlotResponse>() {
+//            @Override
+//            public void onResponse(Call<UpdateTimeSlotResponse> call, Response<UpdateTimeSlotResponse> response) {
+//                if(response.isSuccessful()){
+//                    UpdateTimeSlotResponse timeSlot = response.body();
+//
+//                    Intent intent = new Intent(getApplicationContext(), UpdateTimeSlot.class);
+//                    intent.putExtra("booking", booking);
+//                    intent.putExtra("timeSlot", timeSlot.getData());
+//                    finish();
+//                    startActivity(intent);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UpdateTimeSlotResponse> call, Throwable t) {
+//                Toast.makeText(getApplicationContext(), "Fail to update time slot", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-                    Intent intent = new Intent(getApplicationContext(), UpdateTimeSlot.class);
-                    intent.putExtra("booking", booking);
-                    intent.putExtra("timeSlot", timeSlot.getData());
-                    finish();
-                    startActivity(intent);
-                }
-            }
+//        ApiTimeSlotService.API_TIME_SLOT_SERVICE.findTimeSlot(new FindTimeSlotRequest(booking.getBarberId(),booking.getTimeSlot().getBookedDate(),null,null)).enqueue(new Callback<FindTimeSlotResponse>() {
+//            @Override
+//            public void onResponse(Call<FindTimeSlotResponse> call, Response<FindTimeSlotResponse> response) {
+//                if (response.isSuccessful()) {
+//                    FindTimeSlotResponse findTimeSlotResponse = response.body();
+//                    List<TimeSlot> list =findTimeSlotResponse.getData();
+//                    Intent intent= new Intent(UpdateBookingActivity.this,UpdateTimeSlot.class);
+//                    intent.putExtra("booking", booking);
+//                    intent.putExtra("timeSlot", booking.getTimeSlot());
+//                    finish();
+//                    startActivity(intent);
+//                }
+//                else{
+//                    Toast.makeText(UpdateBookingActivity.this,"error when get list time slot to update",Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<FindTimeSlotResponse> call, Throwable t) {
+//                Toast.makeText(UpdateBookingActivity.this,"error when get list time slot to update",Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-            @Override
-            public void onFailure(Call<UpdateTimeSlotResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Fail to update time slot", Toast.LENGTH_SHORT).show();
-            }
-        });
+        Intent intent= new Intent(UpdateBookingActivity.this,UpdateTimeSlot.class);
+        intent.putExtra("booking", booking);
+        intent.putExtra("timeSlot", currentTimeslot);
+        finish();
+        startActivity(intent);
+
     }
+
 
     private void sendApiGetBookingDetail(Integer bookingId) {
         String accessToken = tokenManager.getAccessToken();

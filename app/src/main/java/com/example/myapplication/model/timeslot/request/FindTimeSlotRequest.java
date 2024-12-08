@@ -49,4 +49,10 @@ public class FindTimeSlotRequest {
         this.startTime = startTime;
         this.status = status;
     }
+
+    public FindTimeSlotRequest(int barberId, String date, String startTime) {
+        this.barberId = barberId;
+        this.date = date;
+        this.startTime = startTime;
+    }
 }

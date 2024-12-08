@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView textSignUp;
     boolean isProgressVisible = false;
     private TokenManager tokenManager ;
+    private ImageView imageView3;
 
 
     public void init(){
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         text1 = findViewById(R.id.text1);
         textSignUp = findViewById(R.id.textSignUp);
         btnLogin = findViewById(R.id.btnLogin);
+        imageView3 = findViewById(R.id.imageView3);
     }
 
     @Override
@@ -65,6 +68,27 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imageView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtUsername.setText("user");
+                txtPassword.setText("123456Abc@");
+                progressBar = findViewById(R.id.progressBar);
+                sendApiLogin();
+            }
+        });
+        text1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtUsername.setText("liem");
+                txtPassword.setText("123456Abc@");
+                progressBar = findViewById(R.id.progressBar);
+                sendApiLogin();
+            }
+        });
+        //listen to the click double
+
+
     }
 
     private void sendApiLogin(){

@@ -8,7 +8,8 @@ import java.io.Serializable;
 public class Notification implements Serializable {
     public static final String BookingType = "booking";
     public static final String HairfastType = "hairfast";
-    private String title, message, timestamp,type;
+    private String title, message,type;
+    private Long timestamp;
     private HairFastWS hairFastWS;
     private BookingResponse bookingResponse;
 
@@ -20,14 +21,14 @@ public class Notification implements Serializable {
         this.type = type;
     }
 
-    public Notification(String title, String message, String timestamp, String type) {
+    public Notification(String title, String message, Long timestamp, String type) {
         this.title = title;
         this.message = message;
         this.timestamp = timestamp;
         this.type = type;
     }
 
-    public Notification(String title, String message, String timestamp, String type, BookingResponse bookingResponse) {
+    public Notification(String title, String message, Long timestamp, String type, BookingResponse bookingResponse) {
         this.title = title;
         this.message = message;
         this.timestamp = timestamp;
@@ -35,7 +36,7 @@ public class Notification implements Serializable {
         this.bookingResponse = bookingResponse;
     }
 
-    public Notification(String title, String message, String timestamp, String type, HairFastWS hairFastWS) {
+    public Notification(String title, String message, Long timestamp, String type, HairFastWS hairFastWS) {
         this.title = title;
         this.message = message;
         this.timestamp = timestamp;
@@ -75,23 +76,23 @@ public class Notification implements Serializable {
         this.message = message;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
-
-
 
     @Override
     public String toString() {
         return "Notification{" +
                 "title='" + title + '\'' +
                 ", message='" + message + '\'' +
-                ", timestamp='" + timestamp + '\'' +
                 ", type='" + type + '\'' +
+                ", timestamp=" + timestamp +
+                ", hairFastWS=" + hairFastWS +
+                ", bookingResponse=" + bookingResponse +
                 '}';
     }
 }

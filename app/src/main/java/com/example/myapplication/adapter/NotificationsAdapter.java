@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.model.notification.Notification;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> {
@@ -34,6 +36,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         return notifications.get(position);
     }
 
+    private String convertLongToTime(long time) {
+        Date date = new Date(time* 1000);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return sdf.format(date);
+    }
+
     @NonNull
     @Override
     public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,7 +54,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         Notification notification = notifications.get(position);
         holder.titleTextView.setText(notification.getTitle());
         holder.messageTextView.setText(notification.getMessage());
-        holder.timestampTextView.setText(notification.getTimestamp());
+        holder.timestampTextView.setText(convertLongToTime(notification.getTimestamp()));
     }
 
     @Override

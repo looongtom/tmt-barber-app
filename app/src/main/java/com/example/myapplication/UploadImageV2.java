@@ -250,6 +250,7 @@ public class UploadImageV2 extends AppCompatActivity {
                     //log the response
                     Log.d("Response", createResultResponse.getData().toString());
                     }
+                finish();
                 }
             @Override
             public void onFailure(Call<CreateResultResponseData> call, Throwable t) {

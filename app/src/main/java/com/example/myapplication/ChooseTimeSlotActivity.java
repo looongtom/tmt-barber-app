@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -124,10 +125,15 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String date = "";
-                        if (mMonth > 8) {
-                            date = dayOfMonth + "-" + (month + 1) + "-" + year;
+                        if (dayOfMonth < 10) {
+                            date = "0" + dayOfMonth + "-";
                         } else {
-                            date = dayOfMonth + "-0" + (month + 1) + "-" + year;
+                            date = dayOfMonth + "-";
+                        }
+                        if (month > 8) {
+                            date +=  (month + 1) + "-" + year;
+                        } else {
+                            date += "0" + (month + 1) + "-" + year;
                         }
                         if (compareDate(date, getToday())) {
                             edtDate.setText(date);
@@ -147,17 +153,18 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
         edtDate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                Log.d("ChooseTimeslot", "beforeTextChanged: "+edtDate.getText().toString());
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                Log.d("ChooseTimeslot", "onTextChanged: "+edtDate.getText().toString());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                sendApiGetListTimeslot(new FindTimeSlotRequest(barberId, edtDate.getText().toString(),"","Available"));
+                Log.d("ChooseTimeslot", "afterTextChanged: "+edtDate.getText().toString());
+                sendApiGetListTimeslot(new FindTimeSlotRequest(barberId, edtDate.getText().toString(),""));
             }
         });
 
@@ -234,6 +241,7 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                     if (timeSlotList == null) {
                         Toast.makeText(ChooseTimeSlotActivity.this, "No time slot available", Toast.LENGTH_SHORT).show();
                     }
+                    adapter.setList(timeSlotList);
                 }
                 else{
                     Toast.makeText(ChooseTimeSlotActivity.this,"error when get list time slot",Toast.LENGTH_SHORT).show();
@@ -309,10 +317,15 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         String date = "";
-        if (mMonth > 8) {
-            date = mDay + "-" + (mMonth + 1) + "-" + mYear;
+        if (mDay < 10) {
+            date = "0" + mDay + "-";
         } else {
-            date = mDay + "-0" + (mMonth + 1) + "-" + mYear;
+            date = mDay + "-";
+        }
+        if (mMonth > 8) {
+            date +=  (mMonth + 1) + "-" + mYear;
+        } else {
+            date += "0" + (mMonth + 1) + "-" + mYear;
         }
         queryDate = date;
         return date;
@@ -343,8 +356,8 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
     public void onResume() {
         super.onResume();
         if (timeSlotList ==null || timeSlotList.size() == 0) {
-            sendApiGetListTimeslot(new FindTimeSlotRequest(barberId, edtDate.getText().toString(),"","Available"));
-            adapter.setList(timeSlotList);
+            sendApiGetListTimeslot(new FindTimeSlotRequest(barberId, edtDate.getText().toString(),""));
+//            adapter.setList(timeSlotList);
         }
     }
 }

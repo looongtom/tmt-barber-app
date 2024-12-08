@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class HairFastWS implements Serializable {
+    private static final long serialVersionUID = 1L;
     @SerializedName("self_img_cloud")
     private String SelfImgCloud;
     @SerializedName("shape_img_cloud")

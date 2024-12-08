@@ -30,6 +30,8 @@ public class BookingResponse implements Serializable {
     private Long createdAt;
     @SerializedName("updated_at")
     private Long updatedAt;
+    @SerializedName("booked_date")
+    private String bookedDate;
     @SerializedName("list_service_struct")
     private List<ServicingResponse> listServiceStruct;
 
@@ -154,19 +156,26 @@ public class BookingResponse implements Serializable {
         this.listServiceStruct = listServiceStruct;
     }
 
+    public BookingResponse() {
+    }
+
     @Override
     public String toString() {
         return "BookingResponse{" +
                 "id=" + id +
                 ", customerId=" + customerId +
+                ", customerName='" + customerName + '\'' +
                 ", barberId=" + barberId +
+                ", barberName='" + barberName + '\'' +
                 ", resultId=" + resultId +
                 ", timeSlotId=" + timeSlotId +
+                ", timeSlot=" + timeSlot +
                 ", status='" + status + '\'' +
                 ", price=" + price +
                 ", feedbackId=" + feedbackId +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", bookedDate='" + bookedDate + '\'' +
                 ", listServiceStruct=" + listServiceStruct +
                 '}';
     }

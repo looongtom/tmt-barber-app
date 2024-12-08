@@ -9,7 +9,7 @@ public class ServicingResponse implements java.io.Serializable{
 
     @Override
     public String toString() {
-        return "Servicing{" +
+        return "ServicingResponse{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +

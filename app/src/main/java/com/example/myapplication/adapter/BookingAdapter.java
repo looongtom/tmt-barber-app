@@ -38,6 +38,7 @@ import com.example.myapplication.model.booking.Booking;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.ServicingResponse;
 import com.example.myapplication.model.service.Servicing;
+import com.example.myapplication.model.timeslot.TimeSlot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -182,6 +183,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
                         Intent intent = new Intent(context, UpdateBookingActivity.class);
                         intent.putExtra("booking", booking);
+                        TimeSlot timeSlot = new TimeSlot(booking.getTimeSlot().getId(),booking.getTimeSlot().getStartTime(),booking.getTimeSlot().getBookedDate(),"Currently Booked",booking.getBarberId());
+                        intent.putExtra("timeSlot", timeSlot);
                         context.startActivity(intent);
                     }
                 });
@@ -196,6 +199,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
                         Intent intent = new Intent(context, UpdateBookingActivity.class);
                         intent.putExtra("booking", booking);
+                        intent.putExtra("timeSlot", new TimeSlot(booking.getTimeSlot().getId(),booking.getTimeSlot().getStartTime(),"Currently Booked",booking.getTimeSlot().getBookedDate(),booking.getBarberId()));
                         context.startActivity(intent);
                     }
                 });

@@ -2,15 +2,20 @@ package com.example.myapplication.fragment;
 
 import static com.example.myapplication.model.account.Account.RoleUser;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.ChooseTimeSlotActivity;
 import com.example.myapplication.LoginActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.BookingAdapter;
@@ -33,6 +39,7 @@ import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.GetListBookingResponse;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,8 +51,11 @@ public class FragmentHistory  extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar loadingPB;
     private NestedScrollView nestedSV;
+    private SearchView searchView;
+    private String queryDate;
     private TokenManager tokenManager ;
     private List<BookingResponse> listBookings;
+    private ImageButton btnReset;
 
     private int page=1,limit=2,total=Integer.MAX_VALUE;
 
@@ -67,6 +77,9 @@ public class FragmentHistory  extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        searchView=view.findViewById(R.id.search);
+//        enableSearchView(searchView,false);
+        btnReset=view.findViewById(R.id.btnClear);
         recyclerView=view.findViewById(R.id.rcvListBooking);
         loadingPB=view.findViewById(R.id.idPBLoading);
         nestedSV=view.findViewById(R.id.idNestedSV);
@@ -78,17 +91,79 @@ public class FragmentHistory  extends Fragment {
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setQueryHint("Search by date");
+                queryDate=null;
+
+                resetPagination();
+                if (listBookings.size()>0 || !listBookings.isEmpty()){
+                    listBookings.clear();
+                    adapter.setData(listBookings);
+                }
+                sendApiGetListBooking(page,limit,new FindBookingRequest(page,limit));
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String date = "";
+                        if (dayOfMonth < 10) {
+                            date = "0" + dayOfMonth + "-";
+                        } else {
+                            date = dayOfMonth + "-";
+                        }
+                        if (month > 8) {
+                            date +=  (month + 1) + "-" + year;
+                        } else {
+                            date += "0" + (month + 1) + "-" + year;
+                        }
+                        queryDate = date;
+                        searchView.setQueryHint(date);
+                        if (listBookings.size()>0 || !listBookings.isEmpty()){
+                            listBookings.clear();
+                            adapter.setData(listBookings);
+                        }
+                        sendApiGetListBooking(page, limit,new FindBookingRequest(page,limit,queryDate));
+                    }
+                }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
         nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight()){
                     page++;
                     loadingPB.setVisibility(View.VISIBLE);
-                    sendApiGetListBooking(page,limit);
+                    sendApiGetListBooking(page,limit,new FindBookingRequest(page,limit,queryDate));
                 }
             }
         });
     }
+
+    private void enableSearchView(View view, boolean enabled) {
+        view.setEnabled(enabled);
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                enableSearchView(child, enabled);
+            }
+        }
+    }
+
 
 
     @Override
@@ -97,7 +172,6 @@ public class FragmentHistory  extends Fragment {
         int roleId = sharedPreferences.getInt("roleId", -1);
         int userId = sharedPreferences.getInt("userId", -1);
         String userName=sharedPreferences.getString("username","");
-
         super.onResume();
 
 //        if(roleId!=3){
@@ -110,10 +184,37 @@ public class FragmentHistory  extends Fragment {
 //        BookingDataSource bookingDataSource = new BookingDataSource(getContext());
 //        List<Booking> bookings = bookingDataSource.getBookingByUserId(getContext(),userId);
 //        adapter.setData(listBookings);
-            sendApiGetListBooking(page, limit);
+        resetPagination();
+        sendApiGetListBooking(page, limit,new FindBookingRequest(page,limit));
     }
 
-    private void sendApiGetListBooking(int page, int limit){
+    private void resetPagination(){
+        this.page=1;
+        this.limit=2;
+        this.total=Integer.MAX_VALUE;
+    }
+
+    private String getToday() {
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        String date = "";
+
+        if (mDay < 10) {
+            date = "0" + mDay + "-";
+        } else {
+            date = mDay + "-";
+        }
+        if (mMonth > 8) {
+            date +=  (mMonth + 1) + "-" + mYear;
+        } else {
+            date += "0" + (mMonth + 1) + "-" + mYear;
+        }
+        return date;
+    }
+
+    private void sendApiGetListBooking(int page, int limit,  FindBookingRequest findBookingRequest){
         if (page*limit > total) {
             // checking if the page number is greater than limit.
             // displaying toast message in this case when page>limit.
@@ -125,7 +226,7 @@ public class FragmentHistory  extends Fragment {
         }
 
         String accessToken = tokenManager.getAccessToken();
-        ApiBookingService.API_BOOKING_SERVICE.findBooking(accessToken,new FindBookingRequest(page,limit)).enqueue(new Callback<GetListBookingResponse>() {
+        ApiBookingService.API_BOOKING_SERVICE.findBooking(accessToken,findBookingRequest).enqueue(new Callback<GetListBookingResponse>() {
             @Override
             public void onResponse(Call<GetListBookingResponse> call, Response<GetListBookingResponse> response) {
                 if(response.isSuccessful() && response.body().getData()!=null){
