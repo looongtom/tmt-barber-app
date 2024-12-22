@@ -139,6 +139,10 @@ public class BookingResponse implements Serializable {
         return barberName;
     }
 
+    public String getBookedDate() {
+        return bookedDate;
+    }
+
     public BookingResponse(Integer id, Integer customerId, String customerName, Integer barberId, String barberName, Integer resultId, Integer timeSlotId, TimeSlotResponse timeSlot, String status, Integer price, Integer feedbackId, Long createdAt, Long updatedAt, List<ServicingResponse> listServiceStruct) {
         this.id = id;
         this.customerId = customerId;

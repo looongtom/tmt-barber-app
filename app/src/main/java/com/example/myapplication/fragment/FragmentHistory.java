@@ -147,7 +147,12 @@ public class FragmentHistory  extends Fragment {
                 if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight()){
                     page++;
                     loadingPB.setVisibility(View.VISIBLE);
-                    sendApiGetListBooking(page,limit,new FindBookingRequest(page,limit,queryDate));
+                    if (queryDate==null || queryDate.isEmpty()) {
+                        sendApiGetListBooking(page, limit, new FindBookingRequest(page, limit));
+                    } else {
+                        sendApiGetListBooking(page, limit, new FindBookingRequest(page, limit, queryDate));
+                    }
+//                    sendApiGetListBooking(page,limit,new FindBookingRequest(page,limit,queryDate));
                 }
             }
         });
@@ -235,17 +240,19 @@ public class FragmentHistory  extends Fragment {
                     total=totalRows;
                     listBookings.addAll(bookings);
                     adapter.setData(listBookings);
-                }else if(response.code()==401) {
+                }else if(response.body()==null){
+                    loadingPB.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "There is no data", Toast.LENGTH_SHORT).show();
+                }
+                else if(response.code()==401) {
                     Toast.makeText(getContext(), "Token is expired", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     getActivity().finish();
                     startActivity(intent);
-                }else if(response.body().getData()==null){
-                    loadingPB.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "There is no data", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    loadingPB.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "There is no data", Toast.LENGTH_SHORT).show();
                 }
             }
 

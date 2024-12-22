@@ -162,6 +162,9 @@ public class ChooseServiceActivity extends AppCompatActivity {
                     adapter.setList(categories);
                 }else if(response.code()==401) {
                     Toast.makeText(ChooseServiceActivity.this, "Token is expired", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ChooseServiceActivity.this, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
                 }
             }
 

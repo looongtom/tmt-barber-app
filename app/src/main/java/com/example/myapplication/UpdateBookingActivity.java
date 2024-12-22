@@ -105,7 +105,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                booking.setStatus("Đã nhận khách");
+                booking.setStatus("Served");
 //                booking.setPrice(price);
                 finish();
             }
@@ -240,6 +240,9 @@ public class UpdateBookingActivity extends AppCompatActivity {
                     recService.setAdapter(adapter);
                 }else if(response.code()==401) {
                     Toast.makeText(UpdateBookingActivity.this, "Token is expired", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(UpdateBookingActivity.this, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
                 }
             }
 
@@ -277,6 +280,9 @@ public class UpdateBookingActivity extends AppCompatActivity {
                     recService.setAdapter(adapter);
                 }else if(response.code()==401) {
                     Toast.makeText(UpdateBookingActivity.this, "Token is expired", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(UpdateBookingActivity.this, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
                 }
             }
 

@@ -220,6 +220,9 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                     }
                 }else if(response.code()==401) {
                     Toast.makeText(ChooseTimeSlotActivity.this, "Token is expired", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ChooseTimeSlotActivity.this, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
                 }
             }
 
