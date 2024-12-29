@@ -155,6 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     intent.putExtra("account", acc);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     Toast.makeText(RegisterActivity.this, "Mã OTP đã được gửi đến thiết bị", Toast.LENGTH_SHORT).show();
+                                    finish();
                                     startActivity(intent);
                                 }
                             }
@@ -167,6 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -181,7 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 String date = "";
-                if (mMonth > 8) {
+                if (month > 8) {
                     date = dayOfMonth+ "-" + (month + 1)+ "-"+year;
                 } else {
                     date = dayOfMonth + "-0" + (month + 1)+ "-"+year;

@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
         receiveGeneralNotification();
 
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences("UserData",Context.MODE_PRIVATE);
-        int roleId = sharedPreferences.getInt("roleId", -1);
-        int userId = sharedPreferences.getInt("userId", -1);
-        String userName=sharedPreferences.getString("username","");
 
         navigationView=findViewById(R.id.bottom_nav);
         viewPager=findViewById(R.id.viewPager);

@@ -22,6 +22,7 @@ import com.example.myapplication.dal.BookingDataSource;
 import com.example.myapplication.dal.ResultDataSource;
 import com.example.myapplication.model.Booking;
 import com.example.myapplication.model.Result;
+import com.example.myapplication.model.booking.response.BookingResponse;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -32,7 +33,7 @@ public class UploadImage extends AppCompatActivity {
     private ImageView imgView1, imgView2, imgView3, imgView4;
     private Button btChoose,btBack;
     private static final int pic_id1 = 1, pic_id2 = 2, pic_id3 = 3, pic_id4 = 4;
-    private Booking booking;
+    private BookingResponse booking;
     private Result result;
     private static boolean isMediaManagerInitialized = false;
 
@@ -61,8 +62,7 @@ public class UploadImage extends AppCompatActivity {
         Intent intent = getIntent();
         Integer bookingId = intent.getIntExtra("bookingId", 0);
         int roleId = intent.getIntExtra("roleId", -1);
-        BookingDataSource bookingDataSource = new BookingDataSource(this);
-        booking = bookingDataSource.getById(bookingId);
+        booking= (BookingResponse) intent.getSerializableExtra("booking");
         System.out.println("Log from UploadImage: "+booking.toString());
 
 
@@ -142,8 +142,6 @@ public class UploadImage extends AppCompatActivity {
                     result = uploadResult;
 
                     booking.setResultId(uploadResult.getId());
-                    bookingDataSource.updateBooking(booking);
-                    booking = bookingDataSource.getById(bookingId);
 
                     // Upload the image to Cloudinary
                     MediaManager.get().upload(imageData1).callback(new UploadCallback() {

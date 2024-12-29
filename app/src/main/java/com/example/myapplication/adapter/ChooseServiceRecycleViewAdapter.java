@@ -11,7 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.model.Service;
+import com.example.myapplication.model.booking.response.ServicingResponse;
+import com.example.myapplication.model.service.Servicing;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<ChooseServiceRecycleViewAdapter.ServiceViewHolder> {
-    private List<Service>list;
+    private List<ServicingResponse>list;
     private Set<Integer>setChoosenService;
     private ItemListener itemListener;
     private Boolean isChoose=true;
@@ -36,7 +37,7 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
         this.itemListener = itemListener;
     }
 
-    public void setList(List<Service> list) {
+    public void setList(List<ServicingResponse> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -46,9 +47,10 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
     }
 
 
-    public Service getItem(int pos) {
+    public ServicingResponse getItem(int pos) {
         return list.get(pos);
     }
+
     @NonNull
     @Override
     public ServiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,7 +60,7 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
 
     @Override
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
-        Service service=list.get(position);
+        ServicingResponse service=list.get(position);
         holder.tvName.setText(service.getName());
         holder.tvPrice.setText(service.getPrice()+"");
         holder.tvDescription.setText(service.getDescription());
@@ -68,13 +70,14 @@ public class ChooseServiceRecycleViewAdapter extends RecyclerView.Adapter<Choose
         } else {
             holder.checkBox.setChecked(false);
         }
-        String fileImage=service.getFilePath();
+        String fileImage=service.getUrl();
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.img);
         else holder.img.setImageResource(R.drawable.barber_man);
     }
 
     @Override
     public int getItemCount() {
+        if (list == null) return 0;
         return list.size();
     }
 

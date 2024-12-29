@@ -194,7 +194,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv7" />
 
     <TextView
-        android:id="@+id/tv6"
+        android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -230,7 +230,7 @@
         android:text="Chọn lại dịch vụ"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv6" />
+        app:layout_constraintTop_toBottomOf="@id/tvPrice" />
 
 
     <androidx.recyclerview.widget.RecyclerView

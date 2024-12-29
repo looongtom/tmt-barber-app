@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@drawable/green_wallpaper_icon"
+        android:gravity="center"
+        android:text="LỊCH SỬ ĐẶT LỊCH"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Khách hàng:"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHistory" />
+
+    <Button
+        android:id="@+id/btDetail"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/border_butoon"
+        android:text="Xem chi tiết"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHistory" />
+
+    <TextView
+        android:id="@+id/txtUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Guesttt"
+        android:textColor="@color/primary"
+        android:textSize="17dp"
+        app:layout_constraintStart_toEndOf="@+id/textView23"
+        app:layout_constraintTop_toBottomOf="@+id/tvHistory" />
+
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Thợ cắt:"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+    <TextView
+        android:id="@+id/txtStaff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:text="Guesttt"
+        android:textColor="@color/primary"
+        android:textSize="17dp"
+        app:layout_constraintStart_toEndOf="@+id/tv2"
+        app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
+
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Ngày đặt:"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv2" />
+
+    <TextView
+        android:id="@+id/txtBookingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:text="Guesttt"
+        android:textColor="@color/primary"
+        android:textSize="17dp"
+        app:layout_constraintStart_toEndOf="@+id/tv3"
+        app:layout_constraintTop_toBottomOf="@+id/txtStaff" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Giờ cắt:"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv3" />
+
+
+    <EditText
+        android:id="@+id/txtSlot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="8dp"
+        android:hint="12:30  :  2-05-2024"
+        android:inputType="date"
+        android:textColor="@color/primary"
+        android:textSize="17dp"
+        app:layout_constraintStart_toEndOf="@+id/tv4"
+        app:layout_constraintTop_toBottomOf="@+id/txtBookingTime" />
+
+
+    <TextView
+        android:id="@+id/tv7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Trạng thái:"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv4" />
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:text="Guesttt"
+        android:textColor="@color/primary"
+        android:textSize="17dp"
+        app:layout_constraintStart_toEndOf="@+id/tv7"
+        app:layout_constraintTop_toBottomOf="@+id/txtSlot" />
+
+    <TextView
+        android:id="@+id/tv8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="12dp"
+        android:text="Tổng tiền:"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv7" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:text="5.000.000"
+        android:textColor="@color/primary"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/tv8"
+        app:layout_constraintTop_toBottomOf="@+id/txtStatus" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvService"
+        android:layout_width="411dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv8"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

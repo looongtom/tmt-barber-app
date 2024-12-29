@@ -1,5 +1,7 @@
 package com.example.myapplication.fragment;
 
+import static com.example.myapplication.model.account.Account.RoleUser;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,20 +23,31 @@ import com.example.myapplication.AddServiceActivity;
 import com.example.myapplication.MyApplication;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteServiceActivity;
-import com.example.myapplication.adapter.ServiceRecycleViewAdapter;
+import com.example.myapplication.adapter.CategoryRecycleViewAdapter;
+import com.example.myapplication.api.ApiServicingService;
+import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.DatabaseHelper;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.category.Category;
+import com.example.myapplication.model.category.response.GetListCategoryResponse;
+import com.example.myapplication.model.service.Servicing;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FragmentService extends Fragment implements ServiceRecycleViewAdapter.ItemListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+public class FragmentService extends Fragment implements CategoryRecycleViewAdapter.ItemListener {
     private RecyclerView recyclerView;
-    ServiceRecycleViewAdapter adapter;
+    private CategoryRecycleViewAdapter adapter;
     private Button btAdd;
-    private DatabaseHelper db;
+    private TokenManager tokenManager ;
 
     @Nullable
     @Override
@@ -47,8 +60,9 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
         super.onViewCreated(view, savedInstanceState);
         recyclerView=view.findViewById(R.id.recyleService);
         btAdd=view.findViewById(R.id.btAddService);
-        adapter=new ServiceRecycleViewAdapter();
-        db=new DatabaseHelper(getContext());
+        adapter=new CategoryRecycleViewAdapter(getContext());
+        tokenManager = new TokenManager(getContext());
+
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
         int roleId = sharedPreferences.getInt("roleId", -1);
@@ -56,9 +70,8 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
         LinearLayoutManager manager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-        adapter.setItemListener(this);
 
-        if(roleId!=1) {
+        if(roleId==RoleUser) {
             btAdd.setVisibility(View.GONE);
         }
         btAdd.setOnClickListener(new View.OnClickListener() {
@@ -71,24 +84,38 @@ public class FragmentService extends Fragment implements ServiceRecycleViewAdapt
     }
 
     @Override
-    public void onItemClick(View view, int pos) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        int roleId = sharedPreferences.getInt("roleId", -1);
-        if(roleId!=1){
-            return;
-        }else{
-            Service service=adapter.getItem(pos);
-            Intent intent=new Intent(getContext(), UpdateDeleteServiceActivity.class);
-            intent.putExtra("service",service);
-            startActivity(intent);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        ServiceDataSource serviceDataSource=new ServiceDataSource(getContext());
-        List<Service> list=(List<Service>) serviceDataSource.selectAllService(getContext());
-        adapter.setList(list);
+        sendApiGetListCategory();
+
+//        ServiceDataSource serviceDataSource=new ServiceDataSource(getContext());
+//        List<Service> list=(List<Service>) serviceDataSource.selectAllService(getContext());
+//        adapter.setList(list);
+    }
+
+    private void sendApiGetListCategory(){
+        String accessToken = tokenManager.getAccessToken();
+        ApiServicingService.API_SERVICING_SERVICE.getListCategory(accessToken).enqueue(new Callback<GetListCategoryResponse>() {
+
+
+            @Override
+            public void onResponse(Call<GetListCategoryResponse> call, Response<GetListCategoryResponse> response) {
+                if(response.isSuccessful()){
+                    GetListCategoryResponse getListCategoryResponse=response.body();
+                    Map<String, List<Servicing>> serviceMap =getListCategoryResponse.getServiceMap();
+                    List<Category> categories =new ArrayList<>();
+                    for (Map.Entry<String, List<Servicing>> entry : serviceMap.entrySet()) {
+                        categories.add(new Category(entry.getValue().get(0).getCategoryId(),entry.getKey(),entry.getValue()));
+                    }
+
+                    adapter.setList(categories);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetListCategoryResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "error get list category", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

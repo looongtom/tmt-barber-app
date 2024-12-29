@@ -13,11 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.ChooseBarberActivity;
 import com.example.myapplication.ChooseServiceActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateDeleteBarberActivity;
 import com.example.myapplication.dal.AccountDataSource;
-import com.example.myapplication.model.Account;
+import com.example.myapplication.model.account.Account;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class ChooseBarberRecycleViewAdapter extends RecyclerView.Adapter<ChooseB
         if(barber==null)return;
         AccountDataSource accountDataSource = new AccountDataSource(context);
         String fileImage=accountDataSource.getFilePictureForCategory(barber.getId());
-        holder.barberName.setText(barber.getName());
+        holder.barberName.setText(barber.getFullName());
         if(fileImage!=null)Picasso.get().load(fileImage).resize(300,300).into(holder.imgBarber);
         else holder.imgBarber.setImageResource(R.drawable.barber_man);
 
@@ -93,8 +94,11 @@ public class ChooseBarberRecycleViewAdapter extends RecyclerView.Adapter<ChooseB
                 @Override
                 public void onClick(View v) {
                     account = list.get(getAdapterPosition());
+//                    Toast.makeText(context, "Choose "+account.toString(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, ChooseServiceActivity.class);
                     intent.putExtra("account", account);
+                    // finish the current activity
+                    ((ChooseBarberActivity)context).finish();
                     context.startActivity(intent);
                 }
             });

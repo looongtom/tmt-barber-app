@@ -4,4 +4,10 @@
         <item>Nam</item>
         <item>Nữ</item>
     </string-array>
+    <string-array name="noti_query_options">
+        <item>Tất cả thông báo</item>
+        <item>Thông báo hôm nay</item>
+        <item>Thông báo tuần này</item>
+        <item>Thông báo tháng này</item>
+    </string-array>
 </resources>

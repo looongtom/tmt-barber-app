@@ -5,13 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/idNestedSV"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="414dp"
@@ -35,16 +32,31 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/search"
+                <LinearLayout
+                    android:id="@+id/llFilter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/primary"
-                    app:iconifiedByDefault="false"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintTop_toBottomOf="@id/tv_name_category"
-                    app:queryHint="Choose date to search" />
+                    android:weightSum="5"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary"
+                        android:layout_weight="4"
+                        app:iconifiedByDefault="false"
+                        app:layout_constraintTop_toBottomOf="@id/tv_name_category"
+                        app:queryHint="Choose date to search" />
+                    <ImageButton
+                        android:id="@+id/btnClear"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/reset"/>
+                </LinearLayout>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvListBooking"
@@ -52,11 +64,16 @@
                     android:layout_height="wrap_content"
 
                     android:layout_marginTop="5dp"
-                    app:layout_constraintTop_toBottomOf="@id/search" />
+                    app:layout_constraintTop_toBottomOf="@id/llFilter" />
 
+                <ProgressBar
+                    android:id="@+id/idPBLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/rcvListBooking"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

@@ -1,5 +1,9 @@
 package com.example.myapplication.adapter;
 
+import static com.example.myapplication.model.account.Account.RoleAdmin;
+import static com.example.myapplication.model.account.Account.RoleBarber;
+import static com.example.myapplication.model.account.Account.RoleUser;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,17 +31,21 @@ import com.example.myapplication.dal.BookingDetailDataSource;
 import com.example.myapplication.dal.ResultDataSource;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.dal.TimeSlotDataSource;
-import com.example.myapplication.model.Booking;
 import com.example.myapplication.model.BookingDetail;
 import com.example.myapplication.model.Result;
 import com.example.myapplication.model.Service;
+import com.example.myapplication.model.booking.Booking;
+import com.example.myapplication.model.booking.response.BookingResponse;
+import com.example.myapplication.model.booking.response.ServicingResponse;
+import com.example.myapplication.model.service.Servicing;
+import com.example.myapplication.model.timeslot.TimeSlot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
-    private List<Booking> list;
+    private List<BookingResponse> list;
     private Context context;
     private ChooseServiceRecycleViewAdapter adapter;
 
@@ -48,16 +56,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     }
 
 
-    public void setData(List<Booking> list) {
-        this.list = list;
-        sortData(list);
-    }
-
-    public void sortData(List<Booking> list) {
-        //sort by create time desc with the value like 2021-06-01 12:00:00
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            list.sort((o1, o2) -> o2.getCreateTime().compareTo(o1.getCreateTime()));
-        }
+    public void setData(List<BookingResponse> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -70,7 +69,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         int userId = sharedPreferences.getInt("userId", -1);
         String userName = sharedPreferences.getString("username", "");
 
-        if (roleId != 3) {
+        if (roleId != RoleUser) {
             //return inflater.inflate(R.layout.fragment_history_staff,container,false);
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history_staff, parent, false);
             return new BookingViewHolder(view);
@@ -80,20 +79,14 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         return new BookingViewHolder(view);
     }
 
-    public String getUsername(int id) {
-        AccountDataSource db = new AccountDataSource(context);
-        return db.getAccountById(id).getUsername();
-    }
-
-    public String getStartTimeSlot(int id) {
-        TimeSlotDataSource db = new TimeSlotDataSource(context);
-        return db.getTimeSlotById(id).getTimeStart();
-    }
-
     public void setImageSrc(ImageView img, String src) {
         if (src != null) {
             Picasso.get().load(src).resize(350, 450).into(img);
         }
+    }
+
+    private String convertTimestamp(Long bookedTime) {
+        return new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date(bookedTime));
     }
 
     @Override
@@ -101,16 +94,23 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
         int roleId = sharedPreferences.getInt("roleId", -1);
         int userId = sharedPreferences.getInt("userId", -1);
+        int totalPrice=0;
         String userName = sharedPreferences.getString("username", "");
 
 
-        Booking booking = list.get(position);
-        holder.txtUsername.setText(getUsername(booking.getUserId()));
-        holder.txtStaff.setText(getUsername(booking.getBarberId()));
-        holder.txtBookingTime.setText(booking.getCreateTime());
-        holder.txtSlot.setText(getStartTimeSlot(booking.getSlotId()) + "   :   " + booking.getTime());
+        BookingResponse booking = list.get(position);
+        holder.txtUsername.setText(booking.getCustomerName());
+        holder.txtStaff.setText(booking.getBarberName());
+        holder.txtBookingTime.setText(booking.getTimeSlot().getBookedDate());
+        holder.txtSlot.setText(booking.getTimeSlot().getStartTime());
+//        holder.txtSlot.setText(getStartTimeSlot(booking.getTimeSlotId()));
         holder.txtPrice.setText(booking.getPrice().toString());
         holder.txtStatus.setText(booking.getStatus());
+
+        for (ServicingResponse servicingResponse : booking.getListServiceStruct()) {
+            totalPrice+=servicingResponse.getPrice();
+        }
+        holder.txtPrice.setText(totalPrice+"");
 
         Result result = new Result();
         ResultDataSource resultDataSource = new ResultDataSource(context);
@@ -118,7 +118,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         if (resultId != null){
             result = resultDataSource.getById(resultId);
         }
-        if (booking.getStatus().equals("Hủy")) {
+        if (booking.getStatus().equals("Canceled")) {
             holder.txtStatus.setTextColor(context.getResources().getColor(R.color.choosen_color));
 //            set text style to bold
             holder.txtStatus.setTypeface(null, Typeface.BOLD);
@@ -127,11 +127,15 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             holder.txtStatus.setTypeface(null, Typeface.BOLD);
         }
 
-        BookingDetailDataSource bookingDetailDataSource = new BookingDetailDataSource(context);
-        List<BookingDetail> listBookingDetail = bookingDetailDataSource.getAllBookingDetail();
-        List<Integer> listIdServices = bookingDetailDataSource.getListServiceByBookingId(booking.getId());
-        List<Service> listService = getListService(listIdServices);
-
+        List<ServicingResponse> listService=new ArrayList<>();
+        for (ServicingResponse servicingResponse : booking.getListServiceStruct()) {
+            listService.add(new ServicingResponse(
+                    servicingResponse.getId(),
+                    servicingResponse.getName(),
+                    servicingResponse.getPrice(),
+                    servicingResponse.getDescription(),
+                    servicingResponse.getUrl()));
+        }
         adapter = new ChooseServiceRecycleViewAdapter();
         adapter.setChoose(false);
         adapter.setList(listService);
@@ -169,30 +173,33 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             int userId = sharedPreferences.getInt("userId", -1);
             String userName = sharedPreferences.getString("username", "");
 
-            if (roleId == 2) {
+            if (roleId == RoleBarber) {
                 btnReceive = itemView.findViewById(R.id.btnReceive);
                 btnReceive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //update status
-                        Booking booking = list.get(getAdapterPosition());
+                        BookingResponse booking = list.get(getAdapterPosition());
 
                         Intent intent = new Intent(context, UpdateBookingActivity.class);
-                        intent.putExtra("bookingId", booking.getId());
+                        intent.putExtra("booking", booking);
+                        TimeSlot timeSlot = new TimeSlot(booking.getTimeSlot().getId(),booking.getTimeSlot().getStartTime(),booking.getTimeSlot().getBookedDate(),"Currently Booked",booking.getBarberId());
+                        intent.putExtra("timeSlot", timeSlot);
                         context.startActivity(intent);
                     }
                 });
             }
-            else if(roleId == 3){
+            else if(roleId == RoleUser){
                 btnReceive = itemView.findViewById(R.id.btnReceive);
                 btnReceive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //update status
-                        Booking booking = list.get(getAdapterPosition());
-                        Intent intent = new Intent(context, UploadImage.class);
-                        intent.putExtra("bookingId", booking.getId());
-                        intent.putExtra("roleId", roleId);
+                        BookingResponse booking = list.get(getAdapterPosition());
+
+                        Intent intent = new Intent(context, UpdateBookingActivity.class);
+                        intent.putExtra("booking", booking);
+                        intent.putExtra("timeSlot", new TimeSlot(booking.getTimeSlot().getId(),booking.getTimeSlot().getStartTime(),"Currently Booked",booking.getTimeSlot().getBookedDate(),booking.getBarberId()));
                         context.startActivity(intent);
                     }
                 });
