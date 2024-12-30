@@ -1,6 +1,8 @@
 package com.example.myapplication.api;
 
 import com.example.myapplication.BuildConfig;
+import com.example.myapplication.model.account.request.ChangePasswordRequest;
+import com.example.myapplication.model.account.response.ChangePasswordResponse;
 import com.example.myapplication.model.account.response.GetListBarberResponse;
 import com.example.myapplication.model.account.response.GetProfileResponse;
 import com.example.myapplication.model.account.request.LoginRequest;
@@ -65,4 +67,7 @@ public interface ApiAccountService {
                                             @Part("self_img") MultipartBody.Part selfImg,
                                             @Part("shape_img") MultipartBody.Part shapeImg,
                                             @Part("color_img") MultipartBody.Part colorImg);
+
+    @POST("auth/change-pass-first-time")
+    Call<ChangePasswordResponse> changePassword(@Header("Authorization") String token, @Body ChangePasswordRequest changePasswordRequest);
 }

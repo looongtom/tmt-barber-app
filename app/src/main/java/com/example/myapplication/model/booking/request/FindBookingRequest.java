@@ -2,7 +2,7 @@ package com.example.myapplication.model.booking.request;
 
 import com.google.gson.annotations.SerializedName;
 
-public class FindBookingRequest {
+public class    FindBookingRequest {
     private Integer page;
     @SerializedName("booked_date")
     private String bookedDate;

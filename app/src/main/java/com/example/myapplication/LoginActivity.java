@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +27,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button btnLogin;
+    Button btnLogin,btnLoginByGoogle;
     TextInputEditText txtUsername;
     TextInputEditText txtPassword;
     private ProgressBar progressBar;
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         textSignUp = findViewById(R.id.textSignUp);
         btnLogin = findViewById(R.id.btnLogin);
         imageView3 = findViewById(R.id.imageView3);
+        btnLoginByGoogle = findViewById(R.id.btnLoginByGoogle);
     }
 
     @Override
@@ -52,6 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login);
         init();
         tokenManager = new TokenManager(this);
+
+        btnLoginByGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.URL_GOOGLE_OAUTH));
+                startActivity(intent);
+            }
+        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

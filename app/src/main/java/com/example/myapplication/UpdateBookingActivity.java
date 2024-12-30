@@ -72,7 +72,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
             btnChooseService.setVisibility(View.GONE);
             btChooseTimeSlot.setVisibility(View.GONE);
             btDelete.setVisibility(View.GONE);
-            btChooseImage.setText("Xem ảnh");
+            btChooseImage.setText("Xem chi tiết");
         }
 
         tokenManager = new TokenManager(this);
