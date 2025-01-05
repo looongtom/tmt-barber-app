@@ -86,7 +86,7 @@ public class ViewHistoryGenerate extends AppCompatActivity implements GeneratedR
             public void onResponse(Call<GetListGeneratedResult> call, Response<GetListGeneratedResult> response) {
                 if (response.isSuccessful()) {
                     GetListGeneratedResult getListGeneratedResult = response.body();
-                    if (getListGeneratedResult != null && getListGeneratedResult.getGenerateHairResponseList().size()>0) {
+                    if (getListGeneratedResult.getGenerateHairResponseList() != null && getListGeneratedResult.getGenerateHairResponseList().size()>0) {
                         generatedResults.clear();
                         generatedResults.addAll(getListGeneratedResult.getGenerateHairResponseList());
                         adapter.setGeneratedResults(generatedResults);
