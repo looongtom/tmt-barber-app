@@ -1,17 +1,17 @@
-package com.example.myapplication.model.hairfast;
+package com.example.myapplication.model.hairfast.response;
 
 import com.google.gson.annotations.SerializedName;
 
 
 public class GenerateHairResponse {
     @SerializedName("data")
-   private HairResponse hairResponse;
+   private GeneratedResult hairResponse;
 
-    public HairResponse getHairResponse() {
+    public GeneratedResult getHairResponse() {
         return hairResponse;
     }
 
-    public void setHairResponse(HairResponse hairResponse) {
+    public void setHairResponse(GeneratedResult hairResponse) {
         this.hairResponse = hairResponse;
     }
 

@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +26,7 @@ import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.model.account.Account;
 import com.example.myapplication.model.category.Category;
 import com.example.myapplication.model.category.response.GetListCategoryResponse;
+import com.example.myapplication.model.hairfast.response.GeneratedResult;
 import com.example.myapplication.model.service.Servicing;
 import com.example.myapplication.model.timeslot.TimeSlot;
 import com.example.myapplication.model.timeslot.request.CreateTimeSlotRequest;
@@ -77,9 +80,9 @@ public class ChooseServiceActivity extends AppCompatActivity {
 //                if(list==null){
 //                    list=timeSlotDataSource.insertTimeSlotForDate(date,account.getId());
 //                }
-                FindTimeSlotRequest request = new FindTimeSlotRequest(account.getId(),currentDate,null,null);
-                sendApiGetListTimeslot(request);
-
+//                FindTimeSlotRequest request = new FindTimeSlotRequest(account.getId(),currentDate,null,null);
+//                sendApiGetListTimeslot(request);
+                showChoiceDialog();
             }
         });
 
@@ -143,6 +146,38 @@ public class ChooseServiceActivity extends AppCompatActivity {
                 Toast.makeText(ChooseServiceActivity.this,"error when get list time slot",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showChoiceDialog() {
+        // Create an AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Đính kèm ảnh kiểu tóc mong muốn");
+        builder.setMessage("Bạn có muốn đính kèm ảnh kiểu tóc mong muốn để thợ cắt tham khảo?");
+
+        // Add options for Activity B and Activity C
+        builder.setPositiveButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Redirect to Activity B
+                FindTimeSlotRequest request = new FindTimeSlotRequest(account.getId(),currentDate,null,null);
+                sendApiGetListTimeslot(request);
+            }
+        });
+
+        builder.setNegativeButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Redirect to ChooseGeneratedResult
+                Intent intent = new Intent(ChooseServiceActivity.this, ChooseGeneratedResult.class);
+                intent.putExtra("account",account);
+                intent.putExtra("listIdService",new HashSet<>(listIdService));
+                finish();
+                startActivity(intent);
+            }
+        });
+
+        // Show the dialog
+        builder.create().show();
     }
 
     private void sendApiGetListCategory(){

@@ -38,6 +38,7 @@ import com.example.myapplication.model.account.Account;
 
 import com.example.myapplication.model.booking.Booking;
 import com.example.myapplication.model.booking.request.CreateBookingRequest;
+import com.example.myapplication.model.hairfast.response.GeneratedResult;
 import com.example.myapplication.model.timeslot.TimeSlot;
 import com.example.myapplication.model.timeslot.request.FindTimeSlotRequest;
 import com.example.myapplication.model.timeslot.response.FindTimeSlotResponse;
@@ -106,6 +107,7 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
 
         Account barber = (Account) getIntent().getSerializableExtra("account");
         Set<Integer> listIdService = (Set<Integer>) getIntent().getSerializableExtra("listIdService");
+        GeneratedResult generatedResult = (GeneratedResult) getIntent().getSerializableExtra("generatedResult");
         barberId = barber.getId();
         tvBarberInfo.setText("Barber: " + barber.getFullName());
         tvQuantityService.setText(listIdService.size() + " services selected");
@@ -175,7 +177,11 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
                     Toast.makeText(ChooseTimeSlotActivity.this, "Please choose a time slot", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                sendApiCreateBooking(new CreateBookingRequest(userId,barberId , choosenTimeSlot.getId(), "Pending",0,listIdService));
+                CreateBookingRequest createBookingRequest = new CreateBookingRequest(userId,barberId , choosenTimeSlot.getId(), "Pending",0,listIdService);
+                if (generatedResult!=null){
+                    createBookingRequest.setPreviewId(generatedResult.getId());
+                }
+                sendApiCreateBooking(createBookingRequest);
 
                 Intent intent = new Intent(ChooseTimeSlotActivity.this, BookingActivity.class);
                 intent.putExtra("timeSlot", choosenTimeSlot);
@@ -189,8 +195,9 @@ public class ChooseTimeSlotActivity extends AppCompatActivity implements ChooseT
 //                booking.setTime(queryDate);
 //                booking.setCreateTime(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
                 booking.setTimeSlotId(choosenTimeSlot.getId());
-                booking.setPrice(1);
                 booking.setStatus("Booked");
+                if (generatedResult!=null) booking.setPreviewId(generatedResult.getId());
+                intent.putExtra("booking", booking);
 //
 ////                intent.putExtra("idBooking", insertBooking.getId());
 //

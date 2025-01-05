@@ -21,21 +21,26 @@ import android.widget.Toast;
 
 import com.example.myapplication.adapter.ChooseServiceRecycleViewAdapter;
 import com.example.myapplication.api.ApiBookingService;
+import com.example.myapplication.api.ApiPreviewImgService;
 import com.example.myapplication.api.ApiTimeSlotService;
 import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.ServiceDataSource;
 import com.example.myapplication.model.Service;
 import com.example.myapplication.model.booking.request.CreateBookingRequest;
 import com.example.myapplication.model.booking.request.UpdateBookingRequest;
+import com.example.myapplication.model.booking.request.UpdateBookingStatusRequest;
 import com.example.myapplication.model.booking.response.BookingDetail;
 import com.example.myapplication.model.booking.response.BookingDetailResponse;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.ServicingResponse;
+import com.example.myapplication.model.hairfast.HairFastWS;
+import com.example.myapplication.model.hairfast.response.DetailHairFastResponse;
 import com.example.myapplication.model.timeslot.TimeSlot;
 import com.example.myapplication.model.timeslot.request.FindTimeSlotRequest;
 import com.example.myapplication.model.timeslot.request.UpdateStatusTimeSlotRequest;
 import com.example.myapplication.model.timeslot.response.FindTimeSlotResponse;
 import com.example.myapplication.model.timeslot.response.UpdateTimeSlotResponse;
+import com.google.protobuf.Any;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -50,7 +55,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
     private TextView txtUsername, txtStaff, txtBookingTime, txtPrice, txtStatus;
     private EditText txtSlot;
     private RecyclerView recService;
-    private Button btnSave, btnChooseService, btDelete, btChooseTimeSlot,btChooseImage;
+    private Button btnSave, btnChooseService, btDelete, btChooseTimeSlot,btChooseImage,btPreviewImage;
     private BookingResponse booking;
     private BookingDetailResponse bookingDetailResponse;
     private ChooseServiceRecycleViewAdapter adapter;
@@ -72,7 +77,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
             btnChooseService.setVisibility(View.GONE);
             btChooseTimeSlot.setVisibility(View.GONE);
             btDelete.setVisibility(View.GONE);
-            btChooseImage.setText("Xem ảnh");
+            btChooseImage.setText("Ảnh kết quả");
         }
 
         tokenManager = new TokenManager(this);
@@ -82,6 +87,19 @@ public class UpdateBookingActivity extends AppCompatActivity {
         booking= (BookingResponse) intent.getSerializableExtra("booking");
         currentTimeslot = (TimeSlot) intent.getSerializableExtra("timeSlot");
         sendApiGetBookingDetail(booking.getId());
+
+        if (booking.getPreviewId()!=null && booking.getPreviewId()!=0){
+            btPreviewImage.setVisibility(View.VISIBLE);
+        }else{
+            btPreviewImage.setVisibility(View.GONE);
+        }
+
+        btPreviewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendApiGetDetailGeneratedPreview(booking.getPreviewId());
+            }
+        });
 
         btChooseTimeSlot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,8 +123,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                booking.setStatus("Served");
-//                booking.setPrice(price);
+                sendApiUpdateStatus("Served");
                 finish();
             }
         });
@@ -131,6 +148,35 @@ public class UpdateBookingActivity extends AppCompatActivity {
         });
     }
 
+    private void sendApiGetDetailGeneratedPreview(Integer id){
+        String accessToken = tokenManager.getAccessToken();
+        ApiPreviewImgService.apiService.getDetailHairFast(accessToken,id).enqueue(new Callback<DetailHairFastResponse>() {
+            @Override
+            public void onResponse(Call<DetailHairFastResponse> call, Response<DetailHairFastResponse> response) {
+                if (response.isSuccessful()){
+                    DetailHairFastResponse detailHairFastResponse = response.body();
+                    if (detailHairFastResponse != null){
+                        HairFastWS hairFastWS = new HairFastWS();
+                        hairFastWS.setGeneratedImgCloud(detailHairFastResponse.getData().getGeneratedImgCloud());
+                        hairFastWS.setColorImgCloud(detailHairFastResponse.getData().getColorImgCloud());
+                        hairFastWS.setSelfImgCloud(detailHairFastResponse.getData().getSelfImgCloud());
+                        hairFastWS.setShapeImgCloud(detailHairFastResponse.getData().getShapeImgCloud());
+
+//                        redirect to DetailHairFastActivity
+                        Intent intent = new Intent(UpdateBookingActivity.this, DetailHairFastActivity.class);
+                        intent.putExtra("hairFastWS", hairFastWS);
+                        startActivity(intent);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DetailHairFastResponse> call, Throwable t) {
+                Toast.makeText(UpdateBookingActivity.this, "error get preview detail", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
         private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Bạn có chắc huỷ lịch không ?")
@@ -138,9 +184,9 @@ public class UpdateBookingActivity extends AppCompatActivity {
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        booking.setStatus("Hủy");
                         dialog.dismiss(); // Close the dialog
                         finish();
+                        sendApiUpdateStatus("Canceled");
                     }
                 })
                 .setNegativeButton("Quay lại", new DialogInterface.OnClickListener() {
@@ -293,6 +339,29 @@ public class UpdateBookingActivity extends AppCompatActivity {
         });
     }
 
+    public void sendApiUpdateStatus(String status){
+        ApiBookingService.API_BOOKING_SERVICE.updateBookingStatus(tokenManager.getAccessToken(),
+                new UpdateBookingStatusRequest(booking.getId(),status)).enqueue(new Callback<Any>() {
+            @Override
+            public void onResponse(Call<Any> call, Response<Any> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(UpdateBookingActivity.this, "Update booking successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(UpdateBookingActivity.this,UpdateBookingActivity.class);
+                    intent.putExtra("booking",booking);
+                    finish();
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(UpdateBookingActivity.this, "Update booking failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Any> call, Throwable t) {
+                Toast.makeText(UpdateBookingActivity.this, "Update booking failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private List<Service> getListService(List<Integer> listIdService) {
         List<Service> listService = new ArrayList<>();
         ServiceDataSource db = new ServiceDataSource(getApplicationContext());
@@ -315,6 +384,7 @@ public class UpdateBookingActivity extends AppCompatActivity {
         btDelete = findViewById(R.id.btDelete);
         btChooseTimeSlot = findViewById(R.id.btChooseTimeSlot);
         btChooseImage = findViewById(R.id.btChooseImage);
+        btPreviewImage = findViewById(R.id.btPreviewImage);
     }
 
     @Override

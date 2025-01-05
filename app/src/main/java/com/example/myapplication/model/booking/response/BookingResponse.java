@@ -34,6 +34,16 @@ public class BookingResponse implements Serializable {
     private String bookedDate;
     @SerializedName("list_service_struct")
     private List<ServicingResponse> listServiceStruct;
+    @SerializedName("preview_id")
+    private Integer previewId;
+
+    public Integer getPreviewId() {
+        return previewId;
+    }
+
+    public void setPreviewId(Integer previewId) {
+        this.previewId = previewId;
+    }
 
     public Integer getId() {
         return id;
