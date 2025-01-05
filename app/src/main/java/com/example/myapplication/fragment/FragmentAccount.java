@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.ChangePasswordActivity;
 import com.example.myapplication.ChooseTimeSlotActivity;
 import com.example.myapplication.LoginActivity;
 import com.example.myapplication.R;
@@ -33,7 +34,7 @@ public class FragmentAccount extends Fragment {
     private Button btLogout;
     private EditText txtName, txtUsername, txtEmail, txtDateOfBirth,txtPhone;
     private Spinner spinnerGender;
-    private Button btnUpdate;
+    private Button btnUpdate,btChangePassword;
     private String[] genders ;
     private ArrayAdapter<String> adapter;
     private ImageView calendarImage;
@@ -42,13 +43,11 @@ public class FragmentAccount extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_account, container, false);
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AccountDataSource accountDataSource = new AccountDataSource(getContext());
         genders = getResources().getStringArray(R.array.gender_options);
 
         calendarImage = view.findViewById(R.id.calendarImageView);
@@ -60,10 +59,19 @@ public class FragmentAccount extends Fragment {
         spinnerGender = view.findViewById(R.id.spinner);
         btnUpdate = view.findViewById(R.id.btnUpdate);
         btLogout = view.findViewById(R.id.btnLogOut);
+        btChangePassword = view.findViewById(R.id.btnChangePassword);
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
                 startActivity(intent);
             }
         });
@@ -115,7 +123,6 @@ public class FragmentAccount extends Fragment {
                     account.setPhone(phone);
                     account.setGender(gender);
 
-                    accountDataSource.updateAccount(account);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("name", name);
                     editor.putString("username", username);
