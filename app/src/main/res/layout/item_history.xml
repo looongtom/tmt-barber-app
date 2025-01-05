@@ -102,6 +102,19 @@
                 app:layout_constraintStart_toEndOf="@+id/tv3"
                 app:layout_constraintTop_toBottomOf="@+id/txtStaff" />
 
+            <Button
+                android:id="@+id/btnViewPreview"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Xem kiểu tóc mong muốn"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnReceive"
+                android:background="@drawable/border_butoon"
+                />
+
             <TextView
                 android:id="@+id/tv4"
                 android:layout_width="wrap_content"

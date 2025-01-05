@@ -1,4 +1,4 @@
-package com.example.myapplication.model.hairfast;
+package com.example.myapplication.model.hairfast.response;
 
 import com.google.gson.annotations.SerializedName;
 

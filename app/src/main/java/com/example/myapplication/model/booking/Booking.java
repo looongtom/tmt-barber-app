@@ -23,6 +23,16 @@ public class Booking implements Serializable {
     private Long createdAt;
     @SerializedName("updated_at")
     private Long updatedAt;
+    @SerializedName("preview_id")
+    private Integer previewId;
+
+    public Integer getPreviewId() {
+        return previewId;
+    }
+
+    public void setPreviewId(Integer previewId) {
+        this.previewId = previewId;
+    }
 
     public Integer getId() {
         return id;

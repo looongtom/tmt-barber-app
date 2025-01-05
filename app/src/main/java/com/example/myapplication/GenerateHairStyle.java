@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.example.myapplication.api.ApiPreviewImgService;
 import com.example.myapplication.auth.TokenManager;
-import com.example.myapplication.model.hairfast.GenerateHairResponse;
 
 import java.io.File;
 import java.io.FileNotFoundException;

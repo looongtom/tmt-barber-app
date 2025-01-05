@@ -7,7 +7,7 @@ import com.example.myapplication.model.account.response.GetListBarberResponse;
 import com.example.myapplication.model.account.response.GetProfileResponse;
 import com.example.myapplication.model.account.request.LoginRequest;
 import com.example.myapplication.model.account.response.LoginResponse;
-import com.example.myapplication.model.hairfast.GenerateHairResponse;
+import com.example.myapplication.model.hairfast.response.GenerateHairResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

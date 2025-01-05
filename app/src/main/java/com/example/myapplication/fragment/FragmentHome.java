@@ -34,6 +34,7 @@ import com.example.myapplication.DetailHairFastActivity;
 import com.example.myapplication.GenerateHairStyle;
 import com.example.myapplication.NotificationActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.ViewHistoryGenerate;
 import com.example.myapplication.adapter.BarberRecycleViewAdapter;
 import com.example.myapplication.api.ApiAccountService;
 import com.example.myapplication.model.account.Account;
@@ -162,7 +163,7 @@ public class FragmentHome  extends Fragment implements BarberRecycleViewAdapter.
         btGenerateImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getContext(), GenerateHairStyle.class);
+                Intent intent=new Intent(getContext(), ViewHistoryGenerate.class);
                 startActivity(intent);
             }
         });

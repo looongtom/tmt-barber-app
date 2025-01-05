@@ -5,6 +5,7 @@ import com.example.myapplication.model.booking.Booking;
 import com.example.myapplication.model.booking.request.CreateBookingRequest;
 import com.example.myapplication.model.booking.request.FindBookingRequest;
 import com.example.myapplication.model.booking.request.UpdateBookingRequest;
+import com.example.myapplication.model.booking.request.UpdateBookingStatusRequest;
 import com.example.myapplication.model.booking.request.UpdateBookingTimeslotRequest;
 import com.example.myapplication.model.booking.response.BookingDetail;
 import com.example.myapplication.model.booking.response.BookingDetailResponse;
@@ -60,5 +61,8 @@ public interface ApiBookingService {
     @POST("booking/update-booking-timeslot")
     Call<Any> updateBookingTimeslotService(@Header("Authorization") String token,
                                    @Body UpdateBookingTimeslotRequest request);
+    @POST("booking/update-booking-status")
+    Call<Any> updateBookingStatus(@Header("Authorization") String token,
+                                   @Body UpdateBookingStatusRequest request);
 
 }

@@ -59,14 +59,14 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
         recyclerView=findViewById(R.id.rcvService);
         btBack=findViewById(R.id.btBack);
         tvPrice=findViewById(R.id.tvPrice);
-        tvStatus=findViewById(R.id.tvStatus);
+        tvStatus=findViewById(R.id.txtStatus);
 
         timeSlot= (TimeSlot) getIntent().getSerializableExtra("timeSlot");
         account = (Account) getIntent().getSerializableExtra("account");
         queryDate = getIntent().getStringExtra("queryDate");
         Set<Integer> listIdService=(Set<Integer>) getIntent().getSerializableExtra("listIdService");
         idBooking=getIntent().getIntExtra("idBooking",-1);
-
+        booking= (Booking) getIntent().getSerializableExtra("booking");
 
 //        listService=getListService(listIdService);
 //        totalPrice=getTotalPrice(listService);
@@ -74,15 +74,12 @@ public class BookingActivity extends AppCompatActivity implements ChooseServiceR
         //update price in booking
 //        bookingDataSource.updateBookingPrice(booking.getId(),totalPrice);
 
-
-//        tvPrice.setText(booking.getPrice().toString());
-
         tvNameCus.setText(userName);
         tvNameBarber.setText(account.getFullName());
         tvDate.setText(queryDate);
 //        tvTime.setText(timeSlot.getTimeStart() + "   :   " + booking.getTime());
         tvTime.setText(timeSlot.getStartTime());
-
+        tvStatus.setText(booking.getStatus());
         adapter = new ChooseServiceRecycleViewAdapter();
         adapter.setChoose(false);
 

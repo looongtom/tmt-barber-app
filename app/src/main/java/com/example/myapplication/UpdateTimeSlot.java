@@ -24,6 +24,7 @@ import com.example.myapplication.api.ApiBookingService;
 import com.example.myapplication.api.ApiTimeSlotService;
 import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.model.booking.Booking;
+import com.example.myapplication.model.booking.request.UpdateBookingStatusRequest;
 import com.example.myapplication.model.booking.request.UpdateBookingTimeslotRequest;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.timeslot.TimeSlot;

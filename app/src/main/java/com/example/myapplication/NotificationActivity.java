@@ -165,7 +165,6 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     public void onCLick(View view, int position) {
         Notification notification = adapter.getItem(position);
         if (notification.getType().equals(Notification.HairfastType)) {
-            Toast.makeText(this, "Hairfast: " + notification.getHairFastWS().toString(), Toast.LENGTH_SHORT).show();
             HairFastWS hairFastWS = (HairFastWS) notification.getHairFastWS();
 
 //            Picasso.get().load(hairFastWS.getGeneratedImgCloud()).into(resultImg);
@@ -174,7 +173,6 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             startActivity(intent);
 
         } else if (notification.getType().equals(Notification.BookingType)) {
-            Toast.makeText(this, "Booking: " + notification.getBookingResponse().toString(), Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, ViewBookingFromNoti.class);
             intent.putExtra("booking", notification.getBookingResponse());

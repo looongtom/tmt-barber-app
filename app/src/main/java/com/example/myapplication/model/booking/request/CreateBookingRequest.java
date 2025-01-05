@@ -16,6 +16,16 @@ public class CreateBookingRequest {
     private Integer price;
     @SerializedName("list_service")
     private Set<Integer> listService;
+    @SerializedName("preview_id")
+    private Integer previewId;
+
+    public Integer getPreviewId() {
+        return previewId;
+    }
+
+    public void setPreviewId(Integer previewId) {
+        this.previewId = previewId;
+    }
 
     public Integer getCustomerId() {
         return customerId;

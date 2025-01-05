@@ -21,10 +21,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.DetailHairFastActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.UpdateBookingActivity;
 import com.example.myapplication.UploadImage;
+import com.example.myapplication.ViewBookingFromNoti;
+import com.example.myapplication.api.ApiPreviewImgService;
+import com.example.myapplication.auth.TokenManager;
 import com.example.myapplication.dal.AccountDataSource;
 import com.example.myapplication.dal.BookingDataSource;
 import com.example.myapplication.dal.BookingDetailDataSource;
@@ -37,6 +41,8 @@ import com.example.myapplication.model.Service;
 import com.example.myapplication.model.booking.Booking;
 import com.example.myapplication.model.booking.response.BookingResponse;
 import com.example.myapplication.model.booking.response.ServicingResponse;
+import com.example.myapplication.model.hairfast.HairFastWS;
+import com.example.myapplication.model.hairfast.response.DetailHairFastResponse;
 import com.example.myapplication.model.service.Servicing;
 import com.example.myapplication.model.timeslot.TimeSlot;
 import com.squareup.picasso.Picasso;
@@ -44,10 +50,15 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
     private List<BookingResponse> list;
     private Context context;
     private ChooseServiceRecycleViewAdapter adapter;
+    private TokenManager tokenManager ;
 
 
     public BookingAdapter(Context context) {
@@ -68,6 +79,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         int roleId = sharedPreferences.getInt("roleId", -1);
         int userId = sharedPreferences.getInt("userId", -1);
         String userName = sharedPreferences.getString("username", "");
+        tokenManager = new TokenManager(parent.getContext());
 
         if (roleId != RoleUser) {
             //return inflater.inflate(R.layout.fragment_history_staff,container,false);
@@ -122,9 +134,15 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             holder.txtStatus.setTextColor(context.getResources().getColor(R.color.choosen_color));
 //            set text style to bold
             holder.txtStatus.setTypeface(null, Typeface.BOLD);
-        } else if (booking.getStatus().equals("Đã nhận khách")) {
+        } else if (booking.getStatus().equals("Served")) {
             holder.txtStatus.setTextColor(context.getResources().getColor(android.R.color.holo_orange_light));
             holder.txtStatus.setTypeface(null, Typeface.BOLD);
+        }
+
+        if (booking.getPreviewId() != null && booking.getPreviewId()!=0) {
+            holder.btnPreview.setVisibility(View.VISIBLE);
+        }else{
+            holder.btnPreview.setVisibility(View.GONE);
         }
 
         List<ServicingResponse> listService=new ArrayList<>();
@@ -144,6 +162,41 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         holder.recService.setLayoutManager(manager);
         holder.recService.setAdapter(adapter);
 
+        holder.btnPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendApiGetDetailGeneratedPreview(booking.getPreviewId());
+            }
+        });
+    }
+
+    private void sendApiGetDetailGeneratedPreview(Integer id){
+        String accessToken = tokenManager.getAccessToken();
+        ApiPreviewImgService.apiService.getDetailHairFast(accessToken,id).enqueue(new Callback<DetailHairFastResponse>() {
+            @Override
+            public void onResponse(Call<DetailHairFastResponse> call, Response<DetailHairFastResponse> response) {
+                if (response.isSuccessful()){
+                    DetailHairFastResponse detailHairFastResponse = response.body();
+                    if (detailHairFastResponse != null){
+                        HairFastWS hairFastWS = new HairFastWS();
+                        hairFastWS.setGeneratedImgCloud(detailHairFastResponse.getData().getGeneratedImgCloud());
+                        hairFastWS.setColorImgCloud(detailHairFastResponse.getData().getColorImgCloud());
+                        hairFastWS.setSelfImgCloud(detailHairFastResponse.getData().getSelfImgCloud());
+                        hairFastWS.setShapeImgCloud(detailHairFastResponse.getData().getShapeImgCloud());
+
+//                        redirect to DetailHairFastActivity
+                        Intent intent = new Intent(context, DetailHairFastActivity.class);
+                        intent.putExtra("hairFastWS", hairFastWS);
+                        context.startActivity(intent);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DetailHairFastResponse> call, Throwable t) {
+                Toast.makeText(context.getApplicationContext(), "error get preview detail", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private List<Service> getListService(List<Integer> listIdService) {
@@ -164,10 +217,19 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     public class BookingViewHolder extends RecyclerView.ViewHolder {
         private TextView txtUsername, txtStaff, txtBookingTime, txtSlot, txtPrice, txtStatus;
         private RecyclerView recService;
-        private Button btnReceive;
+        private Button btnReceive,btnPreview;
 
         public BookingViewHolder(@NonNull View itemView) {
             super(itemView);
+            txtUsername = itemView.findViewById(R.id.txtUsername);
+            txtStaff = itemView.findViewById(R.id.txtStaff);
+            txtBookingTime = itemView.findViewById(R.id.txtBookingTime);
+            txtSlot = itemView.findViewById(R.id.txtSlot);
+            recService = itemView.findViewById(R.id.rcvService);
+            txtPrice = itemView.findViewById(R.id.tv6);
+            txtStatus = itemView.findViewById(R.id.txtStatus);
+            btnPreview = itemView.findViewById(R.id.btnViewPreview);
+
             SharedPreferences sharedPreferences = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
             int roleId = sharedPreferences.getInt("roleId", -1);
             int userId = sharedPreferences.getInt("userId", -1);
@@ -204,15 +266,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                     }
                 });
             }
-
-            txtUsername = itemView.findViewById(R.id.txtUsername);
-            txtStaff = itemView.findViewById(R.id.txtStaff);
-            txtBookingTime = itemView.findViewById(R.id.txtBookingTime);
-            txtSlot = itemView.findViewById(R.id.txtSlot);
-            recService = itemView.findViewById(R.id.rcvService);
-            txtPrice = itemView.findViewById(R.id.tv6);
-            txtStatus = itemView.findViewById(R.id.txtStatus);
-
         }
     }
 
