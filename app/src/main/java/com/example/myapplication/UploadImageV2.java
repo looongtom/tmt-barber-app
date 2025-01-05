@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -167,8 +168,9 @@ public class UploadImageV2 extends AppCompatActivity {
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
                             mArrayUri.add(uri);
+                            System.out.println("Uri:"+ uri.toString());
                             listResult.add(new Result( uri.toString() ));
-                            listResultFile.add(getFileFromUri(this, uri));
+                            listResultFile.add(getPathFromUri(this, uri));
                             // Get the cursor
                             Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
                             // Move to first row
@@ -193,6 +195,32 @@ public class UploadImageV2 extends AppCompatActivity {
                     .show();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private String getRealPathFromURI(Context mContext, Uri contentURI) {
+        String result = null;
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Video.Media.DATA};
+            ContentResolver mContentResolver = mContext.getContentResolver();
+            String mime = mContentResolver.getType(contentURI);
+            cursor = mContentResolver.query(contentURI, proj, null, null, null);
+            if (cursor == null) {
+                return null;
+            } else {
+                cursor.moveToFirst();
+                int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                if (column_index > -1)
+                    result = cursor.getString(column_index);
+                cursor.close();
+            }
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return result;
     }
 
     public static File getFileFromUri(Context context, Uri uri) {
@@ -228,8 +256,35 @@ public class UploadImageV2 extends AppCompatActivity {
         }
 
         // Return the file or null if the file path could not be resolved
+        System.out.println("File path: " + filePath);
         return filePath != null ? new File(filePath) : null;
     }
+
+    public static File getPathFromUri(Context context, Uri uri) {
+        String path = null;
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            String documentId = DocumentsContract.getDocumentId(uri);
+            String[] split = documentId.split(":");
+            String type = split[0];
+
+            if ("primary".equalsIgnoreCase(type)) {
+                path = "/sdcard/" + split[1];
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {MediaStore.Images.Media.DATA};
+            try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    path = cursor.getString(columnIndex);
+                }
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            path = uri.getPath();
+        }
+        System.out.println("URI path: " + path);
+        return path != null ? new File(path) : null;
+    }
+
 
 
     private void sendApiCreateResult(){
