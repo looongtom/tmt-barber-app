@@ -220,7 +220,6 @@ public class ChooseServiceActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int id) {
                //toast the id
-                Toast.makeText(ChooseServiceActivity.this,"id: "+id,Toast.LENGTH_SHORT).show();
                 if (listIdService.contains(id)){
                     listIdService.remove(id);
                 }else{

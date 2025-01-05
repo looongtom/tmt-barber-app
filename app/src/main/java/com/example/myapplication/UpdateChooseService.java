@@ -103,7 +103,6 @@ public class UpdateChooseService extends AppCompatActivity {
         adapter = new ChooseCategoryRecycleViewAdapter(this, new ChooseCategoryRecycleViewAdapter.ItemListener() {
             @Override
             public void onItemClick(int id) {
-                Toast.makeText(UpdateChooseService.this,"id: "+id,Toast.LENGTH_SHORT).show();
                 if (listIdService.contains(id) && !isFirstLoad){
                     listIdService.remove(id);
                 }else if (!listIdService.contains(id) && !isFirstLoad){
